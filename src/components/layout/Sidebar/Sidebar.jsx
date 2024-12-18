@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import styles from "./Sidebar.module.css";
 import { toast } from "react-toastify";
 import { AuthContext } from "../../../context/auth.context";
@@ -13,125 +13,117 @@ import { MdOutlinePayment } from "react-icons/md";
 import { HiDocumentReport } from "react-icons/hi";
 import { IoIosSettings } from "react-icons/io";
 import { IoLogOutOutline } from "react-icons/io5";
+import { FaUser } from "react-icons/fa";
 
 const Sidebar = () => {
   const [activeItem, setActiveItem] = useState(null);
-
-  const handleItemClick = (item) => {
-    setActiveItem(item);
-  };
-
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [username, setUsername] = useState("");
   const navigate = useNavigate();
+  const location = useLocation();
   const { auth, setAuth } = useContext(AuthContext);
 
   useEffect(() => {
-    const token = localStorage.getItem("access_token"); // Check for token
-    setIsLoggedIn(!!token);
+    // Set active item based on the current route
+    const currentPath = location.pathname.slice(1); // Remove leading slash
+    setActiveItem(currentPath || "dashboard");
+  }, [location]);
 
-    // Check if auth object and user data are valid
-    if (token && auth?.user?.name) {
-      setUsername(auth.user.name); // Update username
-    } else {
-      setUsername("");
-    }
-  }, [auth]);
-
-  const handleLogout = () => {
-    localStorage.removeItem("access_token"); // Remove token from storage
-    setIsLoggedIn(false); // Update state
-    setAuth({
-      isAuthenthicate: false,
-      user: {
-        email: "",
-        name: "",
-        role: "",
-      },
-    });
-    navigate("/"); // Redirect to home
-    toast.success("Logged out successfully!");
+  const handleItemClick = (item, path) => {
+    setActiveItem(item); // Set the active menu item
+    navigate(path); // Navigate to the specified path
   };
 
-  const navigateTo = (path) => {
-    navigate(path);
+  const handleLogout = () => {
+    localStorage.removeItem("access_token");
+    setAuth({
+      isAuthenthicate: false,
+      user: { email: "", name: "", role: "" },
+    });
+    toast.success("Logged out successfully!");
+    navigate("/"); // Redirect to home
   };
 
   return (
     <div className={styles.sidebar}>
       <div className={styles.header}>
+        <div className={styles.logo}>basicexpress</div>
         <ul className={styles.menu}>
           <li
             className={`${styles.menuItem} ${
-              activeItem === "Dashboard" ? styles.active : ""
+              activeItem === "dashboard" ? styles.active : ""
             }`}
-            onClick={() => handleItemClick("Dashboard")}
+            onClick={() => handleItemClick("dashboard", "/dashboard")}
           >
             <MdDashboard /> Dashboard
           </li>
           <li
             className={`${styles.menuItem} ${
-              activeItem === "Orders" ? styles.active : ""
+              activeItem === "orders" ? styles.active : ""
             }`}
-            onClick={() => handleItemClick("Orders")}
+            onClick={() => handleItemClick("orders", "/orders")}
           >
-            <BsBoxSeam/> Orders
+            <BsBoxSeam /> Orders
           </li>
           <li
             className={`${styles.menuItem} ${
-              activeItem === "Shipments" ? styles.active : ""
+              activeItem === "user" ? styles.active : ""
             }`}
-            onClick={() => handleItemClick("Shipments")}
+            onClick={() => handleItemClick("user", "/user")}
+          >
+            <FaUser /> User
+          </li>
+          <li
+            className={`${styles.menuItem} ${
+              activeItem === "shipments" ? styles.active : ""
+            }`}
+            onClick={() => handleItemClick("shipments", "/shipments")}
           >
             <FaShippingFast /> Shipments
           </li>
           <li
             className={`${styles.menuItem} ${
-              activeItem === "Tracking" ? styles.active : ""
+              activeItem === "tracking" ? styles.active : ""
             }`}
-            onClick={() => handleItemClick("Tracking")}
+            onClick={() => handleItemClick("tracking", "/tracking")}
           >
             <FaMapLocationDot /> Tracking
           </li>
           <li
             className={`${styles.menuItem} ${
-              activeItem === "Delivery Request" ? styles.active : ""
+              activeItem === "delivery-request" ? styles.active : ""
             }`}
-            onClick={() => handleItemClick("Delivery Request")}
+            onClick={() => handleItemClick("delivery-request", "/delivery-request")}
           >
             <TbTruckDelivery /> Delivery Request
           </li>
           <li
             className={`${styles.menuItem} ${
-              activeItem === "Invoice" ? styles.active : ""
+              activeItem === "invoice" ? styles.active : ""
             }`}
-            onClick={() => handleItemClick("Invoice")}
+            onClick={() => handleItemClick("invoice", "/invoice")}
           >
             <FaFileInvoiceDollar /> Invoice
           </li>
           <li
             className={`${styles.menuItem} ${
-              activeItem === "Payment" ? styles.active : ""
+              activeItem === "payment" ? styles.active : ""
             }`}
-            onClick={() => handleItemClick("Payment")}
+            onClick={() => handleItemClick("payment", "/payment")}
           >
             <MdOutlinePayment /> Payment
           </li>
           <li
             className={`${styles.menuItem} ${
-              activeItem === "Reports" ? styles.active : ""
+              activeItem === "reports" ? styles.active : ""
             }`}
-            onClick={() => handleItemClick("Reports")}
+            onClick={() => handleItemClick("reports", "/reports")}
           >
             <HiDocumentReport /> Reports
           </li>
-        </ul>
-      </div>
-      <div className={styles.footer}>
-        <ul className={styles.menu}>
-          <li className={styles.menuItem}><IoIosSettings /> Setting</li>
+          <li className={styles.menuItem}>
+            <IoIosSettings /> Setting
+          </li>
           <li onClick={handleLogout} className={styles.menuItem}>
-          <IoLogOutOutline /> Logout
+            <IoLogOutOutline /> Logout
           </li>
         </ul>
       </div>

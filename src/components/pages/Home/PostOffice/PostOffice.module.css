@@ -1,0 +1,26 @@
+.infobox {
+  border: 1px solid black;
+  width: 250px;
+  padding: 5px;
+  cursor: pointer;
+}
+
+.infocontent {
+  display: flex;
+  flex-direction: column;
+  max-height: 400px; /* Giới hạn chiều cao tối đa */
+  overflow-y: auto; /* Thêm scroll nếu nội dung vượt quá chiều cao */
+}
+
+.infocontainer {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  justify-content: center;
+  margin-top: 50px;
+}
+
+.map {
+  height: 100%; /* Ensure this is enough to display the map */
+  width: 700px; /* Set full width */
+}

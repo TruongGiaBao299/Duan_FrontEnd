@@ -3,8 +3,9 @@ import { useNavigate } from "react-router-dom";
 import styles from "./Navbar.module.css";
 import { toast } from "react-toastify";
 import { AuthContext } from "../../../context/auth.context";
-import { IoMdNotificationsOutline } from "react-icons/io";
+import { IoIosNotificationsOutline } from "react-icons/io";
 import { BsChatLeftText } from "react-icons/bs";
+import { FaUser } from "react-icons/fa";
 
 const Navbar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -46,20 +47,19 @@ const Navbar = () => {
 
   return (
     <div className={styles.navbar}>
-      <div className={styles.left}>
-        <div className={styles.logo}>BasicExpress</div>
-        <div className={styles.greeting}>
-          <span className={styles.greetinghello}>Welcome back,</span>
-          <span className={styles.greetingname}>{username}!</span>
-        </div>
+      <div className={styles.hello}>
+        <span className={styles.welcome}>Welcome back,</span>
+        <span className={styles.name}>{username}</span>
       </div>
+
       <div className={styles.right}>
         <input type="text" className={styles.searchbar} placeholder="Search" />
-        <div className={styles.icon}>
-          <div>
-            <IoMdNotificationsOutline />
+
+        <div className={styles.groupicon}>
+          <div className={styles.icon}>
+            <IoIosNotificationsOutline />
           </div>
-          <div>
+          <div className={styles.icon}>
             <BsChatLeftText />
           </div>
         </div>
@@ -67,4 +67,5 @@ const Navbar = () => {
     </div>
   );
 };
+
 export default Navbar;

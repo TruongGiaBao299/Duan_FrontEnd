@@ -1,17 +1,13 @@
 .sidebar {
   height: 100%;
-  background-color: #1c222b;
+  width: 180px;
+  background-color: #242731;
   color: #fff;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 82px 25px;
-}
-
-.menuItem {
-  padding: 15px 20px;
-  margin-bottom: 10px;
-  cursor: pointer;
+  padding: 10px 20px;
+  position: fixed;
 }
 
 .menu {
@@ -20,8 +16,13 @@
   margin: 0;
 }
 
-.footer{
-  padding: 80px 0px 0px;
+.logo{
+  padding: 10px;
+  align-items: center;
+  justify-items: center;
+  margin-bottom: 10px;
+  font-size: 20px;
+  color: #94DA22;
 }
 
 .menuItem {
@@ -31,6 +32,7 @@
   justify-items: center;
   display: flex;
   gap: 10px;
+  margin-bottom: 10px;
 }
 
 .menuItem:hover {
@@ -45,4 +47,11 @@
   font-weight: bold;
   border-radius: 20px;
 }
+
+.menuItem.active {
+  background-color: #94DA22; /* Highlight the active item */
+  color: black;
+  font-weight: bold;
+}
+
 

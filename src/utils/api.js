@@ -1,31 +1,6 @@
 import axios from "./axiosCustomize";
+import { createOrderApi, getOrderByIdApi, getOrderApi } from "./orderAPI/orderAPI";
+import { getPostOfficeApi } from "./postOfficeAPI/postOfficeAPI";
+import { createUserApi, getUserApi, loginApi } from "./userAPI/userAPI";
 
-
-// Tạo tài khoản
-const createUserApi = (name, email, password) =>{
-    const URL_API = "/v1/api/register";
-    const data = {
-        name, email, password
-    }
-    return axios.post(URL_API, data);
-}
-
-// Đăng nhập
-const loginApi = ( email, password ) =>{
-    const URL_API = "/v1/api/login";
-    const data = {
-        email, password
-    }
-    return axios.post(URL_API, data);
-}
-
-// Lấy data người dùng
-const getUserApi = () =>{
-    const URL_API = "/v1/api/user";
-
-    return axios.get(URL_API);
-}
-
-export {
-    createUserApi, loginApi, getUserApi
-}
+export { createUserApi, loginApi, getUserApi, createOrderApi, getOrderByIdApi, getPostOfficeApi, getOrderApi };

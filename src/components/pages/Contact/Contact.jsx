@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "./Contact.module.scss";
+import styles from "./Contact.module.css";
 import Header from "../../layout/Header/Header";
 
 const Contact = () => {
@@ -28,15 +28,6 @@ const Contact = () => {
               <div className={styles.field}>
                 <label htmlFor="email">Email Address</label>
                 <input type="email" id="email" name="email" required />
-              </div>
-              <div className={styles.field}>
-                <label htmlFor="message">Message</label>
-                <textarea
-                  id="message"
-                  name="message"
-                  rows="4"
-                  required
-                ></textarea>
               </div>
               <button type="submit" className={styles.button}>
                 Submit

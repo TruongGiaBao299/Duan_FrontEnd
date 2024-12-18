@@ -1,0 +1,43 @@
+.container {
+  padding: 10px;
+}
+
+.filters {
+  margin-bottom: 20px;
+}
+
+.filters button {
+  padding: 10px 15px;
+  margin: 0 5px;
+  color: #F5F5F5;
+  cursor: pointer;
+  border: 2px solid #475365;
+  background-color: #1C222B;
+  border-radius: 14px;
+}
+
+.filters button.active {
+  background-color: #94da22;
+  color: black;
+}
+
+.more{
+  cursor: pointer;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  color: #ffffff;
+}
+
+th,
+td {
+  padding: 10px;
+  text-align: left;
+  color: white;
+  white-space: nowrap; 
+  overflow: hidden;    
+  text-overflow: ellipsis; 
+}
+

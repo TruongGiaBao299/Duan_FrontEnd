@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
-import styles from "./User.module.scss";
-import Header from "../../layout/Header/Header";
-import { getUserApi } from "../../../utils/api";
+import styles from "./User.module.css";
+import { getUserApi } from "../../utils/api";
 
 const User = () => {
   const [data, setData] = useState([]);
@@ -30,13 +29,7 @@ const User = () => {
 
   return (
     <>
-    <Header></Header>
     <div className={styles.pageWrapper}>
-      <div className={styles.header}>
-        <h1>User Management</h1>
-        <button className={styles.addButton}>Add User</button>
-      </div>
-
       {loading ? (
         <p className={styles.loading}>Loading users...</p>
       ) : error ? (
@@ -44,13 +37,13 @@ const User = () => {
       ) : data.length === 0 ? (
         <p className={styles.noData}>No users found.</p>
       ) : (
-        <table className={styles.table}>
+        <table className={styles.tableuser}>
           <thead>
             <tr>
-              <th className={styles.tableHeader}>Id</th>
-              <th className={styles.tableHeader}>Name</th>
-              <th className={styles.tableHeader}>Email</th>
-              <th className={styles.tableHeader}>Role</th>
+              <th className={styles.tableuserHeader}>Id</th>
+              <th className={styles.tableuserHeader}>Name</th>
+              <th className={styles.tableuserHeader}>Email</th>
+              <th className={styles.tableuserHeader}>Role</th>
             </tr>
           </thead>
           <tbody>

@@ -2,7 +2,7 @@ import React from "react";
 import { createUserApi } from "../../../utils/api";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import styles from "./Register.module.scss";
+import styles from "./Register.module.css";
 
 const Register = () => {
   const navigate = useNavigate();

@@ -1,42 +1,33 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Header from "../../layout/Header/Header";
-import styles from "./Home.module.scss";
+import CreateOrder from "./CreateOrder/CreateOrder";
+import FindOrder from "./FindOrder/FindOrder";
+import PostOffice from "./PostOffice/PostOffice";
 
 const Home = () => {
-  const features = ["Feature One", "Feature Two", "Feature Three"];
+  const [currentPage, setCurrentPage] = useState("create"); // State to track current page
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // State to check if the user is logged in
+
+  useEffect(() => {
+    // Check for token in localStorage to determine if the user is logged in
+    const token = localStorage.getItem("access_token");
+    setIsLoggedIn(!!token); // Set isLoggedIn to true if there's a token, otherwise false
+  }, []);
 
   return (
     <>
-      <Header></Header>
-      {/* Hero Section */}
-      <section className={styles.hero}>
-        <div className={styles.container}>
-          <h1 className={styles.title}>Welcome to My Website</h1>
-          <p className={styles.subtitle}>
-            This is a simple home page created without Material-UI. Explore and
-            enjoy!
-          </p>
-          <button className={styles.button}>Get Started</button>
-        </div>
-      </section>
+      <Header />
+      <div>
+        {/* Page navigation buttons */}
+        <button onClick={() => setCurrentPage("create")}>Create Order</button>
+        <button onClick={() => setCurrentPage("find")}>Find Order</button>
+        <button onClick={() => setCurrentPage("postoffice")}>PostOffice</button>
+      </div>
 
-      {/* Features Section */}
-      <section className={styles.features}>
-        <div className={styles.container}>
-          <h2 className={styles.sectionTitle}>Features</h2>
-          <div className={styles.grid}>
-            {features.map((feature, index) => (
-              <div className={styles.card} key={index}>
-                <h3 className={styles.cardTitle}>{feature}</h3>
-                <p className={styles.cardDescription}>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Nullam scelerisque convallis.
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* Display components based on the current page */}
+      {currentPage === "create" && <CreateOrder />}
+      {currentPage === "find" && <FindOrder />}
+      {currentPage === "postoffice" && <PostOffice />}
     </>
   );
 };
