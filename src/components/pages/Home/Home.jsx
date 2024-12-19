@@ -3,6 +3,7 @@ import Header from "../../layout/Header/Header";
 import CreateOrder from "./CreateOrder/CreateOrder";
 import FindOrder from "./FindOrder/FindOrder";
 import PostOffice from "./PostOffice/PostOffice";
+import BecomeDriver from "./BecomeDriver/BecomeDriver";
 
 const Home = () => {
   const [currentPage, setCurrentPage] = useState("create"); // State to track current page
@@ -22,12 +23,14 @@ const Home = () => {
         <button onClick={() => setCurrentPage("create")}>Create Order</button>
         <button onClick={() => setCurrentPage("find")}>Find Order</button>
         <button onClick={() => setCurrentPage("postoffice")}>PostOffice</button>
+        <button onClick={() => setCurrentPage("becomedriver")}>BecomeDriver</button>
       </div>
 
       {/* Display components based on the current page */}
       {currentPage === "create" && <CreateOrder />}
       {currentPage === "find" && <FindOrder />}
       {currentPage === "postoffice" && <PostOffice />}
+      {currentPage === "becomedriver" && <BecomeDriver />}
     </>
   );
 };

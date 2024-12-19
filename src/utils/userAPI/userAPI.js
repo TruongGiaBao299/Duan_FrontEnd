@@ -27,3 +27,10 @@ export const getUserApi = () => {
 
   return axios.get(URL_API);
 };
+
+// Lấy đơn hàng bằng id
+export const makeDriverApi = (id) => {
+  const URL_API = `/v1/api/becomeDriver/${id}`; // Thêm id vào URL
+
+  return axios.post(URL_API);
+};

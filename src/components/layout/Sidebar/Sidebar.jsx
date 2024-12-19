@@ -73,6 +73,14 @@ const Sidebar = () => {
           </li>
           <li
             className={`${styles.menuItem} ${
+              activeItem === "driver" ? styles.active : ""
+            }`}
+            onClick={() => handleItemClick("driver", "/driver")}
+          >
+            <FaUser /> Driver
+          </li>
+          <li
+            className={`${styles.menuItem} ${
               activeItem === "shipments" ? styles.active : ""
             }`}
             onClick={() => handleItemClick("shipments", "/shipments")}

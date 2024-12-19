@@ -15,6 +15,7 @@ import ShipmentsPage from "./components/pages/ShipmentsPage/ShipmentsPage";
 import UserPage from "./components/pages/UserPage/UserPage";
 import ViewOrder from "./containers/ViewOrder/ViewOrder";
 import ViewOrderPage from "./components/pages/ViewOrderPage/ViewOrderPage";
+import DriverPage from "./components/pages/DriverPage/DriverPage";
 
 function App() {
   const { setAuth, appLoading, setAppLoading } = useContext(AuthContext);
@@ -54,6 +55,7 @@ function App() {
             <Route path="/orders" element={<OrdersPage></OrdersPage>}></Route>
             <Route path="/shipments" element={<ShipmentsPage></ShipmentsPage>}></Route>
             <Route path="/vieworder" element={<ViewOrderPage></ViewOrderPage>}></Route>
+            <Route path="/driver" element={<DriverPage></DriverPage>}></Route>
           </Routes>
         </BrowserRouter>
     </>

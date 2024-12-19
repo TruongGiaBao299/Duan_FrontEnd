@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import styles from "./User.module.css";
+import styles from "./Driver.module.css";
 import { getUserApi, makeDriverApi } from "../../utils/api";
 import { toast } from "react-toastify";
+import { changeStatusDriverApi, getDriverApi } from "../../utils/driverAPI/driverAPI";
 
-const User = () => {
+const Driver = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -12,8 +13,8 @@ const User = () => {
     const fetchUser = async () => {
       try {
         setLoading(true);
-        const res = await getUserApi();
-        console.log("User:", res);
+        const res = await getDriverApi();
+        console.log("Driver:", res);
         if (res) {
           setData(res);
         } else {
@@ -30,12 +31,12 @@ const User = () => {
 
   const handleBecomeDriver = async (userId) => {
     try {
-      const res = await makeDriverApi(userId);
+      const res = await changeStatusDriverApi(userId);
       console.log("Become Driver Response:", res);
-      toast.success("User role updated to driver successfully!");
+      toast.success("Driver status updated to driver successfully!");
       // Update the user's role in the table
       const updatedData = data.map((user) =>
-        user._id === userId ? { ...user, role: "driver" } : user
+        user._id === userId ? { ...user, role: "driver", status: "active" } : user
       );
       setData(updatedData);
     } catch (error) {
@@ -57,18 +58,29 @@ const User = () => {
           <thead>
             <tr>
               <th className={styles.tableuserHeader}>Id</th>
-              <th className={styles.tableuserHeader}>Name</th>
-              <th className={styles.tableuserHeader}>Email</th>
-              <th className={styles.tableuserHeader}>Role</th>
-              <th className={styles.tableuserHeader}>Action</th>
+              <th className={styles.tableuserHeader}>DriverName</th>
+              <th className={styles.tableuserHeader}>DriverNumber</th>
+              <th className={styles.tableuserHeader}>DriverEmail</th>
+              <th className={styles.tableuserHeader}>DriverBirth</th>
+              <th className={styles.tableuserHeader}>DriverId</th>
+              <th className={styles.tableuserHeader}>DriverAddress</th>
+              <th className={styles.tableuserHeader}>DriverCity</th>
+              <th className={styles.tableuserHeader}>status</th>
+              <th className={styles.tableuserHeader}>role</th>
             </tr>
           </thead>
           <tbody>
             {data.map((user) => (
               <tr key={user._id} className={styles.tableRow}>
                 <td className={styles.tableCell}>{user._id}</td>
-                <td className={styles.tableCell}>{user.name}</td>
-                <td className={styles.tableCell}>{user.email}</td>
+                <td className={styles.tableCell}>{user.DriverName}</td>
+                <td className={styles.tableCell}>{user.DriverNumber}</td>
+                <td className={styles.tableCell}>{user.DriverEmail}</td>
+                <td className={styles.tableCell}>{user.DriverBirth}</td>
+                <td className={styles.tableCell}>{user.DriverId}</td>
+                <td className={styles.tableCell}>{user.DriverAddress}</td>
+                <td className={styles.tableCell}>{user.DriverCity}</td>              
+                <td className={styles.tableCell}>{user.status}</td>
                 <td className={styles.tableCell}>{user.role}</td>
                 <td className={styles.tableCell}>
                   {user.role !== "driver" ? (
@@ -76,10 +88,12 @@ const User = () => {
                       className={styles.becomeDriverButton}
                       onClick={() => handleBecomeDriver(user._id)}
                     >
-                      Become a Driver
+                      Accept Request
                     </button>
                   ) : (
-                    <span className={styles.alreadyDriver}>Already a Driver</span>
+                    <span className={styles.alreadyDriver}>
+                      Request Accepted
+                    </span>
                   )}
                 </td>
               </tr>
@@ -91,4 +105,4 @@ const User = () => {
   );
 };
 
-export default User;
+export default Driver;
