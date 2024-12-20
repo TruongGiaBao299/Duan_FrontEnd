@@ -11,6 +11,7 @@ import {
   getUserApi,
   loginApi,
   makeDriverApi,
+  makeGuestApi,
 } from "./userAPI/userAPI";
 changeStatusDriverApi;
 export {
@@ -24,4 +25,5 @@ export {
   createDriverApi,
   makeDriverApi,
   changeStatusDriverApi,
+  makeGuestApi
 };

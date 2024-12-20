@@ -7,10 +7,12 @@ import User from "../../../containers/User/User";
 const UserPage = () => {
   return (
     <>
-      <Sidebar></Sidebar>
-      <Navbar></Navbar>
-      <div className={styles.main}>
-        <User></User>
+      <div className={styles.container}>
+        <Sidebar></Sidebar>
+        <Navbar></Navbar>
+        <div className={styles.main}>
+          <User></User>
+        </div>
       </div>
     </>
   );

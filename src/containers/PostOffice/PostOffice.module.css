@@ -1,0 +1,20 @@
+.pageWrapper {
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.tableuser {
+  width: 100%;
+  color: black;
+}
+
+.tableuserHeader {
+  text-align: left;
+  border: none;
+  color: white
+}
+
+.tableCell {
+  border: none;
+  color: white
+}

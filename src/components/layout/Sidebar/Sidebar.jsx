@@ -14,6 +14,8 @@ import { HiDocumentReport } from "react-icons/hi";
 import { IoIosSettings } from "react-icons/io";
 import { IoLogOutOutline } from "react-icons/io5";
 import { FaUser } from "react-icons/fa";
+import { FaUserNinja } from "react-icons/fa";
+import { HiBuildingOffice2 } from "react-icons/hi2";
 
 const Sidebar = () => {
   const [activeItem, setActiveItem] = useState(null);
@@ -77,7 +79,15 @@ const Sidebar = () => {
             }`}
             onClick={() => handleItemClick("driver", "/driver")}
           >
-            <FaUser /> Driver
+            <FaUserNinja /> Driver
+          </li>
+          <li
+            className={`${styles.menuItem} ${
+              activeItem === "postoffice" ? styles.active : ""
+            }`}
+            onClick={() => handleItemClick("postoffice", "/postoffice")}
+          >
+            <HiBuildingOffice2 /> PostOffice
           </li>
           <li
             className={`${styles.menuItem} ${

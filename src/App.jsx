@@ -16,6 +16,7 @@ import UserPage from "./components/pages/UserPage/UserPage";
 import ViewOrder from "./containers/ViewOrder/ViewOrder";
 import ViewOrderPage from "./components/pages/ViewOrderPage/ViewOrderPage";
 import DriverPage from "./components/pages/DriverPage/DriverPage";
+import PostOfficePage from "./components/pages/PostOfficePage/PostOfficePage";
 
 function App() {
   const { setAuth, appLoading, setAppLoading } = useContext(AuthContext);
@@ -56,6 +57,7 @@ function App() {
             <Route path="/shipments" element={<ShipmentsPage></ShipmentsPage>}></Route>
             <Route path="/vieworder" element={<ViewOrderPage></ViewOrderPage>}></Route>
             <Route path="/driver" element={<DriverPage></DriverPage>}></Route>
+            <Route path="/postoffice" element={<PostOfficePage></PostOfficePage>}></Route>
           </Routes>
         </BrowserRouter>
     </>

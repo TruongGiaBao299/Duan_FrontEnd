@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styles from "./User.module.css";
-import { getUserApi, makeDriverApi } from "../../utils/api";
+import { getUserApi, makeDriverApi, makeGuestApi } from "../../utils/api";
 import { toast } from "react-toastify";
 
 const User = () => {
@@ -44,6 +44,22 @@ const User = () => {
     }
   };
 
+  const handleBecomeGuest = async (userId) => {
+    try {
+      const res = await makeGuestApi(userId);
+      console.log("Become Guest Response:", res);
+      toast.success("User role updated to guest successfully!");
+      // Update the user's role in the table
+      const updatedData = data.map((user) =>
+        user._id === userId ? { ...user, role: "guest" } : user
+      );
+      setData(updatedData);
+    } catch (error) {
+      console.error("Error making guest:", error);
+      toast.error("Failed to update user role. Please try again.");
+    }
+  };
+
   return (
     <div className={styles.pageWrapper}>
       {loading ? (
@@ -72,14 +88,25 @@ const User = () => {
                 <td className={styles.tableCell}>{user.role}</td>
                 <td className={styles.tableCell}>
                   {user.role !== "driver" ? (
-                    <button
-                      className={styles.becomeDriverButton}
-                      onClick={() => handleBecomeDriver(user._id)}
-                    >
-                      Become a Driver
-                    </button>
+                    user.role === "admin" ? (
+                      <span className={styles.alreadyAdmin}>
+                        Already an Admin
+                      </span>
+                    ) : (
+                      <button
+                        className={styles.becomeDriverButton}
+                        onClick={() => handleBecomeDriver(user._id)}
+                      >
+                        Become a Driver
+                      </button>
+                    )
                   ) : (
-                    <span className={styles.alreadyDriver}>Already a Driver</span>
+                    <button
+                        className={styles.becomeGuestButton}
+                        onClick={() => handleBecomeGuest(user._id)}
+                      >
+                        Become a Guest
+                      </button>
                   )}
                 </td>
               </tr>

@@ -30,8 +30,7 @@ export const getDriverApi = () => {
 
 // Lấy đơn hàng bằng id
 export const changeStatusDriverApi = (id) => {
-    const URL_API = `/v1/api/driver/${id}`; // Thêm id vào URL
-  
-    return axios.post(URL_API);
-  };
-  
+  const URL_API = `/v1/api/driver/${id}`; // Thêm id vào URL
+
+  return axios.post(URL_API);
+};
