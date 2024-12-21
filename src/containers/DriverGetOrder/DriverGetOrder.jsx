@@ -36,7 +36,7 @@ const DriverGetOrder = () => {
       toast.success("Order status updated to driver successfully!");
       // Update the user's role in the table
       const updatedData = data.map((order) =>
-        order._id === userId ? { ...order } : order
+        order._id === userId ? { ...order, status: "is shipping" } : order
       );
       setData(updatedData);
     } catch (error) {
