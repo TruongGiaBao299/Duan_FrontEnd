@@ -34,3 +34,31 @@ export const changeStatusDriverApi = (id) => {
 
   return axios.post(URL_API);
 };
+
+// Lấy đơn hàng theo gmail của tài xế
+export const getDriverOrderByEmailApi = () => {
+  const URL_API = "/v1/api/getdriverorderemail";
+
+  return axios.get(URL_API);
+};
+
+// Tài xế nhận đơn hàng
+export const AcceptOrderApi = (id) => {
+  const URL_API = `/v1/api/updateorderdriver/${id}`; // Thêm id vào URL
+
+  return axios.post(URL_API);
+};
+
+// Tài xế hủy đơn hàng
+export const CancelledOrderApi = (id) => {
+  const URL_API = `/v1/api/updateordercancelled/${id}`; // Thêm id vào URL
+
+  return axios.post(URL_API);
+};
+
+// Tài xế đã giao đơn hàng
+export const ShippedOrderApi = (id) => {
+  const URL_API = `/v1/api/updateordershipped/${id}`; // Thêm id vào URL
+
+  return axios.post(URL_API);
+};

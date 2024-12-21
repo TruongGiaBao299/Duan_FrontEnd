@@ -50,6 +50,7 @@ const Orders = () => {
                 <th>Price</th>
                 <th>Status</th>
                 <th>Created By</th>
+                <th>Driver</th>
               </tr>
             </thead>
             <tbody>
@@ -75,6 +76,7 @@ const Orders = () => {
                   <td>{order.price}</td>
                   <td>{order.status}</td>
                   <td>{order.createdBy}</td>
+                  <td>{order.driver}</td>
                 </tr>
               ))}
             </tbody>

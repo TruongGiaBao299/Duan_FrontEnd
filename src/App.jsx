@@ -17,6 +17,7 @@ import ViewOrder from "./containers/ViewOrder/ViewOrder";
 import ViewOrderPage from "./components/pages/ViewOrderPage/ViewOrderPage";
 import DriverPage from "./components/pages/DriverPage/DriverPage";
 import PostOfficePage from "./components/pages/PostOfficePage/PostOfficePage";
+import DriverHomePage from "./components/pages/DriverHomePage/DriverHomePage";
 
 function App() {
   const { setAuth, appLoading, setAppLoading } = useContext(AuthContext);
@@ -58,6 +59,7 @@ function App() {
             <Route path="/vieworder" element={<ViewOrderPage></ViewOrderPage>}></Route>
             <Route path="/driver" element={<DriverPage></DriverPage>}></Route>
             <Route path="/postoffice" element={<PostOfficePage></PostOfficePage>}></Route>
+            <Route path="/driverhome" element={<DriverHomePage></DriverHomePage>}></Route>
           </Routes>
         </BrowserRouter>
     </>

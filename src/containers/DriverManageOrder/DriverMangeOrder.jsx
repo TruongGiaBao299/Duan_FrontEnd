@@ -1,14 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { getOrderByEmailApi } from "../../utils/orderAPI/orderAPI";
 import { toast } from "react-toastify";
+import {
+  CancelledOrderApi,
+  getDriverOrderByEmailApi,
+  ShippedOrderApi,
+} from "../../utils/driverAPI/driverAPI";
 
-const ViewOrder = () => {
+const DriverMangeOrder = () => {
   const [orders, setOrders] = useState([]);
+  const [data, setData] = useState([]);
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await getOrderByEmailApi();
+        const res = await getDriverOrderByEmailApi();
         console.log("Order by email:", res);
         console.log("Order by email length:", res.length);
 
@@ -26,6 +32,38 @@ const ViewOrder = () => {
 
     fetchUser();
   }, []);
+
+  const ShippedOrder = async (userId) => {
+    try {
+      const res = await ShippedOrderApi(userId);
+      console.log("Shipped Order Response:", res);
+      toast.success("Order status updated to driver successfully!");
+      // Update the user's role in the table
+      const updatedData = data.map((order) =>
+        order._id === userId ? { ...order } : order
+      );
+      setData(updatedData);
+    } catch (error) {
+      console.error("Error update:", error);
+      toast.error("Failed to update. Please try again.");
+    }
+  };
+
+  const CancelledOrder = async (userId) => {
+    try {
+      const res = await CancelledOrderApi(userId);
+      console.log("Cancelled Order Response:", res);
+      toast.success("Order status updated to driver successfully!");
+      // Update the user's role in the table
+      const updatedData = data.map((order) =>
+        order._id === userId ? { ...order } : order
+      );
+      setData(updatedData);
+    } catch (error) {
+      console.error("Error update:", error);
+      toast.error("Failed to update. Please try again.");
+    }
+  };
 
   return (
     <div>
@@ -93,6 +131,30 @@ const ViewOrder = () => {
               <p>
                 <strong>Driver:</strong> {order.driver}
               </p>
+
+              {/* Status Messages */}
+              {order.status === "shipped" && (
+                <p style={{ color: "green", fontWeight: "bold" }}>
+                  Order shipped successfully
+                </p>
+              )}
+              {order.status === "cancelled" && (
+                <p style={{ color: "red", fontWeight: "bold" }}>
+                  Order cancelled
+                </p>
+              )}
+
+              {/* Conditional Buttons */}
+              {order.status !== "shipped" && order.status !== "cancelled" && (
+                <div>
+                  <button onClick={() => ShippedOrder(order._id)}>
+                    Shipped
+                  </button>
+                  <button onClick={() => CancelledOrder(order._id)}>
+                    Cancelled
+                  </button>
+                </div>
+              )}
             </div>
           ))}
         </div>
@@ -101,4 +163,4 @@ const ViewOrder = () => {
   );
 };
 
-export default ViewOrder;
+export default DriverMangeOrder;

@@ -36,7 +36,9 @@ const Login = () => {
         // Check if the user is an admin and navigate accordingly
         if (res.user.role === "admin") {
           navigate("/dashboard"); // Navigate to admin page if the user is admin
-        } else {
+        } else if (res.user.role === "driver") {
+          navigate("/driverhome"); // Navigate to admin page if the user is admin
+        }else {
           navigate("/"); // Navigate to home for other users
         }
 
