@@ -1,57 +1,124 @@
 import React, { useEffect, useState } from "react";
 import styles from "./Driver.module.css";
-import { getUserApi, makeDriverApi } from "../../utils/api";
+import { getUserApi, makeDriverApi, makeGuestApi } from "../../utils/api";
 import { toast } from "react-toastify";
-import { changeStatusDriverApi, getDriverApi } from "../../utils/driverAPI/driverAPI";
+import { changeStatusDriverApi, changeStatusDriverToGuestApi, getDriverApi } from "../../utils/driverAPI/driverAPI";
 
 const Driver = () => {
-  const [data, setData] = useState([]);
+  const [userData, setUserData] = useState([]);
+  const [driverData, setDriverData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
   useEffect(() => {
-    const fetchUser = async () => {
+    const fetchData = async () => {
       try {
         setLoading(true);
-        const res = await getDriverApi();
-        console.log("Driver:", res);
-        if (res) {
-          setData(res);
+        
+        // Making both API calls concurrently using Promise.all
+        const [userRes, driverRes] = await Promise.all([getUserApi(), getDriverApi()]);
+        
+        console.log("User:", userRes);
+        console.log("Driver:", driverRes);
+  
+        // Handling both responses
+        if (userRes) {
+          // Set user data (or handle it as required)
+          setUserData(userRes);
         } else {
-          setData([]);
+          setUserData([]); // If no user data
+        }
+  
+        if (driverRes) {
+          // Set driver data (or handle it as required)
+          setDriverData(driverRes);
+        } else {
+          setDriverData([]); // If no driver data
         }
       } catch (err) {
-        toast.error("Failed to fetch user data. Please try again later.");
+        toast.error("Failed to fetch data. Please try again later.");
       } finally {
         setLoading(false);
       }
     };
-    fetchUser();
-  }, []);
+  
+    fetchData();
+  }, []);  // Empty dependency array to run once when the component mounts
+  
 
-  const handleBecomeDriver = async (userId) => {
+  const handleBecomeDriver = async (email) => {
     try {
-      const res = await changeStatusDriverApi(userId);
-      console.log("Become Driver Response:", res);
-      toast.success("Driver status updated to driver successfully!");
-      // Update the user's role in the table
-      const updatedData = data.map((user) =>
-        user._id === userId ? { ...user, role: "driver", status: "active" } : user
+      // Run both API calls concurrently using Promise.all
+      const [changeStatusResponse, makeDriverResponse] = await Promise.all([
+        changeStatusDriverApi(email),
+        makeDriverApi(email),
+      ]);
+  
+      console.log("Change Status Driver Response:", changeStatusResponse);
+      console.log("Make Driver Response:", makeDriverResponse);
+  
+      toast.success("Driver status and user role updated successfully!");
+  
+      // Update the user's role in the driverData table
+      const updatedDriverData = driverData.map((user) =>
+        user.email === email
+          ? { ...user, role: "driver", status: "active" }
+          : user
       );
-      setData(updatedData);
+      setDriverData(updatedDriverData);
+  
+      // Update the user's role in the userData table (if needed)
+      const updatedUserData = userData.map((user) =>
+        user.email === email ? { ...user, role: "driver" } : user
+      );
+      setUserData(updatedUserData);
+  
     } catch (error) {
       console.error("Error making driver:", error);
       toast.error("Failed to update user role. Please try again.");
     }
   };
 
+  const handleBecomeGuest = async (email) => {
+    try {
+      // Run both API calls concurrently using Promise.all
+      const [changeStatusResponse, makeDriverResponse] = await Promise.all([
+        changeStatusDriverToGuestApi(email),
+        makeGuestApi(email),
+      ]);
+  
+      console.log("Change Status Driver Response:", changeStatusResponse);
+      console.log("Make Driver Response:", makeDriverResponse);
+  
+      toast.success("Driver status and user role updated successfully!");
+  
+      // Update the user's role in the driverData table
+      const updatedDriverData = driverData.map((user) =>
+        user.email === email
+          ? { ...user, role: "guest", status: "pending" }
+          : user
+      );
+      setDriverData(updatedDriverData);
+  
+      // Update the user's role in the userData table (if needed)
+      const updatedUserData = userData.map((user) =>
+        user.email === email ? { ...user, role: "guest" } : user
+      );
+      setUserData(updatedUserData);
+  
+    } catch (error) {
+      console.error("Error making driver:", error);
+      toast.error("Failed to update user role. Please try again.");
+    }
+  };
+  
   return (
     <div className={styles.pageWrapper}>
       {loading ? (
         <p className={styles.loading}>Loading users...</p>
       ) : error ? (
         <p className={styles.error}>{error}</p>
-      ) : data.length === 0 ? (
+      ) : driverData.length === 0 ? (
         <p className={styles.noData}>No users found.</p>
       ) : (
         <table className={styles.tableuser}>
@@ -70,12 +137,12 @@ const Driver = () => {
             </tr>
           </thead>
           <tbody>
-            {data.map((user) => (
+            {driverData.map((user) => (
               <tr key={user._id} className={styles.tableRow}>
                 <td className={styles.tableCell}>{user._id}</td>
                 <td className={styles.tableCell}>{user.DriverName}</td>
                 <td className={styles.tableCell}>{user.DriverNumber}</td>
-                <td className={styles.tableCell}>{user.DriverEmail}</td>
+                <td className={styles.tableCell}>{user.email}</td>
                 <td className={styles.tableCell}>{user.DriverBirth}</td>
                 <td className={styles.tableCell}>{user.DriverId}</td>
                 <td className={styles.tableCell}>{user.DriverAddress}</td>
@@ -86,14 +153,17 @@ const Driver = () => {
                   {user.role !== "driver" ? (
                     <button
                       className={styles.becomeDriverButton}
-                      onClick={() => handleBecomeDriver(user._id)}
+                      onClick={() => handleBecomeDriver(user.email)}
                     >
                       Accept Request
                     </button>
                   ) : (
-                    <span className={styles.alreadyDriver}>
-                      Request Accepted
-                    </span>
+                    <button
+                      className={styles.becomeGuestButton}
+                      onClick={() => handleBecomeGuest(user.email)}
+                    >
+                      Become Guest
+                    </button>
                   )}
                 </td>
               </tr>

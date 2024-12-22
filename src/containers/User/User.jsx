@@ -28,14 +28,14 @@ const User = () => {
     fetchUser();
   }, []);
 
-  const handleBecomeDriver = async (userId) => {
+  const handleBecomeDriver = async (email) => {
     try {
-      const res = await makeDriverApi(userId);
+      const res = await makeDriverApi(email);
       console.log("Become Driver Response:", res);
       toast.success("User role updated to driver successfully!");
       // Update the user's role in the table
       const updatedData = data.map((user) =>
-        user._id === userId ? { ...user, role: "driver" } : user
+        user.email === email ? { ...user, role: "driver" } : user
       );
       setData(updatedData);
     } catch (error) {
@@ -44,14 +44,14 @@ const User = () => {
     }
   };
 
-  const handleBecomeGuest = async (userId) => {
+  const handleBecomeGuest = async (email) => {
     try {
-      const res = await makeGuestApi(userId);
+      const res = await makeGuestApi(email);
       console.log("Become Guest Response:", res);
       toast.success("User role updated to guest successfully!");
       // Update the user's role in the table
       const updatedData = data.map((user) =>
-        user._id === userId ? { ...user, role: "guest" } : user
+        user.email === email ? { ...user, role: "guest" } : user
       );
       setData(updatedData);
     } catch (error) {
@@ -86,29 +86,6 @@ const User = () => {
                 <td className={styles.tableCell}>{user.name}</td>
                 <td className={styles.tableCell}>{user.email}</td>
                 <td className={styles.tableCell}>{user.role}</td>
-                <td className={styles.tableCell}>
-                  {user.role !== "driver" ? (
-                    user.role === "admin" ? (
-                      <span className={styles.alreadyAdmin}>
-                        Already an Admin
-                      </span>
-                    ) : (
-                      <button
-                        className={styles.becomeDriverButton}
-                        onClick={() => handleBecomeDriver(user._id)}
-                      >
-                        Become a Driver
-                      </button>
-                    )
-                  ) : (
-                    <button
-                        className={styles.becomeGuestButton}
-                        onClick={() => handleBecomeGuest(user._id)}
-                      >
-                        Become a Guest
-                      </button>
-                  )}
-                </td>
               </tr>
             ))}
           </tbody>

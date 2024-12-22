@@ -28,9 +28,16 @@ export const getDriverApi = () => {
   return axios.get(URL_API);
 };
 
-// Lấy đơn hàng bằng id
-export const changeStatusDriverApi = (id) => {
-  const URL_API = `/v1/api/driver/${id}`; // Thêm id vào URL
+// kích hoạt hoạt động tài xế
+export const changeStatusDriverApi = (email) => {
+  const URL_API = `/v1/api/driver/${email}`; // Thêm id vào URL
+
+  return axios.post(URL_API);
+};
+
+// ngừng kích hoạt tài xế
+export const changeStatusDriverToGuestApi = (email) => {
+  const URL_API = `/v1/api/driverUnActive/${email}`; // Thêm id vào URL
 
   return axios.post(URL_API);
 };
