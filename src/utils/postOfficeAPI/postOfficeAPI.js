@@ -16,7 +16,7 @@ export const changeStatusPostOfficeApi = (id) => {
 
 // đổi status thành not activated
 export const changeStatusNotActivatedPostOfficeApi = (id) => {
-  const URL_API = `/v1/api/driverUnActive/${id}`; // Thêm id vào URL
+  const URL_API = `/v1/api/postofficeUnActive/${id}`; // Thêm id vào URL
 
   return axios.post(URL_API);
 };

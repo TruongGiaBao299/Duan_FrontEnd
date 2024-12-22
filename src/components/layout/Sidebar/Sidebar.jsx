@@ -89,7 +89,7 @@ const Sidebar = () => {
           >
             <HiBuildingOffice2 /> PostOffice
           </li>
-          <li
+          {/* <li
             className={`${styles.menuItem} ${
               activeItem === "shipments" ? styles.active : ""
             }`}
@@ -136,7 +136,7 @@ const Sidebar = () => {
             onClick={() => handleItemClick("reports", "/reports")}
           >
             <HiDocumentReport /> Reports
-          </li>
+          </li> */}
           <li className={styles.menuItem}>
             <IoIosSettings /> Setting
           </li>

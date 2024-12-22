@@ -22,6 +22,8 @@
 
 .rightcontent {
   width: 600px;
+  position: absolute;
+  left: 950px;
 }
 .item {
   display: flex;

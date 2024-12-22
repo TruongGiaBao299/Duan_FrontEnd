@@ -29,15 +29,15 @@ export const getUserApi = () => {
 };
 
 // Lấy đơn hàng bằng id
-export const makeDriverApi = (id) => {
-  const URL_API = `/v1/api/becomeDriver/${id}`; // Thêm id vào URL
+export const makeDriverApi = (email) => {
+  const URL_API = `/v1/api/becomeDriver/${email}`; // Thêm id vào URL
 
   return axios.post(URL_API);
 };
 
 // Lấy đơn hàng bằng id
-export const makeGuestApi = (id) => {
-  const URL_API = `/v1/api/becomeGuest/${id}`; // Thêm id vào URL
+export const makeGuestApi = (email) => {
+  const URL_API = `/v1/api/becomeGuest/${email}`; // Thêm id vào URL
 
   return axios.post(URL_API);
 };
