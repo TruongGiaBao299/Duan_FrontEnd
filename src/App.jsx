@@ -13,7 +13,6 @@ import DashboardPage from "./components/pages/DashboardPage/DashboardPage";
 import OrdersPage from "./components/pages/OrdersPage/OrdersPage";
 import ShipmentsPage from "./components/pages/ShipmentsPage/ShipmentsPage";
 import UserPage from "./components/pages/UserPage/UserPage";
-import ViewOrder from "./containers/ViewOrder/ViewOrder";
 import ViewOrderPage from "./components/pages/ViewOrderPage/ViewOrderPage";
 import DriverPage from "./components/pages/DriverPage/DriverPage";
 import PostOfficePage from "./components/pages/PostOfficePage/PostOfficePage";
