@@ -69,3 +69,10 @@ export const ShippedOrderApi = (id) => {
 
   return axios.post(URL_API);
 };
+
+// kích hoạt hoạt động tài xế
+export const deleteRequestDriver = (email) => {
+  const URL_API = `/v1/api/driverrequest/${email}`; // Thêm id vào URL
+
+  return axios.delete(URL_API);
+};

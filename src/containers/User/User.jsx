@@ -76,7 +76,6 @@ const User = () => {
               <th className={styles.tableuserHeader}>Name</th>
               <th className={styles.tableuserHeader}>Email</th>
               <th className={styles.tableuserHeader}>Role</th>
-              <th className={styles.tableuserHeader}>Action</th>
             </tr>
           </thead>
           <tbody>

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import styles from "./Driver.module.css";
 import { getUserApi, makeDriverApi, makeGuestApi } from "../../utils/api";
 import { toast } from "react-toastify";
-import { changeStatusDriverApi, changeStatusDriverToGuestApi, getDriverApi } from "../../utils/driverAPI/driverAPI";
+import { changeStatusDriverApi, changeStatusDriverToGuestApi, deleteRequestDriver, getDriverApi } from "../../utils/driverAPI/driverAPI";
 
 const Driver = () => {
   const [userData, setUserData] = useState([]);
@@ -111,6 +111,20 @@ const Driver = () => {
       toast.error("Failed to update user role. Please try again.");
     }
   };
+
+  const handleDeleteDriverRequest = async (email) => {
+    try {
+      const res = await deleteRequestDriver(email);
+      toast.success(`${email} Request was canceled`);
+  
+      // Update the local state to remove the driver
+      const updatedDriverData = driverData.filter((driver) => driver.email === email);
+      setDriverData(updatedDriverData);
+    } catch (error) {
+      toast.error(error.message || "Failed to delete driver request.");
+    }
+  };
+  
   
   return (
     <div className={styles.pageWrapper}>
@@ -165,6 +179,15 @@ const Driver = () => {
                       Become Guest
                     </button>
                   )}
+                </td>
+                <td className={styles.tableCell}>
+          
+                    <button
+                      className={styles.becomeGuestButton}
+                      onClick={() => handleDeleteDriverRequest(user.email)}
+                    >
+                      Cancel Request
+                    </button>
                 </td>
               </tr>
             ))}
