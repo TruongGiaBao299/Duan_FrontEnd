@@ -1,26 +1,23 @@
 import React, { useState, useEffect } from "react";
 import { getOrderByEmailApi } from "../../utils/orderAPI/orderAPI";
 import { toast } from "react-toastify";
-import {
-  CancelledOrderApi,
-  getDriverOrderByEmailApi,
-  ShippedOrderApi,
-} from "../../utils/driverAPI/driverAPI";
 
-const DriverMangeOrder = () => {
+const ViewHistory = () => {
   const [orders, setOrders] = useState([]);
-  const [data, setData] = useState([]);
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await getDriverOrderByEmailApi();
+        const res = await getOrderByEmailApi();
         console.log("Order by email:", res);
         console.log("Order by email length:", res.length);
-
-        // Check if the response has orders data
+  
+        // Filter orders to show only those with status "shipped" or "canceled"
         if (res && res.length > 0) {
-          setOrders(res); // Assuming the orders are in res.data
+          const filteredOrders = res.filter(
+            (order) => order.status === "shipped" || order.status === "canceled"
+          );
+          setOrders(filteredOrders); // Update state with filtered orders
         } else {
           setOrders([]); // If no orders, set as empty
         }
@@ -29,46 +26,15 @@ const DriverMangeOrder = () => {
         toast.error("Error fetching orders");
       }
     };
-
+  
     fetchUser();
   }, []);
-
-  const ShippedOrder = async (userId) => {
-    try {
-      const res = await ShippedOrderApi(userId);
-      console.log("Shipped Order Response:", res);
-      toast.success("Order status updated to driver successfully!");
-      // Update the user's role in the table
-      const updatedData = data.map((order) =>
-        order._id === userId ? { ...order } : order
-      );
-      setData(updatedData);
-    } catch (error) {
-      console.error("Error update:", error);
-      toast.error("Failed to update. Please try again.");
-    }
-  };
-
-  const CancelledOrder = async (userId) => {
-    try {
-      const res = await CancelledOrderApi(userId);
-      console.log("Cancelled Order Response:", res);
-      toast.success("Order status updated to driver successfully!");
-      // Update the user's role in the table
-      const updatedData = data.map((order) =>
-        order._id === userId ? { ...order } : order
-      );
-      setData(updatedData);
-    } catch (error) {
-      console.error("Error update:", error);
-      toast.error("Failed to update. Please try again.");
-    }
-  };
+  
 
   return (
     <div>
       {orders.length === 0 ? (
-        <p>You don't have any order!</p> // Display message if no orders
+        <p>You don't have any order in history!</p> // Display message if no orders
       ) : (
         <div>
           <h2>Order Information</h2>
@@ -131,30 +97,6 @@ const DriverMangeOrder = () => {
               <p>
                 <strong>Driver:</strong> {order.driver}
               </p>
-
-              {/* Status Messages */}
-              {order.status === "shipped" && (
-                <p style={{ color: "green", fontWeight: "bold" }}>
-                  Order shipped successfully
-                </p>
-              )}
-              {order.status === "canceled" && (
-                <p style={{ color: "red", fontWeight: "bold" }}>
-                  Order canceled
-                </p>
-              )}
-
-              {/* Conditional Buttons */}
-              {order.status !== "shipped" && order.status !== "canceled" && (
-                <div>
-                  <button onClick={() => ShippedOrder(order._id)}>
-                    Shipped
-                  </button>
-                  <button onClick={() => CancelledOrder(order._id)}>
-                    Cancelled
-                  </button>
-                </div>
-              )}
             </div>
           ))}
         </div>
@@ -163,4 +105,4 @@ const DriverMangeOrder = () => {
   );
 };
 
-export default DriverMangeOrder;
+export default ViewHistory;

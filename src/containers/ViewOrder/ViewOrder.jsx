@@ -11,10 +11,13 @@ const ViewOrder = () => {
         const res = await getOrderByEmailApi();
         console.log("Order by email:", res);
         console.log("Order by email length:", res.length);
-
-        // Check if the response has orders data
+  
+        // Filter orders to show only those with status "pending" or "is shipping"
         if (res && res.length > 0) {
-          setOrders(res); // Assuming the orders are in res.data
+          const filteredOrders = res.filter(
+            (order) => order.status === "pending" || order.status === "is shipping"
+          );
+          setOrders(filteredOrders); // Update state with filtered orders
         } else {
           setOrders([]); // If no orders, set as empty
         }
@@ -23,9 +26,10 @@ const ViewOrder = () => {
         toast.error("Error fetching orders");
       }
     };
-
+  
     fetchUser();
   }, []);
+  
 
   return (
     <div>
@@ -46,13 +50,7 @@ const ViewOrder = () => {
                 <strong>Sender Number:</strong> {order.senderNumber}
               </p>
               <p>
-                <strong>From Address:</strong> {order.fromAddress}
-              </p>
-              <p>
-                <strong>From District:</strong> {order.fromDistrict}
-              </p>
-              <p>
-                <strong>From City:</strong> {order.fromCity}
+                <strong>From Address:</strong> {order.fromAddress}, {order.fromDistrict}, {order.fromCity}
               </p>
               <p>
                 <strong>Recipient Name:</strong> {order.recipientName}
@@ -61,13 +59,7 @@ const ViewOrder = () => {
                 <strong>Recipient Number:</strong> {order.recipientNumber}
               </p>
               <p>
-                <strong>To Address:</strong> {order.toAddress}
-              </p>
-              <p>
-                <strong>To District:</strong> {order.toDistrict}
-              </p>
-              <p>
-                <strong>To City:</strong> {order.toCity}
+                <strong>To Address:</strong> {order.toAddress}, {order.toDistrict}, {order.toCity}
               </p>
               <p>
                 <strong>Order Weight:</strong> {order.orderWeight}
@@ -89,6 +81,9 @@ const ViewOrder = () => {
               </p>
               <p>
                 <strong>Created By:</strong> {order.createdBy}
+              </p>
+              <p>
+                <strong>Created At:</strong> {order.createdAt}
               </p>
               <p>
                 <strong>Driver:</strong> {order.driver}

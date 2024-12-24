@@ -17,6 +17,7 @@ import ViewOrderPage from "./components/pages/ViewOrderPage/ViewOrderPage";
 import DriverPage from "./components/pages/DriverPage/DriverPage";
 import PostOfficePage from "./components/pages/PostOfficePage/PostOfficePage";
 import DriverHomePage from "./components/pages/DriverHomePage/DriverHomePage";
+import ViewHistoryPage from "./components/pages/ViewHistoryPage/ViewHistoryPage";
 
 function App() {
   const { setAuth, appLoading, setAppLoading } = useContext(AuthContext);
@@ -56,6 +57,7 @@ function App() {
             <Route path="/orders" element={<OrdersPage></OrdersPage>}></Route>
             <Route path="/shipments" element={<ShipmentsPage></ShipmentsPage>}></Route>
             <Route path="/vieworder" element={<ViewOrderPage></ViewOrderPage>}></Route>
+            <Route path="/viewhistory" element={<ViewHistoryPage></ViewHistoryPage>}></Route>
             <Route path="/driver" element={<DriverPage></DriverPage>}></Route>
             <Route path="/postoffice" element={<PostOfficePage></PostOfficePage>}></Route>
             <Route path="/driverhome" element={<DriverHomePage></DriverHomePage>}></Route>

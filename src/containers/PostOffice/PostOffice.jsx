@@ -1,13 +1,28 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import styles from "./PostOffice.module.css";
 import { getPostOfficeApi, getUserApi, makeDriverApi } from "../../utils/api";
 import { toast } from "react-toastify";
 import { changeStatusNotActivatedPostOfficeApi, changeStatusPostOfficeApi } from "../../utils/postOfficeAPI/postOfficeAPI";
+import { AuthContext } from "../../context/auth.context";
+import { useNavigate } from "react-router-dom";
 
 const PostOffice = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+
+  const { auth, setAuth } = useContext(AuthContext);
+  console.log("check auth PostOffice: ", auth.user.role);
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // Redirect if the user's role is not admin
+    if (auth.user.role !== "admin") {
+      navigate("/login"); // Redirect to the login page or another page
+      return;
+    }
+  }, [auth, navigate]);
 
   useEffect(() => {
     const fetchUser = async () => {
