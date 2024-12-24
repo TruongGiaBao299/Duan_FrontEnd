@@ -1,14 +1,29 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import styles from "./Driver.module.css";
 import { getUserApi, makeDriverApi, makeGuestApi } from "../../utils/api";
 import { toast } from "react-toastify";
 import { changeStatusDriverApi, changeStatusDriverToGuestApi, deleteRequestDriver, getDriverApi } from "../../utils/driverAPI/driverAPI";
+import { AuthContext } from "../../context/auth.context";
+import { useNavigate } from "react-router-dom";
 
 const Driver = () => {
   const [userData, setUserData] = useState([]);
   const [driverData, setDriverData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+
+  const { auth, setAuth } = useContext(AuthContext);
+  console.log("check auth Driver: ", auth.user.role);
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // Redirect if the user's role is not admin
+    if (auth.user.role !== "admin") {
+      navigate("/login"); // Redirect to the login page or another page
+      return;
+    }
+  }, [auth, navigate]);
 
   useEffect(() => {
     const fetchData = async () => {

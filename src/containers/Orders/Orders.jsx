@@ -1,10 +1,25 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import styles from "./Orders.module.css"; // Ensure this file includes proper table styling
 import { getOrderApi } from "../../utils/api";
 import { toast } from "react-toastify";
+import { AuthContext } from "../../context/auth.context";
+import { useNavigate } from "react-router-dom";
 
 const Orders = () => {
   const [orders, setOrders] = useState([]);
+
+  const { auth, setAuth } = useContext(AuthContext);
+  console.log("check auth Orders: ", auth.user.role);
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // Redirect if the user's role is not admin
+    if (auth.user.role !== "admin") {
+      navigate("/login"); // Redirect to the login page or another page
+      return;
+    }
+  }, [auth, navigate]);
 
   useEffect(() => {
     const fetchUser = async () => {

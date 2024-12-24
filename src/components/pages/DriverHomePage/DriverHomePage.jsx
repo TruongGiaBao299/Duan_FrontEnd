@@ -1,10 +1,25 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import DriverGetOrder from "../../../containers/DriverGetOrder/DriverGetOrder";
 import DriverMangeOrder from "../../../containers/DriverManageOrder/DriverMangeOrder";
+import { AuthContext } from "../../../context/auth.context";
+import { useNavigate } from "react-router-dom";
 
 const DriverHomePage = () => {
   const [currentPage, setCurrentPage] = useState("drivergetorder"); // State to track current page
   const [isLoggedIn, setIsLoggedIn] = useState(false); // State to check if the user is logged in
+
+  const { auth, setAuth } = useContext(AuthContext);
+  console.log("check auth Driver Home: ", auth.user.role);
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // Redirect if the user's role is not admin
+    if (auth.user.role !== "driver") {
+      navigate("/login"); // Redirect to the login page or another page
+      return;
+    }
+  }, [auth, navigate]);
 
   useEffect(() => {
     // Check for token in localStorage to determine if the user is logged in

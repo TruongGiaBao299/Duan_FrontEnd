@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import styles from "./Dashboard.module.css";
 import { BsBoxSeam } from "react-icons/bs";
 import { MapContainer, TileLayer } from "react-leaflet";
@@ -13,10 +13,25 @@ import {
   Legend,
 } from "chart.js";
 import Orders from "../Orders/Orders";
+import { AuthContext } from "../../context/auth.context";
+import { useNavigate } from "react-router-dom";
 
 ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend);
 
 const Dashboard = () => {
+  const { auth, setAuth } = useContext(AuthContext);
+  console.log("check auth Dashboard: ", auth.user.role);
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // Redirect if the user's role is not admin
+    if (auth.user.role !== "admin") {
+      navigate("/login"); // Redirect to the login page or another page
+      return;
+    }
+  }, [auth, navigate]);
+
   const trackingData = [
     {
       date: "12 Oct 2024",

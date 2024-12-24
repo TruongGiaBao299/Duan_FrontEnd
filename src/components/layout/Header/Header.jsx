@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import { AuthContext } from "../../../context/auth.context";
 import { MdOutlineLocalShipping } from "react-icons/md";
 import { getOrderByEmailApi } from "../../../utils/orderAPI/orderAPI"; // Import your API call
+import { FaHistory } from "react-icons/fa";
 
 const Header = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -31,13 +32,18 @@ const Header = () => {
   const fetchUserOrders = async (email) => {
     try {
       const orders = await getOrderByEmailApi(email); // Fetch orders by email
-      console.log("Header order: ", orders)
-      setOrderCount(orders.length); // Set order count based on fetched orders
+      console.log("Header order: ", orders);
+  
+      // Filter orders to exclude those with the status "shipped"
+      const pendingOrders = orders.filter(order => order.status === "pending" || order.status === "is shipping");
+  
+      setOrderCount(pendingOrders.length); // Set order count based on filtered orders
     } catch (error) {
       console.error("Error fetching orders:", error);
       setOrderCount(0); // Set order count to 0 in case of error
     }
   };
+  
 
   const handleLogout = () => {
     localStorage.removeItem("access_token"); // Remove token from storage
@@ -78,6 +84,9 @@ const Header = () => {
               <button onClick={() => navigateTo("/vieworder")}>
                 <MdOutlineLocalShipping />
                 {orderCount > 0 && <span>{orderCount}</span>} {/* Show order count */}
+              </button>
+              <button onClick={() => navigateTo("/viewhistory")}>
+                <FaHistory />
               </button>
               <button onClick={handleLogout}>Logout</button>
             </>
