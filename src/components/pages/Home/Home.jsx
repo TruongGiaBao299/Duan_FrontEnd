@@ -23,14 +23,20 @@ const Home = () => {
         <button onClick={() => setCurrentPage("create")}>Create Order</button>
         <button onClick={() => setCurrentPage("find")}>Find Order</button>
         <button onClick={() => setCurrentPage("postoffice")}>PostOffice</button>
-        <button onClick={() => setCurrentPage("becomedriver")}>BecomeDriver</button>
+        
+        {/* Only show BecomeDriver button if the user is logged in */}
+        {isLoggedIn && (
+          <button onClick={() => setCurrentPage("becomedriver")}>
+            Become Driver
+          </button>
+        )}
       </div>
 
       {/* Display components based on the current page */}
       {currentPage === "create" && <CreateOrder />}
       {currentPage === "find" && <FindOrder />}
       {currentPage === "postoffice" && <PostOffice />}
-      {currentPage === "becomedriver" && <BecomeDriver />}
+      {currentPage === "becomedriver" && isLoggedIn && <BecomeDriver />}
     </>
   );
 };

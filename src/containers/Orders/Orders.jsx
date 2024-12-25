@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 
 const Orders = () => {
   const [orders, setOrders] = useState([]);
+  const [address, setAddress] = useState([]);
 
   const { auth, setAuth } = useContext(AuthContext);
   console.log("check auth Orders: ", auth.user.role);
