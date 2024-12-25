@@ -50,7 +50,7 @@ const ViewOrder = () => {
                 <strong>Sender Number:</strong> {order.senderNumber}
               </p>
               <p>
-                <strong>From Address:</strong> {order.fromAddress}, {order.fromDistrict}, {order.fromCity}
+                <strong>From Address:</strong> {order.fromAddress}, {order.fromDistrict}, {order.fromWard}, {order.fromCity}
               </p>
               <p>
                 <strong>Recipient Name:</strong> {order.recipientName}
@@ -59,7 +59,7 @@ const ViewOrder = () => {
                 <strong>Recipient Number:</strong> {order.recipientNumber}
               </p>
               <p>
-                <strong>To Address:</strong> {order.toAddress}, {order.toDistrict}, {order.toCity}
+                <strong>To Address:</strong> {order.toAddress}, {order.toDistrict}, {order.toWard}, {order.toCity}
               </p>
               <p>
                 <strong>Order Weight:</strong> {order.orderWeight}
