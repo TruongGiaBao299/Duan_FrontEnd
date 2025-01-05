@@ -1,8 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import styles from "./PostOffice.module.css";
-import { getPostOfficeApi, getUserApi, makeDriverApi } from "../../utils/api";
 import { toast } from "react-toastify";
-import { changeStatusNotActivatedPostOfficeApi, changeStatusPostOfficeApi } from "../../utils/postOfficeAPI/postOfficeAPI";
+import { changeStatusNotActivatedPostOfficeApi, changeStatusPostOfficeApi, getPostOfficeApi } from "../../utils/postOfficeAPI/postOfficeAPI";
 import { AuthContext } from "../../context/auth.context";
 import { useNavigate } from "react-router-dom";
 

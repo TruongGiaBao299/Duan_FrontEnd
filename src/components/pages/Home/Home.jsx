@@ -4,6 +4,7 @@ import CreateOrder from "./CreateOrder/CreateOrder";
 import FindOrder from "./FindOrder/FindOrder";
 import PostOffice from "./PostOffice/PostOffice";
 import BecomeDriver from "./BecomeDriver/BecomeDriver";
+import SearchPrice from "./SearchPrice/SearchPrice";
 
 const Home = () => {
   const [currentPage, setCurrentPage] = useState("create"); // State to track current page
@@ -23,6 +24,7 @@ const Home = () => {
         <button onClick={() => setCurrentPage("create")}>Create Order</button>
         <button onClick={() => setCurrentPage("find")}>Find Order</button>
         <button onClick={() => setCurrentPage("postoffice")}>PostOffice</button>
+        <button onClick={() => setCurrentPage("searchprice")}>SearchPrice</button>
         
         {/* Only show BecomeDriver button if the user is logged in */}
         {isLoggedIn && (
@@ -36,6 +38,7 @@ const Home = () => {
       {currentPage === "create" && <CreateOrder />}
       {currentPage === "find" && <FindOrder />}
       {currentPage === "postoffice" && <PostOffice />}
+      {currentPage === "searchprice" && <SearchPrice />}
       {currentPage === "becomedriver" && isLoggedIn && <BecomeDriver />}
     </>
   );

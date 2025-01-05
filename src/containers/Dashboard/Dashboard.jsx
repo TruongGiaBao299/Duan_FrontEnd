@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import styles from "./Dashboard.module.css";
 import { BsBoxSeam } from "react-icons/bs";
 import { MapContainer, TileLayer } from "react-leaflet";
@@ -15,12 +15,16 @@ import {
 import Orders from "../Orders/Orders";
 import { AuthContext } from "../../context/auth.context";
 import { useNavigate } from "react-router-dom";
+import { getOrderApi } from "../../utils/orderAPI/orderAPI";
 
 ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend);
 
 const Dashboard = () => {
   const { auth, setAuth } = useContext(AuthContext);
   console.log("check auth Dashboard: ", auth.user.role);
+  const [orders, setOrders] = useState([]);
+  const [totalRevenue, setTotalRevenue] = useState(0);
+  const [inWarehouseCount, setInWarehouseCount] = useState(0);
 
   const navigate = useNavigate();
 
@@ -111,6 +115,44 @@ const Dashboard = () => {
     },
   };
 
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const res = await getOrderApi();
+        console.log("Order:", res);
+
+        // Lọc chỉ những đơn hàng có status === "shipped"
+        const shippedOrders = res.filter((order) => order.status === "shipped");
+        // Lấy 70% giá trị price
+        const Revenue = shippedOrders.map((order) => order.price * 0.7);
+
+        // Tính tổng giá trị 70%
+        const totalRevenue = Revenue.reduce((sum, price) => sum + price, 0);
+        console.log("Shipped Prices (70% Total):", totalRevenue);
+        // Cập nhật state với totalRevenue
+        setTotalRevenue(totalRevenue);
+
+        // Đếm số lượng đơn hàng có status === "is shipping"
+        const inWarehouseOrders = res.filter(
+          (order) => order.status === "is shipping"
+        );
+        setInWarehouseCount(inWarehouseOrders.length);
+
+        // Check if the response has orders data
+        if (res && res.length > 0) {
+          setOrders(res);
+        } else {
+          setOrders([]); // If no orders, set as empty
+        }
+      } catch (error) {
+        console.error("Error:", error);
+        toast.error("Error fetching orders");
+      }
+    };
+
+    fetchUser();
+  }, []);
+
   return (
     <div className={styles.container}>
       <div className={styles.top}>
@@ -122,7 +164,7 @@ const Dashboard = () => {
               </div>
               <div className={styles.itemtotal}>
                 <div className={styles.itemname}>Total Order</div>
-                <div className={styles.itemvalue}>91205</div>
+                <div className={styles.itemvalue}>{orders.length}</div>
               </div>
             </div>
             <div className={styles.item}>
@@ -131,7 +173,7 @@ const Dashboard = () => {
               </div>
               <div className={styles.itemtotal}>
                 <div className={styles.itemname}>Total Revenue</div>
-                <div className={styles.itemvalue}>$122102</div>
+                <div className={styles.itemvalue}>{totalRevenue}</div>
               </div>
             </div>
           </div>
@@ -151,7 +193,7 @@ const Dashboard = () => {
               </div>
               <div className={styles.itemtotal}>
                 <div className={styles.itemname}>In Warehouse</div>
-                <div className={styles.itemvalue}>$12212</div>
+                <div className={styles.itemvalue}>{inWarehouseCount}</div>
               </div>
             </div>
           </div>

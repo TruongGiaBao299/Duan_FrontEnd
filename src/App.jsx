@@ -1,5 +1,5 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import axios from "./utils/axiosCustomize";
+import axios from "./utils/userAPI/axiosUser";
 import { useContext, useEffect, useState } from "react";
 import Home from "./components/pages/Home/Home";
 import Register from "./components/pages/Register/Register";
@@ -26,7 +26,7 @@ function App() {
 
       setAppLoading(true);
 
-      const res = await axios.get(`/v1/api/account`);
+      const res = await axios.get(`/user/account`);
       if (res) {
         setAuth({
           isAuthenthicate: true,

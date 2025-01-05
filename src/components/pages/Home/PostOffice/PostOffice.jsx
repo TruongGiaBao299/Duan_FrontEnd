@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { getPostOfficeApi } from "../../../../utils/api";
 import { toast } from "react-toastify";
 import styles from "./PostOffice.module.css";
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
@@ -7,6 +6,7 @@ import "leaflet/dist/leaflet.css";
 import { FaLocationDot } from "react-icons/fa6";
 import { FaPhoneAlt } from "react-icons/fa";
 import { FaHome } from "react-icons/fa";
+import { getPostOfficeApi } from "../../../../utils/postOfficeAPI/postOfficeAPI";
 
 // Hook để xử lý việc thay đổi vị trí và zoom bản đồ đến một tọa độ cụ thể
 const MapViewUpdater = ({ latitude, longitude }) => {

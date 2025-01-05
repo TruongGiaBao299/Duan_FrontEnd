@@ -1,10 +1,10 @@
 import React, { useContext } from "react";
-import { loginApi } from "../../../utils/api";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import styles from "./Login.module.scss";
 import Header from "../../layout/Header/Header";
 import { AuthContext } from "../../../context/auth.context";
+import { loginApi } from "../../../utils/userAPI/userAPI";
 
 const Login = () => {
   const navigate = useNavigate();

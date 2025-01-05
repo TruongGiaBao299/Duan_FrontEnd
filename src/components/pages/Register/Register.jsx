@@ -1,8 +1,8 @@
 import React from "react";
-import { createUserApi } from "../../../utils/api";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import styles from "./Register.module.css";
+import { createUserApi } from "../../../utils/userAPI/userAPI";
 
 const Register = () => {
   const navigate = useNavigate();

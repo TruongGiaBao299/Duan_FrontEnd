@@ -1,9 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
 import styles from "./Orders.module.css"; // Ensure this file includes proper table styling
-import { getOrderApi } from "../../utils/api";
 import { toast } from "react-toastify";
 import { AuthContext } from "../../context/auth.context";
 import { useNavigate } from "react-router-dom";
+import { getOrderApi } from "../../utils/orderAPI/orderAPI";
 
 const Orders = () => {
   const [orders, setOrders] = useState([]);

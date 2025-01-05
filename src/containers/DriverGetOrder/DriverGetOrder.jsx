@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { getOrderApi } from "../../utils/api";
 import { toast } from "react-toastify";
 import styles from "./DriverGetOrder.module.css";
 import { AcceptOrderApi } from "../../utils/driverAPI/driverAPI";
+import { getOrderApi } from "../../utils/orderAPI/orderAPI";
 
 const DriverGetOrder = () => {
   const [orders, setOrders] = useState([]);

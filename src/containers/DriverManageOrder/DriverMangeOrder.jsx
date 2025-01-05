@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { getOrderByEmailApi } from "../../utils/orderAPI/orderAPI";
 import { toast } from "react-toastify";
 import {
   CancelledOrderApi,

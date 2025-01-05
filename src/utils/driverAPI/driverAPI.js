@@ -1,4 +1,5 @@
-import axios from "../axiosCustomize";
+import axios from "./axiosDriver";
+import axiosorder from "../orderAPI/axiosOrder";
 
 // Tạo đơn hàng
 export const createDriverApi = (
@@ -9,7 +10,7 @@ export const createDriverApi = (
   DriverAddress,
   DriverCity
 ) => {
-  const URL_API = "/v1/api/driver";
+  const URL_API = "/driver/create";
   const data = {
     DriverName,
     DriverNumber,
@@ -23,56 +24,56 @@ export const createDriverApi = (
 
 // Lấy dữ liệu tài xế
 export const getDriverApi = () => {
-  const URL_API = `/v1/api/getdriver`;
+  const URL_API = `/driver/get`;
 
   return axios.get(URL_API);
 };
 
 // kích hoạt hoạt động tài xế
 export const changeStatusDriverApi = (email) => {
-  const URL_API = `/v1/api/driver/${email}`; // Thêm id vào URL
+  const URL_API = `/driver/active/${email}`; // Thêm id vào URL
 
   return axios.post(URL_API);
 };
 
 // ngừng kích hoạt tài xế
 export const changeStatusDriverToGuestApi = (email) => {
-  const URL_API = `/v1/api/driverUnActive/${email}`; // Thêm id vào URL
+  const URL_API = `/driver/noactive/${email}`; // Thêm id vào URL
 
   return axios.post(URL_API);
 };
 
 // Lấy đơn hàng theo gmail của tài xế
 export const getDriverOrderByEmailApi = () => {
-  const URL_API = "/v1/api/getdriverorderemail";
+  const URL_API = "/order/getdriverorderbyemail";
 
-  return axios.get(URL_API);
+  return axiosorder.get(URL_API);
 };
 
 // Tài xế nhận đơn hàng
 export const AcceptOrderApi = (id) => {
-  const URL_API = `/v1/api/updateorderdriver/${id}`; // Thêm id vào URL
+  const URL_API = `/order/isshippingorder/${id}`; // Thêm id vào URL
 
-  return axios.post(URL_API);
+  return axiosorder.post(URL_API);
 };
 
 // Tài xế hủy đơn hàng
 export const CancelledOrderApi = (id) => {
-  const URL_API = `/v1/api/updateordercancelled/${id}`; // Thêm id vào URL
+  const URL_API = `/order/canceledorder/${id}`; // Thêm id vào URL
 
-  return axios.post(URL_API);
+  return axiosorder.post(URL_API);
 };
 
 // Tài xế đã giao đơn hàng
 export const ShippedOrderApi = (id) => {
-  const URL_API = `/v1/api/updateordershipped/${id}`; // Thêm id vào URL
+  const URL_API = `/order/shippedorder/${id}`; // Thêm id vào URL
 
-  return axios.post(URL_API);
+  return axiosorder.post(URL_API);
 };
 
 // kích hoạt hoạt động tài xế
 export const deleteRequestDriver = (email) => {
-  const URL_API = `/v1/api/driverrequest/${email}`; // Thêm id vào URL
+  const URL_API = `/driver/noaccept/${email}`; // Thêm id vào URL
 
   return axios.delete(URL_API);
 };

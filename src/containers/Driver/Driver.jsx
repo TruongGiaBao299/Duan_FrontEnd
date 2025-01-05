@@ -1,10 +1,10 @@
 import React, { useContext, useEffect, useState } from "react";
 import styles from "./Driver.module.css";
-import { getUserApi, makeDriverApi, makeGuestApi } from "../../utils/api";
 import { toast } from "react-toastify";
 import { changeStatusDriverApi, changeStatusDriverToGuestApi, deleteRequestDriver, getDriverApi } from "../../utils/driverAPI/driverAPI";
 import { AuthContext } from "../../context/auth.context";
 import { useNavigate } from "react-router-dom";
+import { getUserApi, makeDriverApi, makeGuestApi } from "../../utils/userAPI/userAPI";
 
 const Driver = () => {
   const [userData, setUserData] = useState([]);

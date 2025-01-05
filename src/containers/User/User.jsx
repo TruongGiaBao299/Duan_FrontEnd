@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styles from "./User.module.css";
-import { getUserApi, makeDriverApi, makeGuestApi } from "../../utils/api";
 import { toast } from "react-toastify";
+import { getUserApi } from "../../utils/userAPI/userAPI";
 
 const User = () => {
   const [data, setData] = useState([]);

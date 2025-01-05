@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { toast } from "react-toastify";
-import { getOrderByIdApi } from "../../../../utils/api";
 import { useNavigate } from "react-router-dom";
+import { getOrderByIdApi } from "../../../../utils/orderAPI/orderAPI";
 
 const FindOrder = () => {
   const [orderInfo, setOrderInfo] = useState(null); // Lưu thông tin đơn hàng

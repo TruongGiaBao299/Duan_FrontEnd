@@ -1,9 +1,8 @@
 import React, { useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { createDriverApi } from "../../../../utils/api";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../../../context/auth.context";
-import { getDriverApi } from "../../../../utils/driverAPI/driverAPI";
+import { createDriverApi, getDriverApi } from "../../../../utils/driverAPI/driverAPI";
 
 const BecomeDriver = () => {
   const navigate = useNavigate();

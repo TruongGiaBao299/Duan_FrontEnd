@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import styles from "./CreateOrder.module.css";
-import { createOrderApi } from "../../../../utils/orderAPI/orderAPI";
+import styles from "./SearchPrice.module.css";
 import { getLocationAPI } from "../../../../utils/locationAPI/locationAPI";
+import { SearchPriceApi } from "../../../../utils/orderAPI/orderAPI";
 
-const CreateOrder = () => {
+const SearchPrice = () => {
+  const [orderInfo, setOrderInfo] = useState(null); // Store order information
   const navigate = useNavigate();
   const [location, setLocation] = useState([]);
   const [locationCity, setLocationCity] = useState([]); // Store list of city names
@@ -23,14 +24,12 @@ const CreateOrder = () => {
 
   const [isLoading, setIsLoading] = useState(true); // Track loading state
 
+  // Fetch location data on component mount
   useEffect(() => {
     const fetchLocation = async () => {
       try {
         const res = await getLocationAPI();
-        console.log("Location:", res);
-
         const LocationCity = res.map((location) => location.name);
-        console.log("LocationCity:", LocationCity);
 
         if (res) {
           setLocation(res); // Save the received data
@@ -96,19 +95,15 @@ const CreateOrder = () => {
   }, [selectedToDistrict, selectedToCity]);
 
   const handleSubmit = async (event) => {
-    event.preventDefault();
-    const form = event.currentTarget;
+    event.preventDefault(); // Prevent form from reloading
+    const form = event.currentTarget; // Get form element
     const formData = new FormData(form);
 
     const data = {
-      senderName: formData.get("senderName"),
-      senderNumber: formData.get("senderNumber"),
       fromAddress: formData.get("fromAddress"),
       fromDistrict: formData.get("fromDistrict"),
       fromWard: formData.get("fromWard"),
       fromCity: formData.get("fromCity"),
-      recipientName: formData.get("recipientName"),
-      recipientNumber: formData.get("recipientNumber"),
       toAddress: formData.get("toAddress"),
       toDistrict: formData.get("toDistrict"),
       toWard: formData.get("toWard"),
@@ -116,63 +111,47 @@ const CreateOrder = () => {
       orderWeight: formData.get("orderWeight"),
       orderSize: formData.get("orderSize"),
       type: formData.get("type"),
-      message: formData.get("message"),
     };
 
     try {
-      const res = await createOrderApi(
-        data.senderName,
-        data.senderNumber,
+      setIsLoading(true); // Set loading to true when API is called
+      const res = await SearchPriceApi(
         data.fromAddress,
         data.fromDistrict,
         data.fromWard,
         data.fromCity,
-        data.recipientName,
-        data.recipientNumber,
         data.toAddress,
         data.toDistrict,
         data.toWard,
         data.toCity,
         data.orderWeight,
         data.orderSize,
-        data.type,
-        data.message
-      );
+        data.type
+      ); // Call the API with the form data
 
-      console.log("Order Created: ", res);
+      console.log(res)
 
-      if (res && res.data === null) {
-        toast.error("Data is null!");
+      if (res) {
+        setOrderInfo(res); // Save the order info
+        
+        toast.success("Order details retrieved successfully!");
       } else {
-        toast.success("Order created successfully!");
-        form.reset(); // Reset form input
-        navigate("/");
+        toast.error("No order information found.");
+        setOrderInfo(null); // Set to null if no data is found
       }
     } catch (error) {
       console.error("Error:", error);
-      toast.error("You need to login to fill out the form");
-      navigate("/login");
+      toast.error("Failed to retrieve order details. Please try again.");
+      setOrderInfo(null); // Set to null in case of an error
+    } finally {
+      setIsLoading(false); // Mark loading as false once the API response is processed
     }
   };
 
-  if (isLoading) {
-    // Hiển thị trạng thái Loading
-    return <div>Loading...</div>;
-  }
-
   return (
-    <div className={styles.CreateOrderContainer}>
+    <div>
+      <h1>Find Order</h1>
       <form onSubmit={handleSubmit}>
-        <div className={styles.CreateOrderInput}>
-          <label htmlFor="senderName">Sender Name</label>
-          <input type="text" id="senderName" name="senderName" required />
-        </div>
-
-        <div className={styles.CreateOrderInput}>
-          <label htmlFor="senderNumber">Sender Number</label>
-          <input type="text" id="senderNumber" name="senderNumber" required />
-        </div>
-
         {/* From City */}
         <div className={styles.CreateOrderInput}>
           <label htmlFor="fromCity">From City</label>
@@ -227,21 +206,6 @@ const CreateOrder = () => {
         <div className={styles.CreateOrderInput}>
           <label htmlFor="fromAddress">From Address</label>
           <input type="text" id="fromAddress" name="fromAddress" required />
-        </div>
-
-        <div className={styles.CreateOrderInput}>
-          <label htmlFor="recipientName">Recipient Name</label>
-          <input type="text" id="recipientName" name="recipientName" required />
-        </div>
-
-        <div className={styles.CreateOrderInput}>
-          <label htmlFor="recipientNumber">Recipient Number</label>
-          <input
-            type="text"
-            id="recipientNumber"
-            name="recipientNumber"
-            required
-          />
         </div>
 
         {/* To City */}
@@ -301,13 +265,25 @@ const CreateOrder = () => {
         </div>
 
         <div className={styles.CreateOrderInput}>
-          <label htmlFor="orderWeight">Order Weight</label>
-          <input type="number" id="orderWeight" name="orderWeight" required />
+          <label htmlFor="orderWeight">Order Weight (kg)</label>
+          <input
+            type="number"
+            id="orderWeight"
+            name="orderWeight"
+            step="0.1"
+            required
+          />
         </div>
 
         <div className={styles.CreateOrderInput}>
-          <label htmlFor="orderSize">Order Size</label>
-          <input type="number" id="orderSize" name="orderSize" required />
+          <label htmlFor="orderSize">Order Size (m³)</label>
+          <input
+            type="number"
+            id="orderSize"
+            name="orderSize"
+            step="0.01"
+            required
+          />
         </div>
 
         <div className={styles.CreateOrderInput}>
@@ -315,17 +291,34 @@ const CreateOrder = () => {
           <input type="text" id="type" name="type" required />
         </div>
 
-        <div className={styles.CreateOrderInput}>
-          <label htmlFor="message">Message</label>
-          <input type="text" id="message" name="message" required />
-        </div>
-
         <div className={styles.CreateOrderSubmit}>
-          <button type="submit">Submit</button>
+          <button type="submit" disabled={isLoading}>
+            Submit
+          </button>
         </div>
       </form>
+
+      {/* Display order info */}
+      {/* Display order info */}
+      {orderInfo ? (
+        <div>
+          <h2>Order Information</h2>
+          <p>
+            <strong>Distance:</strong> {orderInfo.distance || "N/A"} km
+          </p>
+          <p>
+            <strong>Price:</strong> {orderInfo.price || "N/A"} VND
+          </p>
+          <p>
+            <strong>Estimated Delivery Time:</strong>{" "}
+            {orderInfo.estimatedDeliveryTime || "N/A"}
+          </p>
+        </div>
+      ) : (
+        <p>No order information available.</p>
+      )}
     </div>
   );
 };
 
-export default CreateOrder;
+export default SearchPrice;
