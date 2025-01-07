@@ -15,14 +15,6 @@ const Orders = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Redirect if the user's role is not admin
-    if (auth.user.role !== "admin") {
-      navigate("/login"); // Redirect to the login page or another page
-      return;
-    }
-  }, [auth, navigate]);
-
-  useEffect(() => {
     const fetchUser = async () => {
       try {
         const res = await getOrderApi();

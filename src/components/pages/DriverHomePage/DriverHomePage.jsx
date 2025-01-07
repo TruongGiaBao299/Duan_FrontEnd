@@ -3,6 +3,7 @@ import DriverGetOrder from "../../../containers/DriverGetOrder/DriverGetOrder";
 import DriverMangeOrder from "../../../containers/DriverManageOrder/DriverMangeOrder";
 import { AuthContext } from "../../../context/auth.context";
 import { useNavigate } from "react-router-dom";
+import HeaderDriver from "../../layout/HeaderDriver/HeaderDriver";
 
 const DriverHomePage = () => {
   const [currentPage, setCurrentPage] = useState("drivergetorder"); // State to track current page
@@ -14,14 +15,6 @@ const DriverHomePage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Redirect if the user's role is not admin
-    if (auth.user.role !== "driver") {
-      navigate("/login"); // Redirect to the login page or another page
-      return;
-    }
-  }, [auth, navigate]);
-
-  useEffect(() => {
     // Check for token in localStorage to determine if the user is logged in
     const token = localStorage.getItem("access_token");
     setIsLoggedIn(!!token); // Set isLoggedIn to true if there's a token, otherwise false
@@ -29,6 +22,7 @@ const DriverHomePage = () => {
 
   return (
     <>
+      <HeaderDriver></HeaderDriver>
       <div>
         {/* Page navigation buttons */}
         <button onClick={() => setCurrentPage("drivergetorder")}>Get Order</button>

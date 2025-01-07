@@ -6,32 +6,24 @@ import { createDriverApi, getDriverApi } from "../../../../utils/driverAPI/drive
 
 const BecomeDriver = () => {
   const navigate = useNavigate();
-  const { auth, setAuth } = useContext(AuthContext);
-  console.log("check auth BecomeDriver: ", auth.user.email);
+  const { auth } = useContext(AuthContext);
 
-  const [userData, setUserData] = useState([]);
   const [driverData, setDriverData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [isAlreadySubmitted, setIsAlreadySubmitted] = useState(false); // Trạng thái nếu đã nộp
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
-
-        // Making both API calls concurrently using Promise.all
         const driverRes = await getDriverApi();
 
-        console.log("Driver:", driverRes);
-
-        const driverEmails = driverRes.map((driver) => driver.email);
-        console.log("Driver Emails:", driverEmails);
-
-        if (driverRes) {
-          // Set driver data (or handle it as required)
-          setDriverData(driverRes);
-        } else {
-          setDriverData([]); // If no driver data
-        }
+        // Kiểm tra xem email của người dùng đã có trong danh sách driver chưa
+        const isAlreadyDriver = driverRes.some(
+          (driver) => driver.email === auth.user.email
+        );
+        setIsAlreadySubmitted(isAlreadyDriver); // Cập nhật trạng thái
+        setDriverData(driverRes || []);
       } catch (err) {
         toast.error("Failed to fetch data. Please try again later.");
       } finally {
@@ -40,13 +32,13 @@ const BecomeDriver = () => {
     };
 
     fetchData();
-  }, []); // Empty dependency array to run once when the component mounts
+  }, [auth.user.email]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const form = event.currentTarget; // Lấy form element
+    const form = event.currentTarget;
     const formData = new FormData(form);
-  
+
     const data = {
       DriverName: formData.get("driverName"),
       DriverNumber: formData.get("driverNumber"),
@@ -55,17 +47,8 @@ const BecomeDriver = () => {
       DriverAddress: formData.get("driverAddress"),
       DriverCity: formData.get("driverCity"),
     };
-  
+
     try {
-      // Check if the user has already submitted a request
-      const isAlreadyDriver = driverData.some((driver) => driver.email === auth.user.email);
-  
-      if (isAlreadyDriver) {
-        toast.error("You already sent a driver request!");
-        return; // Prevent further execution
-      }
-  
-      // Proceed with the API call if the email does not exist
       const res = await createDriverApi(
         data.DriverName,
         data.DriverNumber,
@@ -74,13 +57,13 @@ const BecomeDriver = () => {
         data.DriverAddress,
         data.DriverCity
       );
-  
+
       if (res && res.data === null) {
         toast.error("Data is null!");
       } else {
         toast.success("Driver request sent!");
-        form.reset(); // Reset form input
-        navigate("/");
+        form.reset(); // Xóa dữ liệu form sau khi submit
+        setIsAlreadySubmitted(true); // Cập nhật trạng thái
       }
     } catch (error) {
       console.error("Error:", error);
@@ -88,46 +71,51 @@ const BecomeDriver = () => {
       navigate("/login");
     }
   };
-  
 
   return (
     <div className="">
-      <form onSubmit={handleSubmit}>
-        <div className="">
-          <label htmlFor="driverName">DriverName</label>
-          <input type="text" id="driverName" name="driverName" required />
-        </div>
+      {loading ? (
+        <p>Loading...</p>
+      ) : isAlreadySubmitted ? ( // Kiểm tra nếu đã nộp
+        <p>Your request has been sent, please wait for us to review.</p>
+      ) : (
+        <form onSubmit={handleSubmit}>
+          <div className="">
+            <label htmlFor="driverName">DriverName</label>
+            <input type="text" id="driverName" name="driverName" required />
+          </div>
 
-        <div className="">
-          <label htmlFor="driverNumber">DriverNumber</label>
-          <input type="text" id="driverNumber" name="driverNumber" required />
-        </div>
+          <div className="">
+            <label htmlFor="driverNumber">DriverNumber</label>
+            <input type="text" id="driverNumber" name="driverNumber" required />
+          </div>
 
-        <div className="">
-          <label htmlFor="driverBirth">DriverBirth</label>
-          <input type="text" id="driverBirth" name="driverBirth" required />
-        </div>
+          <div className="">
+            <label htmlFor="driverBirth">DriverBirth</label>
+            <input type="text" id="driverBirth" name="driverBirth" required />
+          </div>
 
-        <div className="">
-          <label htmlFor="driverId">DriverId</label>
-          <input type="text" id="driverId" name="driverId" required />
-        </div>
+          <div className="">
+            <label htmlFor="driverId">DriverId</label>
+            <input type="text" id="driverId" name="driverId" required />
+          </div>
 
-        <div className="">
-          <label htmlFor="driverAddress">DriverAddress</label>
-          <input type="text" id="driverAddress" name="driverAddress" required />
-        </div>
+          <div className="">
+            <label htmlFor="driverAddress">DriverAddress</label>
+            <input type="text" id="driverAddress" name="driverAddress" required />
+          </div>
 
-        <div className="">
-          <label htmlFor="driverCity">DriverCity</label>
-          <input type="text" id="driverCity" name="driverCity" required />
-        </div>
+          <div className="">
+            <label htmlFor="driverCity">DriverCity</label>
+            <input type="text" id="driverCity" name="driverCity" required />
+          </div>
 
-        {/* Submit Button */}
-        <div className="">
-          <button type="submit">Submit</button>
-        </div>
-      </form>
+          {/* Nút Submit */}
+          <div className="">
+            <button type="submit">Submit</button>
+          </div>
+        </form>
+      )}
     </div>
   );
 };

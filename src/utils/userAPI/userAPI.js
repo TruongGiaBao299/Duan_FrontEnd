@@ -41,3 +41,10 @@ export const makeGuestApi = (email) => {
 
   return axios.post(URL_API);
 };
+
+// Lấy đơn hàng bằng id
+export const makePostOfficeApi = (email) => {
+  const URL_API = `/user/becomePostOffice/${email}`; // Thêm id vào URL
+
+  return axios.post(URL_API);
+};

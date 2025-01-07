@@ -8,15 +8,53 @@ export const getPostOfficeApi = () => {
 };
 
 // đổi status thành active
-export const changeStatusPostOfficeApi = (id) => {
-  const URL_API = `/postoffice/status/${id}`; // Thêm id vào URL
+export const changeStatusPostOfficeApi = (email) => {
+  const URL_API = `/postoffice/status/${email}`; // Thêm id vào URL
 
   return axios.post(URL_API);
 };
 
 // đổi status thành not activated
-export const changeStatusNotActivatedPostOfficeApi = (id) => {
-  const URL_API = `/postoffice/statusnotactive/${id}`; // Thêm id vào URL
+export const changeStatusNotActivatedPostOfficeApi = (email) => {
+  const URL_API = `/postoffice/statusnotactive/${email}`; // Thêm id vào URL
 
   return axios.post(URL_API);
+};
+
+// xóa bưu cục
+export const deleteRequestPostOffice = (email) => {
+  const URL_API = `/postoffice/delete/${email}`; // Thêm id vào URL
+
+  return axios.delete(URL_API);
+};
+
+// tạo bưu cục
+export const createPostOfficeApi = (
+  OfficeUserName,
+  OfficeUserId,
+  OfficeUserNumber,
+  OfficeUserAddress,
+  OfficeUserEmail,
+  OfficeName,
+  OfficeHotline,
+  OfficeAddress,
+  OfficeDistrict,
+  OfficeWard,
+  OfficeCity,
+) => {
+  const URL_API = "/postoffice/create";
+  const data = {
+    OfficeUserName,
+    OfficeUserId,
+    OfficeUserNumber,
+    OfficeUserAddress,
+    OfficeUserEmail,
+    OfficeName,
+    OfficeHotline,
+    OfficeAddress,
+    OfficeDistrict,
+    OfficeWard,
+    OfficeCity,
+  };
+  return axios.post(URL_API, data);
 };

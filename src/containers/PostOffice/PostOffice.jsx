@@ -1,40 +1,42 @@
 import React, { useContext, useEffect, useState } from "react";
 import styles from "./PostOffice.module.css";
 import { toast } from "react-toastify";
-import { changeStatusNotActivatedPostOfficeApi, changeStatusPostOfficeApi, getPostOfficeApi } from "../../utils/postOfficeAPI/postOfficeAPI";
+import {
+  changeStatusNotActivatedPostOfficeApi,
+  changeStatusPostOfficeApi,
+  deleteRequestPostOffice,
+  getPostOfficeApi,
+} from "../../utils/postOfficeAPI/postOfficeAPI";
 import { AuthContext } from "../../context/auth.context";
 import { useNavigate } from "react-router-dom";
+import { makePostOfficeApi } from "../../utils/userAPI/userAPI";
 
 const PostOffice = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [isUpdating, setIsUpdating] = useState(false); // State để kiểm tra trạng thái xử lý
   const [error, setError] = useState("");
+  const [userData, setUserData] = useState([]);
 
-  const { auth, setAuth } = useContext(AuthContext);
-  console.log("check auth PostOffice: ", auth.user.role);
-
+  const { auth } = useContext(AuthContext);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    // Redirect if the user's role is not admin
-    if (auth.user.role !== "admin") {
-      navigate("/login"); // Redirect to the login page or another page
-      return;
-    }
-  }, [auth, navigate]);
-
+  // Fetch danh sách bưu cục
   useEffect(() => {
     const fetchUser = async () => {
       try {
         setLoading(true);
         const res = await getPostOfficeApi();
-        console.log("PostOffice:", res);
-        if (res) {
+        console.log("Post Office: ", res);
+        if (res && Array.isArray(res)) {
           setData(res);
         } else {
           setData([]);
+          toast.warn("No Post Office data found.");
         }
       } catch (err) {
+        console.error("Error fetching post office data:", err);
+        setError("Failed to fetch Post Office data.");
         toast.error("Failed to fetch user data. Please try again later.");
       } finally {
         setLoading(false);
@@ -43,35 +45,82 @@ const PostOffice = () => {
     fetchUser();
   }, []);
 
-  const handleActiveStatus = async (id) => {
+  // Kích hoạt trạng thái bưu cục
+  const handleActiveStatus = async (email) => {
+    setIsUpdating(true);
     try {
-      const res = await changeStatusPostOfficeApi(id);
-      console.log("Status Post Office Response:", res);
-      toast.success("Status Post Office active successfully!");
-      // Update the user's role in the table
+      // Run both API calls concurrently using Promise.all
+      const [changeStatusResponse, makePostOfficeResponse] = await Promise.all([
+        changeStatusPostOfficeApi(email),
+        makePostOfficeApi(email),
+      ]);
+
+      console.log("Change Status Post Response:", changeStatusResponse);
+      console.log("Make Post Response:", makePostOfficeResponse);
+      
+      toast.success("Post Office activated successfully!");
+      
       const updatedData = data.map((Office) =>
-        Office._id === id ? { ...Office, status: "active" } : Office
+        Office.email === email ? { ...Office, status: "active" } : Office
       );
       setData(updatedData);
+
+       // Update the user's role in the userData table (if needed)
+       const updatedUserData = userData.map((user) =>
+        user.email === email ? { ...user, role: "postoffice" } : user
+      );
+      setUserData(updatedUserData);
     } catch (error) {
-      console.error("Error update:", error);
-      toast.error("Failed to update. Please try again.");
+      console.error("Error updating status:", error);
+      toast.error("Failed to update status. Please try again.");
+    } finally {
+      setIsUpdating(false);
     }
   };
 
-  const handleNotActiveStatus = async (id) => {
+  // Hủy kích hoạt trạng thái bưu cục và xóa yêu cầu
+  const handleNotActiveStatus = async (email) => {
+    // Cập nhật UI ngay lập tức: xóa bưu cục khỏi data
+    const updatedData = data.filter((office) => office.email !== email);
+    setData(updatedData);
+
+    setIsUpdating(true);
     try {
-      const res = await changeStatusNotActivatedPostOfficeApi(id);
-      console.log("Status Post Office Response:", res);
-      toast.success("Status Post Office not activated successfully!");
-      // Update the user's role in the table
-      const updatedData = data.map((Office) =>
-        Office._id === id ? { ...Office, status: "not activated" } : Office
+      // Thực hiện hai API đồng thời
+      const [statusResponse, deleteResponse] = await Promise.allSettled([
+        changeStatusNotActivatedPostOfficeApi(email),
+        deleteRequestPostOffice(email),
+      ]);
+
+      // Kiểm tra kết quả từ API
+      if (statusResponse.status === "rejected") {
+        console.error("Failed to update status:", statusResponse.reason);
+        throw new Error("Failed to update post office status.");
+      }
+      if (deleteResponse.status === "rejected") {
+        console.error("Failed to cancel request:", deleteResponse.reason);
+        throw new Error("Failed to cancel post office request.");
+      }
+
+      // Nếu cả hai API đều thành công
+      toast.success(
+        "Post Office status updated and request canceled successfully!"
       );
-      setData(updatedData);
     } catch (error) {
-      console.error("Error update:", error);
-      toast.error("Failed to update. Please try again.");
+      console.error("Error handling update and delete:", error);
+      toast.error(
+        error.message || "Failed to process request. Please try again."
+      );
+
+      // Nếu có lỗi, thêm lại bưu cục vào UI
+      const revertData = [...data];
+      const office = revertData.find((office) => office.email === email);
+      if (office) {
+        office.status = "active"; // Reset trạng thái về "active"
+        setData(revertData);
+      }
+    } finally {
+      setIsUpdating(false);
     }
   };
 
@@ -88,6 +137,11 @@ const PostOffice = () => {
           <thead>
             <tr>
               <th className={styles.tableuserHeader}>Id</th>
+              <th className={styles.tableuserHeader}>OfficeUserName</th>
+              <th className={styles.tableuserHeader}>OfficeUserNumber</th>
+              <th className={styles.tableuserHeader}>OfficeUserId</th>
+              <th className={styles.tableuserHeader}>OfficeUserAddress</th>
+              <th className={styles.tableuserHeader}>OfficeUserEmail</th>
               <th className={styles.tableuserHeader}>OfficeName</th>
               <th className={styles.tableuserHeader}>OfficeHotline</th>
               <th className={styles.tableuserHeader}>OfficeAddress</th>
@@ -100,25 +154,37 @@ const PostOffice = () => {
             {data.map((Office) => (
               <tr key={Office._id} className={styles.tableRow}>
                 <td className={styles.tableCell}>{Office._id}</td>
+                <td className={styles.tableCell}>{Office.OfficeUserName}</td>
+                <td className={styles.tableCell}>{Office.OfficeUserNumber}</td>
+                <td className={styles.tableCell}>{Office.OfficeUserId}</td>
+                <td className={styles.tableCell}>{Office.OfficeUserAddress}</td>
+                <td className={styles.tableCell}>{Office.email}</td>
                 <td className={styles.tableCell}>{Office.OfficeName}</td>
                 <td className={styles.tableCell}>{Office.OfficeHotline}</td>
-                <td className={styles.tableCell}>{Office.OfficeAddress}, {Office.OfficeDistrict}, {Office.OfficeCity}</td>
-                <td className={styles.tableCell}>{Office.OfficeLatitude}, {Office.OfficeLongitude}</td>
+                <td className={styles.tableCell}>
+                  {Office.OfficeAddress}, {Office.OfficeWard},{" "}
+                  {Office.OfficeDistrict}, {Office.OfficeCity}
+                </td>
+                <td className={styles.tableCell}>
+                  {Office.OfficeLatitude}, {Office.OfficeLongitude}
+                </td>
                 <td className={styles.tableCell}>{Office.status}</td>
                 <td className={styles.tableCell}>
                   {Office.status !== "active" ? (
                     <button
                       className={styles.becomeDriverButton}
-                      onClick={() => handleActiveStatus(Office._id)}
+                      onClick={() => handleActiveStatus(Office.email)}
+                      disabled={isUpdating}
                     >
-                      Active Post Office
+                      {isUpdating ? "Processing..." : "Activate"}
                     </button>
                   ) : (
                     <button
                       className={styles.becomeDriverButton}
-                      onClick={() => handleNotActiveStatus(Office._id)}
+                      onClick={() => handleNotActiveStatus(Office.email)}
+                      disabled={isUpdating}
                     >
-                      Remove Active Post Office
+                      {isUpdating ? "Processing..." : "Deactivate"}
                     </button>
                   )}
                 </td>

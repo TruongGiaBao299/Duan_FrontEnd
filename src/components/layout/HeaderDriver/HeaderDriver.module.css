@@ -1,0 +1,59 @@
+.header {
+  background-color: #333;
+  color: #fff;
+  padding: 20px;
+}
+
+.toolbar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.navLinks {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 3rem;
+
+  button {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: color 0.3s;
+
+    &:hover {
+      color: #00aaff;
+    }
+  } 
+}
+.greeting {
+  margin-right: 1rem;
+  font-size: 1rem;
+  color: white;
+}
+
+.searchbar {
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.signup{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+  color: black;
+  border-radius: 10px;
+  padding: 10px;
+
+  button {
+    background: none;
+    border: none;
+    color: black;
+    font-size: 1rem;
+    cursor: pointer;
+  }
+}

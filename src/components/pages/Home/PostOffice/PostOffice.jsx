@@ -36,7 +36,9 @@ const PostOffice = () => {
         }
       } catch (error) {
         console.error("Lỗi:", error);
-        toast.error("Lấy dữ liệu văn phòng bưu điện thất bại. Vui lòng thử lại!");
+        toast.error(
+          "Lấy dữ liệu văn phòng bưu điện thất bại. Vui lòng thử lại!"
+        );
       }
     };
     fetchPostOffices();
@@ -66,7 +68,7 @@ const PostOffice = () => {
                 <FaPhoneAlt /> {office.OfficeHotline}
               </p>
               <p>
-                <FaLocationDot /> {office.OfficeAddress}, District{" "}
+                <FaLocationDot /> {office.OfficeAddress}, {office.OfficeWard},{" "}
                 {office.OfficeDistrict}, {office.OfficeCity}
               </p>
             </div>
@@ -106,7 +108,7 @@ const PostOffice = () => {
                       </strong>
                     </p>
                     <p>
-                      <FaLocationDot /> {office.OfficeAddress}
+                      <FaLocationDot /> {office.OfficeAddress}, {office.OfficeWard}, {office.OfficeDistrict}, {office.OfficeCity}
                     </p>
                     <p>
                       <FaPhoneAlt /> {office.OfficeHotline}
