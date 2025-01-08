@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { getOrderByEmailApi } from "../../utils/orderAPI/orderAPI";
 import { toast } from "react-toastify";
+import {
+  CancelledOrderApi,
+  ShippedOrderApi,
+} from "../../utils/driverAPI/driverAPI";
 
 const ViewOrder = () => {
   const [orders, setOrders] = useState([]);
@@ -10,31 +14,58 @@ const ViewOrder = () => {
       try {
         const res = await getOrderByEmailApi();
         console.log("Order by email:", res);
-        console.log("Order by email length:", res.length);
-  
+
         // Filter orders to show only those with status "pending" or "is shipping"
         if (res && res.length > 0) {
           const filteredOrders = res.filter(
-            (order) => order.status === "pending" || order.status === "is shipping"
+            (order) =>
+              order.status === "pending" || order.status === "is shipping" || order.status === "delivery to post office"
           );
-          setOrders(filteredOrders); // Update state with filtered orders
+          setOrders(filteredOrders);
         } else {
-          setOrders([]); // If no orders, set as empty
+          setOrders([]);
         }
       } catch (error) {
         console.error("Error:", error);
         toast.error("Error fetching orders");
       }
     };
-  
+
     fetchUser();
   }, []);
-  
+
+  const ShippedOrder = async (userId) => {
+    try {
+      const res = await ShippedOrderApi(userId);
+      toast.success("Order status updated to shipped successfully!");
+      const updatedOrders = orders.map((order) =>
+        order._id === userId ? { ...order, status: "shipped" } : order
+      );
+      setOrders(updatedOrders);
+    } catch (error) {
+      console.error("Error update:", error);
+      toast.error("Failed to update. Please try again.");
+    }
+  };
+
+  const CancelledOrder = async (userId) => {
+    try {
+      const res = await CancelledOrderApi(userId);
+      toast.success("Order status updated to canceled successfully!");
+      const updatedOrders = orders.map((order) =>
+        order._id === userId ? { ...order, status: "canceled" } : order
+      );
+      setOrders(updatedOrders);
+    } catch (error) {
+      console.error("Error update:", error);
+      toast.error("Failed to update. Please try again.");
+    }
+  };
 
   return (
     <div>
       {orders.length === 0 ? (
-        <p>You don't have any order!</p> // Display message if no orders
+        <p>You don't have any order!</p>
       ) : (
         <div>
           <h2>Order Information</h2>
@@ -50,7 +81,8 @@ const ViewOrder = () => {
                 <strong>Sender Number:</strong> {order.senderNumber}
               </p>
               <p>
-                <strong>From Address:</strong> {order.fromAddress}, {order.fromDistrict}, {order.fromWard}, {order.fromCity}
+                <strong>From Address:</strong> {order.fromAddress},{" "}
+                {order.fromDistrict}, {order.fromWard}, {order.fromCity}
               </p>
               <p>
                 <strong>Recipient Name:</strong> {order.recipientName}
@@ -59,7 +91,8 @@ const ViewOrder = () => {
                 <strong>Recipient Number:</strong> {order.recipientNumber}
               </p>
               <p>
-                <strong>To Address:</strong> {order.toAddress}, {order.toDistrict}, {order.toWard}, {order.toCity}
+                <strong>To Address:</strong> {order.toAddress},{" "}
+                {order.toDistrict}, {order.toWard}, {order.toCity}
               </p>
               <p>
                 <strong>Order Weight:</strong> {order.orderWeight}
@@ -88,6 +121,19 @@ const ViewOrder = () => {
               <p>
                 <strong>Driver:</strong> {order.driver}
               </p>
+              <p>
+                <strong>EstimatedDeliveryTime:</strong> {order.estimatedDeliveryTime}
+              </p>
+
+              {/* Conditional rendering of buttons */}
+              {order.status === "is shipping" && (
+                <button onClick={() => ShippedOrder(order._id)}>Shipped</button>
+              )}
+              {order.status === "pending" && (
+                <button onClick={() => CancelledOrder(order._id)}>
+                  Cancelled
+                </button>
+              )}
             </div>
           ))}
         </div>

@@ -110,11 +110,10 @@ const BecomePostOffice = () => {
       try {
         setLoading(true);
         const PostRes = await getPostOfficeApi();
-        const res = await getPostOfficeApi();
-        console.log("PostOffice:", res);
+        console.log("PostOffice:", PostRes);
 
-        if (res) {
-          setPostOfficeData(res); // Lưu dữ liệu nhận được
+        if (PostRes) {
+          setPostOfficeData(PostRes); // Lưu dữ liệu nhận được
         } else {
           setPostOfficeData([]); // Nếu không có dữ liệu, set dữ liệu rỗng
         }
@@ -227,11 +226,6 @@ const BecomePostOffice = () => {
               name="OfficeUserAddress"
               required
             />
-          </div>
-
-          <div className="">
-            <label htmlFor="OfficeSize">OfficeSize</label>
-            <input type="number" id="OfficeSize" name="OfficeSize" required />
           </div>
 
           <div className="">

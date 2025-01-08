@@ -1,4 +1,5 @@
 import axios from "./axiosPostOffice";
+import axiosorder from "../orderAPI/axiosOrder";
 
 // Lấy data người dùng
 export const getPostOfficeApi = () => {
@@ -34,7 +35,6 @@ export const createPostOfficeApi = (
   OfficeUserId,
   OfficeUserNumber,
   OfficeUserAddress,
-  OfficeUserEmail,
   OfficeName,
   OfficeHotline,
   OfficeAddress,
@@ -48,7 +48,6 @@ export const createPostOfficeApi = (
     OfficeUserId,
     OfficeUserNumber,
     OfficeUserAddress,
-    OfficeUserEmail,
     OfficeName,
     OfficeHotline,
     OfficeAddress,
@@ -57,4 +56,11 @@ export const createPostOfficeApi = (
     OfficeCity,
   };
   return axios.post(URL_API, data);
+};
+
+// Lấy đơn hàng theo gmail của tài xế
+export const getPostOfficeOrderByEmailApi = () => {
+  const URL_API = "/order/getpostofficeorderbyemail";
+
+  return axiosorder.get(URL_API);
 };

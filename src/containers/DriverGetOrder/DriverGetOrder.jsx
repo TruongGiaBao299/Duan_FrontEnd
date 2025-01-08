@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import styles from "./DriverGetOrder.module.css";
-import { AcceptOrderApi } from "../../utils/driverAPI/driverAPI";
+import { AcceptOrderApi, IsShippingOrderApi } from "../../utils/driverAPI/driverAPI";
 import { getOrderApi } from "../../utils/orderAPI/orderAPI";
 
 const DriverGetOrder = () => {
   const [orders, setOrders] = useState([]);
-  const [data, setData] = useState([]);
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -29,16 +28,34 @@ const DriverGetOrder = () => {
     fetchOrders();
   }, []);
 
-  const AcceptOrder = async (userId) => {
+  const AcceptOrder = async (orderId) => {
     try {
-      const res = await AcceptOrderApi(userId);
+      const res = await AcceptOrderApi(orderId);
       console.log("Accept Order Response:", res);
       toast.success("Order status updated to driver successfully!");
-      // Update the user's role in the table
-      const updatedData = data.map((order) =>
-        order._id === userId ? { ...order, status: "is shipping" } : order
+
+      // Update the order's status in the UI
+      const updatedOrders = orders.map((order) =>
+        order._id === orderId ? { ...order, status: "delivery to post office" } : order
       );
-      setData(updatedData);
+      setOrders(updatedOrders);
+    } catch (error) {
+      console.error("Error update:", error);
+      toast.error("Failed to update. Please try again.");
+    }
+  };
+
+  const AcceptOrderIsShipping = async (orderId) => {
+    try {
+      const res = await IsShippingOrderApi(orderId);
+      console.log("Accept Order Response:", res);
+      toast.success("Order status updated to driver successfully!");
+
+      // Update the order's status in the UI
+      const updatedOrders = orders.map((order) =>
+        order._id === orderId ? { ...order, status: "is shipping" } : order
+      );
+      setOrders(updatedOrders);
     } catch (error) {
       console.error("Error update:", error);
       toast.error("Failed to update. Please try again.");
@@ -47,7 +64,7 @@ const DriverGetOrder = () => {
 
   return (
     <div className={styles.driverordercontainer}>
-      {orders.filter((order) => order.status === "pending").length === 0 ? (
+      {orders.filter((order) => order.status === "pending" || order.status === "delivery to post office").length === 0 ? (
         <p>You don't have any pending orders!</p>
       ) : (
         <div>
@@ -68,11 +85,12 @@ const DriverGetOrder = () => {
                 <th>Price</th>
                 <th>Status</th>
                 <th>Created By</th>
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody>
               {orders
-                .filter((order) => order.status === "pending")
+                .filter((order) => order.status === "pending" || order.status === "delivery to post office")
                 .map((order) => (
                   <tr key={order._id}>
                     <td>{order._id}</td>
@@ -84,8 +102,7 @@ const DriverGetOrder = () => {
                     <td>{order.recipientName}</td>
                     <td>{order.recipientNumber}</td>
                     <td>
-                      {order.toAddress}, District: {order.toDistrict}, City:{" "}
-                      {order.toCity}
+                      {`${order.toAddress}, District: ${order.toDistrict}, City: ${order.toCity}`}
                     </td>
                     <td>{order.orderWeight}</td>
                     <td>{order.orderSize}</td>
@@ -97,7 +114,11 @@ const DriverGetOrder = () => {
                     <td>
                       <button
                         className={styles.becomeDriverButton}
-                        onClick={() => AcceptOrder(order._id)}
+                        onClick={() =>
+                          order.status === "pending"
+                            ? AcceptOrder(order._id)
+                            : AcceptOrderIsShipping(order._id)
+                        }
                       >
                         Accept Request
                       </button>

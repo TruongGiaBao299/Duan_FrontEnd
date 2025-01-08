@@ -18,6 +18,7 @@ import DriverPage from "./components/pages/DriverPage/DriverPage";
 import PostOfficePage from "./components/pages/PostOfficePage/PostOfficePage";
 import DriverHomePage from "./components/pages/DriverHomePage/DriverHomePage";
 import ViewHistoryPage from "./components/pages/ViewHistoryPage/ViewHistoryPage";
+import PostOfficeHomePage from "./components/pages/PostOfficeHomePage/PostOfficeHomePage";
 
 function App() {
   const { setAuth, appLoading, setAppLoading } = useContext(AuthContext);
@@ -61,6 +62,7 @@ function App() {
             <Route path="/driver" element={<DriverPage></DriverPage>}></Route>
             <Route path="/postoffice" element={<PostOfficePage></PostOfficePage>}></Route>
             <Route path="/driverhome" element={<DriverHomePage></DriverHomePage>}></Route>
+            <Route path="/postofficehome" element={<PostOfficeHomePage></PostOfficeHomePage>}></Route>
           </Routes>
         </BrowserRouter>
     </>

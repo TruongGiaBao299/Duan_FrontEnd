@@ -38,6 +38,8 @@ const Login = () => {
           navigate("/dashboard"); // Navigate to admin page if the user is admin
         } else if (res.user.role === "driver") {
           navigate("/driverhome"); // Navigate to admin page if the user is admin
+        } else if (res.user.role === "postoffice") {
+          navigate("/postofficehome"); // Navigate to admin page if the user is admin
         }else {
           navigate("/"); // Navigate to home for other users
         }

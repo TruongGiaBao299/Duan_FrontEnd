@@ -4,11 +4,11 @@ import {
   CancelledOrderApi,
   getDriverOrderByEmailApi,
   ShippedOrderApi,
-  SentPostOfficeApi,
+  SentPostOfficeApi, // Import API mới
 } from "../../utils/driverAPI/driverAPI";
 import { getPostOfficeApi } from "../../utils/postOfficeAPI/postOfficeAPI";
 
-const DriverMangeOrder = () => {
+const PostOfficeManageOrder = () => {
   const [orders, setOrders] = useState([]);
   const [emails, setEmails] = useState({}); // Lưu giá trị email cho từng đơn hàng
   const [data, setData] = useState([]); // Dữ liệu bưu cục từ API
@@ -35,7 +35,6 @@ const DriverMangeOrder = () => {
     const fetchPostOffices = async () => {
       try {
         const res = await getPostOfficeApi();
-        console.log("Post:", res);
         if (res) {
           setData(res); // Lưu dữ liệu email bưu cục từ API
         } else {
@@ -77,10 +76,38 @@ const DriverMangeOrder = () => {
     }
   };
 
+  // const ShippedOrder = async (userId) => {
+  //   try {
+  //     const res = await ShippedOrderApi(userId);
+  //     toast.success("Order status updated to driver successfully!");
+  //     const updatedOrders = orders.map((order) =>
+  //       order._id === userId ? { ...order, status: "shipped" } : order
+  //     );
+  //     setOrders(updatedOrders);
+  //   } catch (error) {
+  //     console.error("Error update:", error);
+  //     toast.error("Failed to update. Please try again.");
+  //   }
+  // };
+
+  // const CancelledOrder = async (userId) => {
+  //   try {
+  //     const res = await CancelledOrderApi(userId);
+  //     toast.success("Order status updated to driver successfully!");
+  //     const updatedOrders = orders.map((order) =>
+  //       order._id === userId ? { ...order, status: "canceled" } : order
+  //     );
+  //     setOrders(updatedOrders);
+  //   } catch (error) {
+  //     console.error("Error update:", error);
+  //     toast.error("Failed to update. Please try again.");
+  //   }
+  // };
+
   return (
     <div>
       {orders.length === 0 ? (
-        <p>You don't have any orders!</p>
+        <p>You don't have any order!</p>
       ) : (
         <div>
           <h2>Order Information</h2>
@@ -109,45 +136,52 @@ const DriverMangeOrder = () => {
                 <p><strong>PostOffice:</strong> {order.postOffice}</p>
               )}
 
+              {/* Hiển thị thông báo trạng thái đơn hàng */}
+              {order.status === "shipped" && (
+                <p style={{ color: "green", fontWeight: "bold" }}>
+                  Order shipped successfully
+                </p>
+              )}
+              {order.status === "canceled" && (
+                <p style={{ color: "red", fontWeight: "bold" }}>
+                  Order canceled
+                </p>
+              )}
+
               {/* Hiển thị form để cập nhật Post Office Email */}
-              {!order.postOffice &&
-                order.status !== "shipped" &&
-                order.status !== "canceled" && (
-                  <div>
-                    <h3>Update Post Office Email</h3>
-                    <form onSubmit={(e) => handleSubmit(e, order._id)}>
-                      <select
-                        value={emails[order._id] || ""}
-                        onChange={(e) =>
-                          setEmails((prev) => ({
-                            ...prev,
-                            [order._id]: e.target.value,
-                          }))
-                        }
-                        required
-                      >
-                        <option value="">Select a Post Office</option>
-                        {data
-                          .filter(
-                            (postOffice) =>
-                              postOffice.OfficeDistrict === order.fromDistrict || // Ưu tiên district
-                              (postOffice.OfficeDistrict !== order.fromDistrict &&
-                                postOffice.OfficeCity === order.fromCity) // Sau đó xét đến city
-                          )
-                          
-                          .map((postOffice) => (
-                            <option
-                              key={postOffice.email}
-                              value={postOffice.email}
-                            >
-                              {postOffice.OfficeName} {/* Hiển thị tên bưu cục */}
-                            </option>
-                          ))}
-                      </select>
-                      <button type="submit">Submit</button>
-                    </form>
-                  </div>
-                )}
+              {!order.postOffice && order.status !== "shipped" && order.status !== "canceled" && (
+                <div>
+                  <h3>Update Post Office Email</h3>
+                  <form onSubmit={(e) => handleSubmit(e, order._id)}>
+                    <select
+                      value={emails[order._id] || ""}
+                      onChange={(e) =>
+                        setEmails((prev) => ({
+                          ...prev,
+                          [order._id]: e.target.value,
+                        }))
+                      }
+                      required
+                    >
+                      <option value="">Select a Post Office</option>
+                      {data.map((postOffice) => (
+                        <option key={postOffice.email} value={postOffice.email}>
+                          {postOffice.OfficeName} {/* Hiển thị tên bưu cục */}
+                        </option>
+                      ))}
+                    </select>
+                    <button type="submit">Submit</button>
+                  </form>
+                </div>
+              )}
+
+              {/* Các nút cập nhật trạng thái đơn hàng
+              {!order.postOffice && (
+                <div>
+                  <button onClick={() => ShippedOrder(order._id)}>Shipped</button>
+                  <button onClick={() => CancelledOrder(order._id)}>Cancelled</button>
+                </div>
+              )} */}
             </div>
           ))}
         </div>
@@ -156,4 +190,4 @@ const DriverMangeOrder = () => {
   );
 };
 
-export default DriverMangeOrder;
+export default PostOfficeManageOrder;

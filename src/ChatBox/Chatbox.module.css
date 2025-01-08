@@ -3,7 +3,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 100vh;
+  max-height: 100vh;
 }
 
 .chattoggler{
@@ -104,7 +104,7 @@
 
 .chatbody {
   padding: 25px 22px;
-  height: 460px;
+  height: 380px;
   overflow-y: auto;
   scrollbar-width: thin;
   scrollbar-color: lightgray transparent;

@@ -52,9 +52,15 @@ export const getDriverOrderByEmailApi = () => {
 
 // Tài xế nhận đơn hàng
 export const AcceptOrderApi = (id) => {
-  const URL_API = `/order/isshippingorder/${id}`; // Thêm id vào URL
+  const URL_API = `/order/acceptorder/${id}`; // Thêm id vào URL
 
   return axiosorder.post(URL_API);
+};
+
+// Tài xế gửi về bưu cục
+export const SentPostOfficeApi = (id, email) => {
+  const URL_API = `/order/updatepostoffice/${id}`; // URL API với id đơn hàng
+  return axiosorder.post(URL_API, { email }); // Gửi email trong body request
 };
 
 // Tài xế hủy đơn hàng
@@ -67,6 +73,13 @@ export const CancelledOrderApi = (id) => {
 // Tài xế đã giao đơn hàng
 export const ShippedOrderApi = (id) => {
   const URL_API = `/order/shippedorder/${id}`; // Thêm id vào URL
+
+  return axiosorder.post(URL_API);
+};
+
+// Tài xế đang giao đơn hàng
+export const IsShippingOrderApi = (id) => {
+  const URL_API = `/order/isshippingorder/${id}`; // Thêm id vào URL
 
   return axiosorder.post(URL_API);
 };
