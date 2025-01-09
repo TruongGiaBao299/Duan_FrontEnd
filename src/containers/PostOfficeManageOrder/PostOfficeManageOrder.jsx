@@ -6,12 +6,13 @@ import {
   ShippedOrderApi,
   SentPostOfficeApi, // Import API mới
 } from "../../utils/driverAPI/driverAPI";
-import { getPostOfficeApi } from "../../utils/postOfficeAPI/postOfficeAPI";
+import { getPostOfficeApi, getPostOfficeByEmailApi } from "../../utils/postOfficeAPI/postOfficeAPI";
 
 const PostOfficeManageOrder = () => {
   const [orders, setOrders] = useState([]);
   const [emails, setEmails] = useState({}); // Lưu giá trị email cho từng đơn hàng
   const [data, setData] = useState([]); // Dữ liệu bưu cục từ API
+  const [post, setPost] = useState({}); // Lưu giá trị email cho từng đơn hàng
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -30,6 +31,27 @@ const PostOfficeManageOrder = () => {
 
     fetchUser();
   }, []);
+
+  useEffect(() => {
+          const fetchUser = async () => {
+            try {
+              const res = await getPostOfficeByEmailApi();
+              console.log("Post Office by email:", res);
+      
+              // Filter orders to show only those with status "pending" or "is shipping"
+              if (res && res.length) {
+                setPost(res);
+              } else {
+                setPost([]);
+              }
+            } catch (error) {
+              console.error("Error:", error);
+              toast.error("Error fetching orders");
+            }
+          };
+      
+          fetchUser();
+        }, []);
 
   useEffect(() => {
     const fetchPostOffices = async () => {

@@ -6,13 +6,17 @@ import {
   IsShippingOrderApi,
   SentPostOfficeApi,
 } from "../../utils/driverAPI/driverAPI";
-import { getPostOfficeOrderByEmailApi } from "../../utils/postOfficeAPI/postOfficeAPI";
+import {
+  getPostOfficeByEmailApi,
+  getPostOfficeOrderByEmailApi,
+} from "../../utils/postOfficeAPI/postOfficeAPI";
 import { getPostOfficeApi } from "../../utils/postOfficeAPI/postOfficeAPI";
 
 const PostOfficeGetOrder = () => {
   const [orders, setOrders] = useState([]);
   const [data, setData] = useState([]);
   const [emails, setEmails] = useState({}); // Lưu giá trị email cho từng đơn hàng
+  const [post, setPost] = useState({}); // Lưu giá trị email cho từng đơn hàng
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -33,6 +37,27 @@ const PostOfficeGetOrder = () => {
   }, []);
 
   useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const res = await getPostOfficeByEmailApi();
+        console.log("Post Office by email:", res);
+
+        // Filter orders to show only those with status "pending" or "is shipping"
+        if (res && res.length) {
+          setPost(res);
+        } else {
+          setPost([]);
+        }
+      } catch (error) {
+        console.error("Error:", error);
+        toast.error("Error fetching orders");
+      }
+    };
+
+    fetchUser();
+  }, []);
+
+  useEffect(() => {
     const fetchPostOffices = async () => {
       try {
         const res = await getPostOfficeApi();
@@ -43,9 +68,7 @@ const PostOfficeGetOrder = () => {
         }
       } catch (error) {
         console.error("Error:", error);
-        toast.error(
-          "Failed to fetch post office data. Please try again!"
-        );
+        toast.error("Failed to fetch post office data. Please try again!");
       }
     };
     fetchPostOffices();
@@ -150,9 +173,11 @@ const PostOfficeGetOrder = () => {
                           {data
                             .filter(
                               (postOffice) =>
-                                postOffice.OfficeDistrict === order.fromDistrict || // Ưu tiên district
-                                (postOffice.OfficeDistrict !== order.fromDistrict &&
-                                  postOffice.OfficeCity === order.fromCity) // Sau đó xét đến city
+                                postOffice.OfficeDistrict ===
+                                  order.toDistrict || // Ưu tiên district
+                                (postOffice.OfficeDistrict !==
+                                  order.toDistrict &&
+                                  postOffice.OfficeCity === order.toCity) // Sau đó xét đến city
                             )
                             .map((postOffice) => (
                               <option

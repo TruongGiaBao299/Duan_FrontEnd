@@ -1,32 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import styles from "./DriverGetOrder.module.css";
-import { AcceptOrderApi, IsShippingOrderApi } from "../../utils/driverAPI/driverAPI";
+import {
+  AcceptOrderApi,
+  getDriverByEmailApi,
+  IsShippingOrderApi,
+} from "../../utils/driverAPI/driverAPI";
 import { getOrderApi } from "../../utils/orderAPI/orderAPI";
 
 const DriverGetOrder = () => {
   const [orders, setOrders] = useState([]);
-
-  useEffect(() => {
-    const fetchOrders = async () => {
-      try {
-        const res = await getOrderApi();
-        console.log("Order:", res);
-
-        // Check if the response has orders data
-        if (res && res.length > 0) {
-          setOrders(res);
-        } else {
-          setOrders([]); // If no orders, set as empty
-        }
-      } catch (error) {
-        console.error("Error:", error);
-        toast.error("Error fetching orders");
-      }
-    };
-
-    fetchOrders();
-  }, []);
+  const [drivers, setDrivers] = useState([]);
+  const [driverCity, setDriverCity] = useState(""); // Thêm state cho driverCity
 
   const AcceptOrder = async (orderId) => {
     try {
@@ -36,7 +21,9 @@ const DriverGetOrder = () => {
 
       // Update the order's status in the UI
       const updatedOrders = orders.map((order) =>
-        order._id === orderId ? { ...order, status: "delivery to post office" } : order
+        order._id === orderId
+          ? { ...order, status: "delivery to post office" }
+          : order
       );
       setOrders(updatedOrders);
     } catch (error) {
@@ -62,9 +49,58 @@ const DriverGetOrder = () => {
     }
   };
 
+  useEffect(() => {
+    const fetchOrders = async () => {
+      try {
+        const res = await getOrderApi();
+        console.log("Orders:", res); // Kiểm tra đơn hàng
+
+        // Check if the response has orders data
+        if (res && res.length > 0) {
+          setOrders(res);
+        } else {
+          setOrders([]); // If no orders, set as empty
+        }
+      } catch (error) {
+        console.error("Error:", error);
+        toast.error("Error fetching orders");
+      }
+    };
+
+    fetchOrders();
+  }, []);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const res = await getDriverByEmailApi();
+        console.log("Driver by email:", res); // Kiểm tra tài xế nhận được
+
+        // Giả sử tài xế có thuộc tính city, bạn có thể kiểm tra city ở đây
+        if (res) {
+          setDrivers(res);
+          setDriverCity(res.DriverCity); // Cập nhật city của tài xế (giả sử res có city)
+          console.log("Driver City:", res.DriverCity); // Kiểm tra thành phố của tài xế
+        } else {
+          setDrivers([]);
+        }
+      } catch (error) {
+        console.error("Error:", error);
+        toast.error("Error fetching driver");
+      }
+    };
+
+    fetchUser();
+  }, []);
+
   return (
     <div className={styles.driverordercontainer}>
-      {orders.filter((order) => order.status === "pending" || order.status === "delivery to post office").length === 0 ? (
+      {orders.filter(
+        (order) =>
+          (order.status === "pending" ||
+            order.status === "delivery to post office") &&
+          order.fromCity === driverCity // Lọc theo thành phố của tài xế
+      ).length === 0 ? (
         <p>You don't have any pending orders!</p>
       ) : (
         <div>
@@ -90,20 +126,21 @@ const DriverGetOrder = () => {
             </thead>
             <tbody>
               {orders
-                .filter((order) => order.status === "pending" || order.status === "delivery to post office")
+                .filter(
+                  (order) =>
+                    (order.status === "pending" ||
+                      order.status === "delivery to post office") &&
+                    order.fromCity === driverCity // Kiểm tra so sánh với driverCity
+                )
                 .map((order) => (
                   <tr key={order._id}>
                     <td>{order._id}</td>
                     <td>{order.senderName}</td>
                     <td>{order.senderNumber}</td>
-                    <td>
-                      {`${order.fromAddress}, District: ${order.fromDistrict}, City: ${order.fromCity}`}
-                    </td>
+                    <td>{`${order.fromAddress}, District: ${order.fromDistrict}, City: ${order.fromCity}`}</td>
                     <td>{order.recipientName}</td>
                     <td>{order.recipientNumber}</td>
-                    <td>
-                      {`${order.toAddress}, District: ${order.toDistrict}, City: ${order.toCity}`}
-                    </td>
+                    <td>{`${order.toAddress}, District: ${order.toDistrict}, City: ${order.toCity}`}</td>
                     <td>{order.orderWeight}</td>
                     <td>{order.orderSize}</td>
                     <td>{order.type}</td>

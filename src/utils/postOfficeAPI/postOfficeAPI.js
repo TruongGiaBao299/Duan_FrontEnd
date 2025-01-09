@@ -64,3 +64,10 @@ export const getPostOfficeOrderByEmailApi = () => {
 
   return axiosorder.get(URL_API);
 };
+
+// Lấy tài xế theo gmail
+export const getPostOfficeByEmailApi = () => {
+  const URL_API = "/postoffice/getpostofficeemail";
+
+  return axios.get(URL_API);
+};

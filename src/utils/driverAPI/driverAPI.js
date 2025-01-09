@@ -8,6 +8,8 @@ export const createDriverApi = (
   DriverBirth,
   DriverId,
   DriverAddress,
+  DriverDistrict,
+  DriverWard,
   DriverCity
 ) => {
   const URL_API = "/driver/create";
@@ -17,6 +19,8 @@ export const createDriverApi = (
     DriverBirth,
     DriverId,
     DriverAddress,
+    DriverDistrict,
+    DriverWard,
     DriverCity,
   };
   return axios.post(URL_API, data);
@@ -89,4 +93,11 @@ export const deleteRequestDriver = (email) => {
   const URL_API = `/driver/noaccept/${email}`; // Thêm id vào URL
 
   return axios.delete(URL_API);
+};
+
+// Lấy tài xế theo gmail
+export const getDriverByEmailApi = () => {
+  const URL_API = "/driver/getdriverbyemail";
+
+  return axios.get(URL_API);
 };
