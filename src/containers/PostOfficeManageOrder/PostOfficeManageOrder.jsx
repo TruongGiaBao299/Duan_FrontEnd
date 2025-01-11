@@ -6,7 +6,10 @@ import {
   ShippedOrderApi,
   SentPostOfficeApi, // Import API mới
 } from "../../utils/driverAPI/driverAPI";
-import { getPostOfficeApi, getPostOfficeByEmailApi } from "../../utils/postOfficeAPI/postOfficeAPI";
+import {
+  getPostOfficeApi,
+  getPostOfficeByEmailApi,
+} from "../../utils/postOfficeAPI/postOfficeAPI";
 
 const PostOfficeManageOrder = () => {
   const [orders, setOrders] = useState([]);
@@ -33,25 +36,25 @@ const PostOfficeManageOrder = () => {
   }, []);
 
   useEffect(() => {
-          const fetchUser = async () => {
-            try {
-              const res = await getPostOfficeByEmailApi();
-              console.log("Post Office by email:", res);
-      
-              // Filter orders to show only those with status "pending" or "is shipping"
-              if (res && res.length) {
-                setPost(res);
-              } else {
-                setPost([]);
-              }
-            } catch (error) {
-              console.error("Error:", error);
-              toast.error("Error fetching orders");
-            }
-          };
-      
-          fetchUser();
-        }, []);
+    const fetchUser = async () => {
+      try {
+        const res = await getPostOfficeByEmailApi();
+        console.log("Post Office by email:", res);
+
+        // Filter orders to show only those with status "pending" or "is shipping"
+        if (res && res.length) {
+          setPost(res);
+        } else {
+          setPost([]);
+        }
+      } catch (error) {
+        console.error("Error:", error);
+        toast.error("Error fetching orders");
+      }
+    };
+
+    fetchUser();
+  }, []);
 
   useEffect(() => {
     const fetchPostOffices = async () => {
@@ -64,7 +67,9 @@ const PostOfficeManageOrder = () => {
         }
       } catch (error) {
         console.error("Lỗi:", error);
-        toast.error("Lấy dữ liệu văn phòng bưu điện thất bại. Vui lòng thử lại!");
+        toast.error(
+          "Lấy dữ liệu văn phòng bưu điện thất bại. Vui lòng thử lại!"
+        );
       }
     };
     fetchPostOffices();
@@ -135,27 +140,67 @@ const PostOfficeManageOrder = () => {
           <h2>Order Information</h2>
           {orders.map((order) => (
             <div key={order._id}>
-              <p><strong>Order ID:</strong> {order._id}</p>
-              <p><strong>Sender Name:</strong> {order.senderName}</p>
-              <p><strong>Sender Number:</strong> {order.senderNumber}</p>
-              <p><strong>From Address:</strong> {order.fromAddress}</p>
-              <p><strong>From District:</strong> {order.fromDistrict}</p>
-              <p><strong>From City:</strong> {order.fromCity}</p>
-              <p><strong>Recipient Name:</strong> {order.recipientName}</p>
-              <p><strong>Recipient Number:</strong> {order.recipientNumber}</p>
-              <p><strong>To Address:</strong> {order.toAddress}</p>
-              <p><strong>To District:</strong> {order.toDistrict}</p>
-              <p><strong>To City:</strong> {order.toCity}</p>
-              <p><strong>Order Weight:</strong> {order.orderWeight}</p>
-              <p><strong>Order Size:</strong> {order.orderSize}</p>
-              <p><strong>Type:</strong> {order.type}</p>
-              <p><strong>Message:</strong> {order.message}</p>
-              <p><strong>Price:</strong> {order.price}</p>
-              <p><strong>Status:</strong> {order.status}</p>
-              <p><strong>Created By:</strong> {order.createdBy}</p>
-              <p><strong>Driver:</strong> {order.driver}</p>
+              <p>
+                <strong>Order ID:</strong> {order._id}
+              </p>
+              <p>
+                <strong>Sender Name:</strong> {order.senderName}
+              </p>
+              <p>
+                <strong>Sender Number:</strong> {order.senderNumber}
+              </p>
+              <p>
+                <strong>From Address:</strong> {order.fromAddress}
+              </p>
+              <p>
+                <strong>From District:</strong> {order.fromDistrict}
+              </p>
+              <p>
+                <strong>From City:</strong> {order.fromCity}
+              </p>
+              <p>
+                <strong>Recipient Name:</strong> {order.recipientName}
+              </p>
+              <p>
+                <strong>Recipient Number:</strong> {order.recipientNumber}
+              </p>
+              <p>
+                <strong>To Address:</strong> {order.toAddress}
+              </p>
+              <p>
+                <strong>To District:</strong> {order.toDistrict}
+              </p>
+              <p>
+                <strong>To City:</strong> {order.toCity}
+              </p>
+              <p>
+                <strong>Order Weight:</strong> {order.orderWeight}
+              </p>
+              <p>
+                <strong>Order Size:</strong> {order.orderSize}
+              </p>
+              <p>
+                <strong>Type:</strong> {order.type}
+              </p>
+              <p>
+                <strong>Message:</strong> {order.message}
+              </p>
+              <p>
+                <strong>Price:</strong> {order.price}
+              </p>
+              <p>
+                <strong>Status:</strong> {order.status}
+              </p>
+              <p>
+                <strong>Created By:</strong> {order.createdBy}
+              </p>
+              <p>
+                <strong>Driver:</strong> {order.driver}
+              </p>
               {order.postOffice && (
-                <p><strong>PostOffice:</strong> {order.postOffice}</p>
+                <p>
+                  <strong>PostOffice:</strong> {order.postOffice}
+                </p>
               )}
 
               {/* Hiển thị thông báo trạng thái đơn hàng */}
@@ -171,31 +216,36 @@ const PostOfficeManageOrder = () => {
               )}
 
               {/* Hiển thị form để cập nhật Post Office Email */}
-              {!order.postOffice && order.status !== "shipped" && order.status !== "canceled" && (
-                <div>
-                  <h3>Update Post Office Email</h3>
-                  <form onSubmit={(e) => handleSubmit(e, order._id)}>
-                    <select
-                      value={emails[order._id] || ""}
-                      onChange={(e) =>
-                        setEmails((prev) => ({
-                          ...prev,
-                          [order._id]: e.target.value,
-                        }))
-                      }
-                      required
-                    >
-                      <option value="">Select a Post Office</option>
-                      {data.map((postOffice) => (
-                        <option key={postOffice.email} value={postOffice.email}>
-                          {postOffice.OfficeName} {/* Hiển thị tên bưu cục */}
-                        </option>
-                      ))}
-                    </select>
-                    <button type="submit">Submit</button>
-                  </form>
-                </div>
-              )}
+              {!order.postOffice &&
+                order.status !== "shipped" &&
+                order.status !== "canceled" && (
+                  <div>
+                    <h3>Update Post Office Email</h3>
+                    <form onSubmit={(e) => handleSubmit(e, order._id)}>
+                      <select
+                        value={emails[order._id] || ""}
+                        onChange={(e) =>
+                          setEmails((prev) => ({
+                            ...prev,
+                            [order._id]: e.target.value,
+                          }))
+                        }
+                        required
+                      >
+                        <option value="">Select a Post Office</option>
+                        {data.map((postOffice) => (
+                          <option
+                            key={postOffice.email}
+                            value={postOffice.email}
+                          >
+                            {postOffice.OfficeName} {/* Hiển thị tên bưu cục */}
+                          </option>
+                        ))}
+                      </select>
+                      <button type="submit">Submit</button>
+                    </form>
+                  </div>
+                )}
 
               {/* Các nút cập nhật trạng thái đơn hàng
               {!order.postOffice && (

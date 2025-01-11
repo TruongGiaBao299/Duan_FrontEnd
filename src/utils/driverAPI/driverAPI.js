@@ -10,7 +10,8 @@ export const createDriverApi = (
   DriverAddress,
   DriverDistrict,
   DriverWard,
-  DriverCity
+  DriverCity,
+  postOffice
 ) => {
   const URL_API = "/driver/create";
   const data = {
@@ -22,6 +23,7 @@ export const createDriverApi = (
     DriverDistrict,
     DriverWard,
     DriverCity,
+    postOffice
   };
   return axios.post(URL_API, data);
 };
@@ -57,6 +59,13 @@ export const getDriverOrderByEmailApi = () => {
 // Tài xế nhận đơn hàng
 export const AcceptOrderApi = (id) => {
   const URL_API = `/order/acceptorder/${id}`; // Thêm id vào URL
+
+  return axiosorder.post(URL_API);
+};
+
+// Tài xế nhận đơn hàng
+export const AcceptOrderPrepareApi = (id) => {
+  const URL_API = `/order/prepare/${id}`; // Thêm id vào URL
 
   return axiosorder.post(URL_API);
 };

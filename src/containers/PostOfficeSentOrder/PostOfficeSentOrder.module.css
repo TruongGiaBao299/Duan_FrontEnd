@@ -1,0 +1,19 @@
+.driverordercontainer {
+  padding: 10px;
+}
+
+.driverordertable {
+  width: 100%;
+  border-collapse: collapse;
+  color: black;
+
+  th,
+  td {
+    padding: 10px;
+    text-align: left;
+    color: black;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}

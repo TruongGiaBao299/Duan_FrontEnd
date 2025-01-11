@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import HeaderDriver from "../../layout/HeaderDriver/HeaderDriver";
 import PostOfficeGetOrder from "../../../containers/PostOfficeGetOrder/PostOfficeGetOrder";
 import PostOfficeManageOrder from "../../../containers/PostOfficeManageOrder/PostOfficeManageOrder";
+import PostOfficeSentOrder from "../../../containers/PostOfficeSentOrder/PostOfficeSentOrder";
+import PostOfficeManageDriver from "../../../containers/PostOfficeManageDriver/PostOfficeManageDriver";
 
 const PostOfficeHomePage = () => {
   const [currentPage, setCurrentPage] = useState("drivergetorder"); // State to track current page
@@ -25,13 +27,17 @@ const PostOfficeHomePage = () => {
       <HeaderDriver></HeaderDriver>
       <div>
         {/* Page navigation buttons */}
+        <button onClick={() => setCurrentPage("postofficesentorder")}>Sent Order</button>
         <button onClick={() => setCurrentPage("postofficegetorder")}>Get Order</button>
-        <button onClick={() => setCurrentPage("postofficemanageorder")}>Manage Order</button>
+        <button onClick={() => setCurrentPage("postofficemanagedriver")}>Manage Driver</button>
+        {/* <button onClick={() => setCurrentPage("postofficemanageorder")}>Manage Order</button> */}
       </div>
 
       {/* Display components based on the current page */}
-      {currentPage === "postofficegetorder" && <PostOfficeGetOrder />}
-      {currentPage === "postofficemanageorder" && <PostOfficeManageOrder />}
+      {currentPage === "postofficesentorder" && <PostOfficeSentOrder />}
+      {currentPage === "postofficegetorder" && <PostOfficeGetOrder />} 
+      {currentPage === "postofficemanagedriver" && <PostOfficeManageDriver />} 
+      {/* {currentPage === "postofficemanageorder" && <PostOfficeManageOrder />} */}
     </>
   );
 };

@@ -7,6 +7,7 @@ import {
   getDriverApi,
 } from "../../../../utils/driverAPI/driverAPI";
 import { getLocationAPI } from "../../../../utils/locationAPI/locationAPI";
+import { getPostOfficeApi } from "../../../../utils/postOfficeAPI/postOfficeAPI";
 
 const BecomeDriver = () => {
   const navigate = useNavigate();
@@ -32,6 +33,10 @@ const BecomeDriver = () => {
 
   const [isLoading, setIsLoading] = useState(true); // Track loading state
 
+  const [emails, setEmails] = useState({}); // Lưu giá trị email cho từng đơn hàng
+  const [post, setPost] = useState({}); // Lưu giá trị email cho từng đơn hàng
+  const [data, setData] = useState([]);
+
   useEffect(() => {
     const fetchLocation = async () => {
       try {
@@ -56,6 +61,24 @@ const BecomeDriver = () => {
     };
 
     fetchLocation();
+  }, []);
+
+  useEffect(() => {
+    const fetchPostOffices = async () => {
+      try {
+        const res = await getPostOfficeApi();
+        console.log("PostOffice:", res);
+        if (res) {
+          setData(res); // Lưu dữ liệu email bưu cục từ API
+        } else {
+          setData([]);
+        }
+      } catch (error) {
+        console.error("Error:", error);
+        toast.error("Failed to fetch post office data. Please try again!");
+      }
+    };
+    fetchPostOffices();
   }, []);
 
   // Update districts for "From"
@@ -140,6 +163,7 @@ const BecomeDriver = () => {
       DriverDistrict: formData.get("driverDistrict"),
       DriverWard: formData.get("driverWard"),
       DriverCity: formData.get("driverCity"),
+      postOffice: formData.get("postOffice"),
     };
 
     try {
@@ -151,7 +175,8 @@ const BecomeDriver = () => {
         data.DriverAddress,
         data.DriverDistrict,
         data.DriverWard,
-        data.DriverCity
+        data.DriverCity,
+        data.postOffice
       );
 
       if (res && res.data === null) {
@@ -167,6 +192,19 @@ const BecomeDriver = () => {
       navigate("/login");
     }
   };
+
+  const [filteredPostOffices, setFilteredPostOffices] = useState([]);
+
+  useEffect(() => {
+    if (selectedFromCity) {
+      const filtered = data.filter(
+        (postOffice) => postOffice.OfficeCity === selectedFromCity
+      );
+      setFilteredPostOffices(filtered);
+    } else {
+      setFilteredPostOffices([]);
+    }
+  }, [selectedFromCity, data]);
 
   return (
     <div className="">
@@ -256,6 +294,19 @@ const BecomeDriver = () => {
               ))}
             </select>
           </div>
+
+          <div className="">
+            <label htmlFor="postOffice">PostOffice</label>
+            <select id="postOffice" name="postOffice" required>
+              <option value="">Select Post Office</option>
+              {filteredPostOffices.map((postOffice, index) => (
+                <option key={index} value={postOffice.email}>
+                  {postOffice.OfficeName}
+                </option>
+              ))}
+            </select>
+          </div>
+
           {/* Nút Submit */}
           <div className="">
             <button type="submit">Submit</button>

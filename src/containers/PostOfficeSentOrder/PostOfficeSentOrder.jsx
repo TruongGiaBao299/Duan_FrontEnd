@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import styles from "./PostOfficeGetOrder.module.css";
+import styles from "./PostOfficeSentOrder.module.css";
 import {
   AcceptOrderApi,
   AcceptOrderPrepareApi,
@@ -13,7 +13,7 @@ import {
 } from "../../utils/postOfficeAPI/postOfficeAPI";
 import { getPostOfficeApi } from "../../utils/postOfficeAPI/postOfficeAPI";
 
-const PostOfficeGetOrder = () => {
+const PostOfficeSentOrder = () => {
   const [orders, setOrders] = useState([]);
   const [data, setData] = useState([]);
   const [emails, setEmails] = useState({}); // Lưu giá trị email cho từng đơn hàng
@@ -24,7 +24,7 @@ const PostOfficeGetOrder = () => {
     const fetchOrders = async () => {
       try {
         const res = await getPostOfficeOrderByEmailApi();
-        console.log("Order by email:", res);
+        console.log("Post Office Order by email:", res);
         if (res && res.length > 0) {
           setOrders(res);
         } else {
@@ -44,7 +44,7 @@ const PostOfficeGetOrder = () => {
       try {
         const res = await getPostOfficeByEmailApi();
         console.log("Post Office by email:", res);
-        console.log("Post Office by email City:", res.OfficeCity);
+        console.log("Post Office City:", res.OfficeCity);
 
         // Filter orders to show only those with status "pending" or "is shipping"
         if (res) {
@@ -128,9 +128,9 @@ const PostOfficeGetOrder = () => {
 
   return (
     <div className={styles.driverordercontainer}>
-      {orders.filter((order) => order.status === "delivery to post office" && order.toCity === postCity)
+      {orders.filter((order) => order.status === "delivery to post office" && order.fromCity === postCity)
         .length === 0 ? (
-        <p>You don't have any pending orders!</p>
+        <p>You don't have any orders to sent!</p>
       ) : (
         <div>
           <table className={styles.driverordertable}>
@@ -156,7 +156,7 @@ const PostOfficeGetOrder = () => {
             </thead>
             <tbody>
               {orders
-                .filter((order) => order.status === "delivery to post office" && order.toCity === postCity)
+                .filter((order) => order.status === "delivery to post office" && order.fromCity === postCity)
                 .map((order) => (
                   <tr key={order._id}>
                     <td>{order._id}</td>
@@ -179,7 +179,7 @@ const PostOfficeGetOrder = () => {
                     <td>{order.createdBy}</td>
                     <td>{order.driver}</td>
                     <td>{order.postOffice}</td>
-                    {/* <td>
+                    <td>
                       <h3>Update Post Office Email</h3>
                       <form onSubmit={(e) => handleSubmit(e, order._id)}>
                         <select
@@ -194,7 +194,7 @@ const PostOfficeGetOrder = () => {
                         >
                           <option value="">Select a Post Office</option>
                           {/* Filter post offices based on city */}
-                          {/* {data
+                          {data
                             .filter(
                               (postOffice) =>
                                 postOffice.OfficeDistrict ===
@@ -213,16 +213,16 @@ const PostOfficeGetOrder = () => {
                             ))}
                         </select>
                         <button type="submit">Submit</button>
-                      </form> */}
-                    {/* </td> */} 
-                    <td>
+                      </form>
+                    </td>
+                    {/* <td>
                       <button
                         className=""
                         onClick={() => AcceptOrderPrepare(order._id)}
                       >
                         Accept Request
                       </button>
-                    </td>
+                    </td> */}
                   </tr>
                 ))}
             </tbody>
@@ -233,4 +233,4 @@ const PostOfficeGetOrder = () => {
   );
 };
 
-export default PostOfficeGetOrder;
+export default PostOfficeSentOrder;

@@ -175,6 +175,7 @@ const Driver = () => {
               <th className={styles.tableuserHeader}>DriverId</th>
               <th className={styles.tableuserHeader}>DriverAddress</th>
               <th className={styles.tableuserHeader}>DriverCity</th>
+              <th className={styles.tableuserHeader}>PostOffice</th>
               <th className={styles.tableuserHeader}>status</th>
               <th className={styles.tableuserHeader}>role</th>
             </tr>
@@ -190,6 +191,7 @@ const Driver = () => {
                 <td className={styles.tableCell}>{user.DriverId}</td>
                 <td className={styles.tableCell}>{user.DriverAddress}</td>
                 <td className={styles.tableCell}>{user.DriverCity}</td>
+                <td className={styles.tableCell}>{user.postOffice}</td>
                 <td className={styles.tableCell}>{user.status}</td>
                 <td className={styles.tableCell}>{user.role}</td>
                 <td className={styles.tableCell}>

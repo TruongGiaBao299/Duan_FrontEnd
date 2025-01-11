@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import styles from "./DriverGetOrder.module.css";
+import styles from "./DriverSentOrder.module.css";
 import {
   AcceptOrderApi,
   getDriverByEmailApi,
@@ -8,7 +8,7 @@ import {
 } from "../../utils/driverAPI/driverAPI";
 import { getOrderApi } from "../../utils/orderAPI/orderAPI";
 
-const DriverGetOrder = () => {
+const DriverSentOrder = () => {
   const [orders, setOrders] = useState([]);
   const [drivers, setDrivers] = useState([]);
   const [driverCity, setDriverCity] = useState(""); // Thêm state cho driverCity
@@ -99,7 +99,9 @@ const DriverGetOrder = () => {
   return (
     <div className={styles.driverordercontainer}>
       {orders.filter(
-        (order) => order.status === "pending" && order.fromCity === driverCity // Lọc theo thành phố của tài xế
+        (order) =>
+          order.status === "prepare to delivery" &&
+          order.toCity === driverCity // Lọc theo thành phố của tài xế
       ).length === 0 ? (
         <p>You don't have any pending orders!</p>
       ) : (
@@ -128,8 +130,8 @@ const DriverGetOrder = () => {
               {orders
                 .filter(
                   (order) =>
-                    (order.status === "pending") &&
-                    order.fromCity === driverCity// Kiểm tra so sánh với driverCity
+                    order.status === "prepare to delivery" &&
+                    order.toCity === driverCity // Kiểm tra so sánh với driverCity
                 )
                 .map((order) => (
                   <tr key={order._id}>
@@ -169,4 +171,4 @@ const DriverGetOrder = () => {
   );
 };
 
-export default DriverGetOrder;
+export default DriverSentOrder;

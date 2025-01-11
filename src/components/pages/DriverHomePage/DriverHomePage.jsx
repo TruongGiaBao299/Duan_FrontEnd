@@ -4,6 +4,7 @@ import DriverMangeOrder from "../../../containers/DriverManageOrder/DriverMangeO
 import { AuthContext } from "../../../context/auth.context";
 import { useNavigate } from "react-router-dom";
 import HeaderDriver from "../../layout/HeaderDriver/HeaderDriver";
+import DriverSentOrder from "../../../containers/DriverSentOrder/DriverSentOrder";
 
 const DriverHomePage = () => {
   const [currentPage, setCurrentPage] = useState("drivergetorder"); // State to track current page
@@ -26,12 +27,14 @@ const DriverHomePage = () => {
       <div>
         {/* Page navigation buttons */}
         <button onClick={() => setCurrentPage("drivergetorder")}>Get Order</button>
+        <button onClick={() => setCurrentPage("sentorder")}>Sent Order</button>
         <button onClick={() => setCurrentPage("drivermanageorder")}>Manage Order</button>
       </div>
 
       {/* Display components based on the current page */}
       {currentPage === "drivergetorder" && <DriverGetOrder />}
-      {currentPage === "drivermanageorder" && <DriverMangeOrder />}
+      {currentPage === "sentorder" && <DriverSentOrder />}
+      {currentPage === "drivermanageorder" && <DriverMangeOrder />}    
     </>
   );
 };
