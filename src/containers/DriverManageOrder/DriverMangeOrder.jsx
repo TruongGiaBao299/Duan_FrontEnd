@@ -14,6 +14,7 @@ const DriverMangeOrder = () => {
   const [emails, setEmails] = useState({}); // Lưu giá trị email cho từng đơn hàng
   const [data, setData] = useState([]); // Dữ liệu bưu cục từ API
   const [drivers, setDrivers] = useState([]);
+  const [filterStatus, setFilterStatus] = useState("all"); // Trạng thái bộ lọc
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -23,27 +24,6 @@ const DriverMangeOrder = () => {
           setOrders(res);
         } else {
           setOrders([]);
-        }
-      } catch (error) {
-        console.error("Error:", error);
-        toast.error("Error fetching orders");
-      }
-    };
-
-    fetchUser();
-  }, []);
-
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const res = await getDriverByEmailApi();
-        console.log("Driver by email:", res);
-
-        // Filter orders to show only those with status "pending" or "is shipping"
-        if (res && res.length) {
-          setDrivers(res);
-        } else {
-          setDrivers([]);
         }
       } catch (error) {
         console.error("Error:", error);
@@ -65,10 +45,8 @@ const DriverMangeOrder = () => {
           setData([]);
         }
       } catch (error) {
-        console.error("Lỗi:", error);
-        toast.error(
-          "Lấy dữ liệu văn phòng bưu điện thất bại. Vui lòng thử lại!"
-        );
+        console.error("Error:", error);
+        toast.error("Failed to fetch post office data. Please try again!");
       }
     };
     fetchPostOffices();
@@ -102,14 +80,31 @@ const DriverMangeOrder = () => {
     }
   };
 
+  // Lọc đơn hàng theo trạng thái
+  const filteredOrders = filterStatus === "all"
+    ? orders
+    : orders.filter((order) => order.status === filterStatus);
+
   return (
     <div>
-      {orders.length === 0 ? (
-        <p>You don't have any orders!</p>
+      {/* Nút bộ lọc */}
+      <div style={{ marginBottom: "20px" }}>
+        <button onClick={() => setFilterStatus("all")}>All</button>
+        <button onClick={() => setFilterStatus("delivery to post office")}>
+          Delivery to Post Office
+        </button>
+        <button onClick={() => setFilterStatus("shipped")}>Shipped</button>
+        <button onClick={() => setFilterStatus("is shipping")}>
+          Is Shipping
+        </button>
+      </div>
+
+      {filteredOrders.length === 0 ? (
+        <p>No orders match the selected filter!</p>
       ) : (
         <div>
           <h2>Order Information</h2>
-          {orders.map((order) => (
+          {filteredOrders.map((order) => (
             <div key={order._id}>
               <p>
                 <strong>Order ID:</strong> {order._id}

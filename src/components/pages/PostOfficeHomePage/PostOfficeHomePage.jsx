@@ -6,6 +6,7 @@ import PostOfficeGetOrder from "../../../containers/PostOfficeGetOrder/PostOffic
 import PostOfficeManageOrder from "../../../containers/PostOfficeManageOrder/PostOfficeManageOrder";
 import PostOfficeSentOrder from "../../../containers/PostOfficeSentOrder/PostOfficeSentOrder";
 import PostOfficeManageDriver from "../../../containers/PostOfficeManageDriver/PostOfficeManageDriver";
+import PostOfficeHistory from "../../../containers/PostOfficeHistory/PostOfficeHistory";
 
 const PostOfficeHomePage = () => {
   const [currentPage, setCurrentPage] = useState("drivergetorder"); // State to track current page
@@ -30,6 +31,7 @@ const PostOfficeHomePage = () => {
         <button onClick={() => setCurrentPage("postofficesentorder")}>Sent Order</button>
         <button onClick={() => setCurrentPage("postofficegetorder")}>Get Order</button>
         <button onClick={() => setCurrentPage("postofficemanagedriver")}>Manage Driver</button>
+        <button onClick={() => setCurrentPage("postofficehistory")}>History</button>
         {/* <button onClick={() => setCurrentPage("postofficemanageorder")}>Manage Order</button> */}
       </div>
 
@@ -37,6 +39,7 @@ const PostOfficeHomePage = () => {
       {currentPage === "postofficesentorder" && <PostOfficeSentOrder />}
       {currentPage === "postofficegetorder" && <PostOfficeGetOrder />} 
       {currentPage === "postofficemanagedriver" && <PostOfficeManageDriver />} 
+      {currentPage === "postofficehistory" && <PostOfficeHistory />} 
       {/* {currentPage === "postofficemanageorder" && <PostOfficeManageOrder />} */}
     </>
   );

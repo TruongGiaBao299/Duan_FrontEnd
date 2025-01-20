@@ -5,8 +5,10 @@ import { getUserApi } from "../../utils/userAPI/userAPI";
 
 const User = () => {
   const [data, setData] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [roleFilter, setRoleFilter] = useState("All");
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -16,8 +18,10 @@ const User = () => {
         console.log("User:", res);
         if (res) {
           setData(res);
+          setFilteredData(res); // Set initial filtered data to all users
         } else {
           setData([]);
+          setFilteredData([]);
         }
       } catch (err) {
         toast.error("Failed to fetch user data. Please try again later.");
@@ -28,45 +32,39 @@ const User = () => {
     fetchUser();
   }, []);
 
-  const handleBecomeDriver = async (email) => {
-    try {
-      const res = await makeDriverApi(email);
-      console.log("Become Driver Response:", res);
-      toast.success("User role updated to driver successfully!");
-      // Update the user's role in the table
-      const updatedData = data.map((user) =>
-        user.email === email ? { ...user, role: "driver" } : user
-      );
-      setData(updatedData);
-    } catch (error) {
-      console.error("Error making driver:", error);
-      toast.error("Failed to update user role. Please try again.");
+  const handleFilterChange = (role) => {
+    setRoleFilter(role);
+    if (role === "All") {
+      setFilteredData(data); // Show all users
+    } else {
+      const filtered = data.filter((user) => user.role === role);
+      setFilteredData(filtered);
     }
   };
 
-  const handleBecomeGuest = async (email) => {
-    try {
-      const res = await makeGuestApi(email);
-      console.log("Become Guest Response:", res);
-      toast.success("User role updated to guest successfully!");
-      // Update the user's role in the table
-      const updatedData = data.map((user) =>
-        user.email === email ? { ...user, role: "guest" } : user
-      );
-      setData(updatedData);
-    } catch (error) {
-      console.error("Error making guest:", error);
-      toast.error("Failed to update user role. Please try again.");
-    }
-  };
+  const roles = ["All", "guest", "driver", "postoffice"];
 
   return (
     <div className={styles.pageWrapper}>
+      <div className={styles.filters}>
+        {roles.map((role) => (
+          <button
+            key={role}
+            className={`${styles.filterButton} ${
+              roleFilter === role ? styles.active : ""
+            }`}
+            onClick={() => handleFilterChange(role)}
+          >
+            {role}
+          </button>
+        ))}
+      </div>
+
       {loading ? (
         <p className={styles.loading}>Loading users...</p>
       ) : error ? (
         <p className={styles.error}>{error}</p>
-      ) : data.length === 0 ? (
+      ) : filteredData.length === 0 ? (
         <p className={styles.noData}>No users found.</p>
       ) : (
         <table className={styles.tableuser}>
@@ -79,7 +77,7 @@ const User = () => {
             </tr>
           </thead>
           <tbody>
-            {data.map((user) => (
+            {filteredData.map((user) => (
               <tr key={user._id} className={styles.tableRow}>
                 <td className={styles.tableCell}>{user._id}</td>
                 <td className={styles.tableCell}>{user.name}</td>

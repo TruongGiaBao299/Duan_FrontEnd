@@ -162,7 +162,7 @@ const PostOffice = () => {
                 <td className={styles.tableCell}>{Office.OfficeName}</td>
                 <td className={styles.tableCell}>{Office.OfficeHotline}</td>
                 <td className={styles.tableCell}>
-                  {Office.OfficeAddress}, {Office.OfficeWard}, {Office.OfficeDistrict}, {Office.OfficeCity}
+                  {Office.OfficeAddress}, {Office.OfficeDistrict}, {Office.OfficeWard}, {Office.OfficeCity}
                 </td>
                 <td className={styles.tableCell}>
                   {Office.OfficeLatitude}, {Office.OfficeLongitude}

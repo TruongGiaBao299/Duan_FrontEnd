@@ -4,50 +4,77 @@ import styles from "./Header.module.css";
 import { toast } from "react-toastify";
 import { AuthContext } from "../../../context/auth.context";
 import { MdOutlineLocalShipping } from "react-icons/md";
-import { getOrderByEmailApi } from "../../../utils/orderAPI/orderAPI"; // Import your API call
+import { getOrderByEmailApi } from "../../../utils/orderAPI/orderAPI";
 import { FaHistory } from "react-icons/fa";
 
 const Header = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [username, setUsername] = useState("");
-  const [orderCount, setOrderCount] = useState(0); // State for storing order count
+  const [orderCount, setOrderCount] = useState(0);
+  const [coordinates, setCoordinates] = useState({ latitude: null, longitude: null }); // Tọa độ
   const navigate = useNavigate();
   const { auth, setAuth } = useContext(AuthContext);
   console.log("check auth: ", auth);
 
   useEffect(() => {
-    const token = localStorage.getItem("access_token"); // Check for token
+    const token = localStorage.getItem("access_token");
     setIsLoggedIn(!!token);
 
-    // Check if auth object and user data are valid
     if (token && auth?.user?.name) {
-      setUsername(auth.user.name); // Update username
-      fetchUserOrders(auth.user.email); // Fetch orders when the user is logged in
+      setUsername(auth.user.name);
+      fetchUserOrders(auth.user.email);
     } else {
       setUsername("");
-      setOrderCount(0); // Reset order count if not logged in
+      setOrderCount(0);
     }
   }, [auth]);
 
+  useEffect(() => {
+    const fetchCoordinates = () => {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const { latitude, longitude } = position.coords;
+            setCoordinates({ latitude, longitude });
+            console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
+          },
+          (error) => {
+            console.error("Error getting location:", error);
+            toast.error("Unable to fetch location. Please enable location services.");
+          },
+          {
+            enableHighAccuracy: true,
+            timeout: 10000,
+            maximumAge: 0,
+          }
+        );
+      } else {
+        toast.error("Geolocation is not supported by this browser.");
+      }
+    };
+
+    fetchCoordinates();
+  }, []);
+
   const fetchUserOrders = async (email) => {
     try {
-      const orders = await getOrderByEmailApi(email); // Fetch orders by email
+      const orders = await getOrderByEmailApi(email);
       console.log("Header order: ", orders);
-  
-      // Filter orders to exclude those with the status "shipped"
-      const pendingOrders = orders.filter(order => order.status === "pending" || order.status === "is shipping");
-  
-      setOrderCount(pendingOrders.length); // Set order count based on filtered orders
+
+      const pendingOrders = orders.filter(
+        (order) => order.status === "pending" || order.status === "is shipping"
+      );
+
+      setOrderCount(pendingOrders.length);
     } catch (error) {
       console.error("Error fetching orders:", error);
-      setOrderCount(0); // Set order count to 0 in case of error
+      setOrderCount(0);
     }
   };
-  
 
   const handleLogout = () => {
-    localStorage.removeItem("access_token"); // Remove token from storage
-    setIsLoggedIn(false); // Update state
+    localStorage.removeItem("access_token");
+    setIsLoggedIn(false);
     setAuth({
       isAuthenthicate: false,
       user: {
@@ -57,7 +84,6 @@ const Header = () => {
       },
     });
 
-    // Force page reload to reset the state and UI
     navigateTo("/");
     window.location.reload();
     toast.success("Logged out successfully!");
@@ -71,40 +97,36 @@ const Header = () => {
     <header className={styles.header}>
       <div className={styles.toolbar}>
         <nav className={styles.navLinks}>
-          {isLoggedIn ? ( // Check if logged in
+          {isLoggedIn ? (
             <>
               <span className={styles.greeting}>Hello, {username}!</span>
               <button onClick={() => navigateTo("/")}>Home</button>
               <button onClick={() => navigateTo("/contact")}>Contact</button>
-              <input
-                className={styles.searchbar}
-                type="text"
-                placeholder="Search"
-              />
+              <input className={styles.searchbar} type="text" placeholder="Search" />
               <button onClick={() => navigateTo("/vieworder")}>
                 <MdOutlineLocalShipping />
-                {orderCount > 0 && <span>{orderCount}</span>} {/* Show order count */}
+                {orderCount > 0 && <span>{orderCount}</span>}
               </button>
               <button onClick={() => navigateTo("/viewhistory")}>
                 <FaHistory />
               </button>
               <button onClick={handleLogout}>Logout</button>
+              {/* {coordinates.latitude && coordinates.longitude && (
+                <div className={styles.coordinates}>
+                  <p>Latitude: {coordinates.latitude}</p>
+                  <p>Longitude: {coordinates.longitude}</p>
+                </div>
+              )} */}
             </>
           ) : (
             <>
               <button onClick={() => navigateTo("/")}>Home</button>
               <button onClick={() => navigateTo("/contact")}>Contact</button>
-              <input
-                className={styles.searchbar}
-                type="text"
-                placeholder="Search"
-              />
+              <input className={styles.searchbar} type="text" placeholder="Search" />
               <div className={styles.signup}>
                 <button onClick={() => navigateTo("/login")}>Login</button>
                 <div>/</div>
-                <button onClick={() => navigateTo("/register")}>
-                  Register
-                </button>
+                <button onClick={() => navigateTo("/register")}>Register</button>
               </div>
             </>
           )}

@@ -24,3 +24,8 @@
   height: 100%; /* Ensure this is enough to display the map */
   width: 700px; /* Set full width */
 }
+
+.searchContainer{
+  display: flex;
+  flex-direction: column;
+}

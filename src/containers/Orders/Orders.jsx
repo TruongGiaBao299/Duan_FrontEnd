@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import styles from "./Orders.module.css"; // Ensure this file includes proper table styling
+import styles from "./Orders.module.css"; 
 import { toast } from "react-toastify";
 import { AuthContext } from "../../context/auth.context";
 import { useNavigate } from "react-router-dom";
@@ -7,9 +7,10 @@ import { getOrderApi } from "../../utils/orderAPI/orderAPI";
 
 const Orders = () => {
   const [orders, setOrders] = useState([]);
-  const [address, setAddress] = useState([]);
+  const [filteredOrders, setFilteredOrders] = useState([]);
+  const [statusFilter, setStatusFilter] = useState("All");
 
-  const { auth, setAuth } = useContext(AuthContext);
+  const { auth } = useContext(AuthContext);
   console.log("check auth Orders: ", auth.user.role);
 
   const navigate = useNavigate();
@@ -20,11 +21,12 @@ const Orders = () => {
         const res = await getOrderApi();
         console.log("Order:", res);
 
-        // Check if the response has orders data
         if (res && res.length > 0) {
           setOrders(res);
+          setFilteredOrders(res); // Set initial filtered orders to all orders
         } else {
-          setOrders([]); // If no orders, set as empty
+          setOrders([]);
+          setFilteredOrders([]); // No orders
         }
       } catch (error) {
         console.error("Error:", error);
@@ -35,10 +37,44 @@ const Orders = () => {
     fetchUser();
   }, []);
 
+  const handleFilterChange = (status) => {
+    setStatusFilter(status);
+    if (status === "All") {
+      setFilteredOrders(orders);
+    } else {
+      const filtered = orders.filter((order) => order.status === status);
+      setFilteredOrders(filtered);
+    }
+  };
+
+  const statuses = [
+    "All",
+    "pending",
+    "delivery to post office",
+    "prepare to delivery",
+    "is shipping",
+    "shipped",
+    "canceled",
+  ];
+
   return (
     <div className={styles.container}>
-      {orders.length === 0 ? (
-        <p>You don't have any orders!</p> // Display message if no orders
+      <div className={styles.filters}>
+        {statuses.map((status) => (
+          <button
+            key={status}
+            className={`${styles.filterButton} ${
+              statusFilter === status ? styles.active : ""
+            }`}
+            onClick={() => handleFilterChange(status)}
+          >
+            {status}
+          </button>
+        ))}
+      </div>
+
+      {filteredOrders.length === 0 ? (
+        <p>You don't have any orders!</p>
       ) : (
         <div>
           <table className={styles.table}>
@@ -62,7 +98,7 @@ const Orders = () => {
               </tr>
             </thead>
             <tbody>
-              {orders.map((order) => (
+              {filteredOrders.map((order) => (
                 <tr key={order._id}>
                   <td>{order._id}</td>
                   <td>{order.senderName}</td>
@@ -70,12 +106,10 @@ const Orders = () => {
                   <td>
                     {`${order.fromAddress}, District: ${order.fromDistrict}, City: ${order.fromCity}`}
                   </td>
-
                   <td>{order.recipientName}</td>
                   <td>{order.recipientNumber}</td>
                   <td>
-                    {order.toAddress}, District: {order.toDistrict}, City:{" "}
-                    {order.toCity}
+                    {`${order.toAddress}, District: ${order.toDistrict}, City: ${order.toCity}`}
                   </td>
                   <td>{order.orderWeight}</td>
                   <td>{order.orderSize}</td>

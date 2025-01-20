@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../../../context/auth.context";
-import { createDriverApi } from "../../../../utils/driverAPI/driverAPI";
 import {
   createPostOfficeApi,
   getPostOfficeApi,
@@ -66,18 +65,10 @@ const BecomePostOffice = () => {
         (city) => city.name === selectedFromCity
       );
       setLocationDistrictFrom(selectedCity ? selectedCity.districts : []);
+      setSelectedFromDistrict(""); // Reset district when city changes
+      setLocationWardFrom([]); // Reset wards when city changes
     }
   }, [selectedFromCity]);
-
-  // Update districts for "To"
-  useEffect(() => {
-    if (selectedToCity) {
-      const selectedCity = location.find(
-        (city) => city.name === selectedToCity
-      );
-      setLocationDistrictTo(selectedCity ? selectedCity.districts : []);
-    }
-  }, [selectedToCity]);
 
   // Update wards for "From"
   useEffect(() => {
@@ -91,6 +82,18 @@ const BecomePostOffice = () => {
       setLocationWardFrom(selectedDistrict ? selectedDistrict.wards : []);
     }
   }, [selectedFromDistrict, selectedFromCity]);
+
+  // Update districts for "To"
+  useEffect(() => {
+    if (selectedToCity) {
+      const selectedCity = location.find(
+        (city) => city.name === selectedToCity
+      );
+      setLocationDistrictTo(selectedCity ? selectedCity.districts : []);
+      setSelectedToDistrict(""); // Reset district when city changes
+      setLocationWardTo([]); // Reset wards when city changes
+    }
+  }, [selectedToCity]);
 
   // Update wards for "To"
   useEffect(() => {
@@ -123,7 +126,6 @@ const BecomePostOffice = () => {
           (post) => post.email === auth.user.email
         );
         setIsAlreadySubmitted(isAlreadyPost); // Cập nhật trạng thái
-        setPostOfficeData(PostRes || []);
       } catch (error) {
         console.error("Lỗi:", error);
         toast.error(
@@ -149,8 +151,8 @@ const BecomePostOffice = () => {
       OfficeName: formData.get("OfficeName"),
       OfficeHotline: formData.get("OfficeHotline"),
       OfficeAddress: formData.get("OfficeAddress"),
+      OfficeDistrict: formData.get("OfficeDistrict"),  
       OfficeWard: formData.get("OfficeWard"),
-      OfficeDistrict: formData.get("OfficeDistrict"),
       OfficeCity: formData.get("OfficeCity"),
     };
 
@@ -166,8 +168,8 @@ const BecomePostOffice = () => {
         data.OfficeName,
         data.OfficeHotline,
         data.OfficeAddress,
+        data.OfficeDistrict, 
         data.OfficeWard,
-        data.OfficeDistrict,
         data.OfficeCity,
       );
 
@@ -186,14 +188,14 @@ const BecomePostOffice = () => {
   };
 
   return (
-    <div className="">
+    <div>
       {loading ? (
         <p>Loading...</p>
       ) : isAlreadySubmitted ? ( // Kiểm tra nếu đã nộp
         <p>Your request has been sent, please wait for us to review.</p>
       ) : (
         <form onSubmit={handleSubmit}>
-          <div className="">
+          <div>
             <label htmlFor="OfficeUserName">OfficeUserName</label>
             <input
               type="text"
@@ -203,12 +205,12 @@ const BecomePostOffice = () => {
             />
           </div>
 
-          <div className="">
+          <div>
             <label htmlFor="OfficeUserId">OfficeUserId</label>
             <input type="text" id="OfficeUserId" name="OfficeUserId" required />
           </div>
 
-          <div className="">
+          <div>
             <label htmlFor="OfficeUserNumber">OfficeUserNumber</label>
             <input
               type="text"
@@ -218,7 +220,7 @@ const BecomePostOffice = () => {
             />
           </div>
 
-          <div className="">
+          <div>
             <label htmlFor="OfficeUserAddress">OfficeUserAddress</label>
             <input
               type="text"
@@ -228,12 +230,12 @@ const BecomePostOffice = () => {
             />
           </div>
 
-          <div className="">
+          <div>
             <label htmlFor="OfficeName">OfficeName</label>
             <input type="text" id="OfficeName" name="OfficeName" required />
           </div>
 
-          <div className="">
+          <div>
             <label htmlFor="OfficeHotline">OfficeHotline</label>
             <input
               type="text"
@@ -243,7 +245,7 @@ const BecomePostOffice = () => {
             />
           </div>
 
-          <div className="">
+          <div>
             <label htmlFor="OfficeAddress">OfficeAddress</label>
             <input
               type="text"
@@ -254,7 +256,7 @@ const BecomePostOffice = () => {
           </div>
 
           {/* From City */}
-          <div className="">
+          <div>
             <label htmlFor="OfficeCity">OfficeCity</label>
             <select
               id="OfficeCity"
@@ -273,7 +275,7 @@ const BecomePostOffice = () => {
           </div>
 
           {/* From District */}
-          <div className="">
+          <div>
             <label htmlFor="OfficeDistrict">OfficeDistrict</label>
             <select
               id="OfficeDistrict"
@@ -292,7 +294,7 @@ const BecomePostOffice = () => {
           </div>
 
           {/* From Ward */}
-          <div className="">
+          <div>
             <label htmlFor="OfficeWard">OfficeWard</label>
             <select id="OfficeWard" name="OfficeWard" required>
               <option value="">Select Ward</option>
@@ -305,7 +307,7 @@ const BecomePostOffice = () => {
           </div>
 
           {/* Nút Submit */}
-          <div className="">
+          <div>
             <button type="submit">Submit</button>
           </div>
         </form>

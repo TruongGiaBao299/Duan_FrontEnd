@@ -150,7 +150,7 @@ const SearchPrice = () => {
 
   return (
     <div>
-      <h1>Find Order</h1>
+      <h1>Search Price</h1>
       <form onSubmit={handleSubmit}>
         {/* From City */}
         <div className={styles.CreateOrderInput}>

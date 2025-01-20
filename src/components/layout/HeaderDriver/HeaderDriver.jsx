@@ -14,6 +14,7 @@ const HeaderDriver = () => {
   const navigate = useNavigate();
   const { auth, setAuth } = useContext(AuthContext);
   console.log("check auth: ", auth);
+  const [coordinates, setCoordinates] = useState({ latitude: null, longitude: null }); // Tọa độ
 
   useEffect(() => {
     const token = localStorage.getItem("access_token"); // Check for token
@@ -28,6 +29,34 @@ const HeaderDriver = () => {
       setOrderCount(0); // Reset order count if not logged in
     }
   }, [auth]);
+
+  useEffect(() => {
+      const fetchCoordinates = () => {
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(
+            (position) => {
+              const { latitude, longitude } = position.coords;
+              setCoordinates({ latitude, longitude });
+              console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
+            },
+            (error) => {
+              console.error("Error getting location:", error);
+              toast.error("Unable to fetch location. Please enable location services.");
+            },
+            {
+              enableHighAccuracy: true,
+              timeout: 10000,
+              maximumAge: 0,
+            }
+          );
+        } else {
+          toast.error("Geolocation is not supported by this browser.");
+        }
+      };
+  
+      fetchCoordinates();
+    }, []);
+  
 
   const fetchUserOrders = async (email) => {
     try {
@@ -74,20 +103,12 @@ const HeaderDriver = () => {
           {isLoggedIn ? ( // Check if logged in
             <>
               <span className={styles.greeting}>Hello, {username}!</span>
-              <button onClick={() => navigateTo("/")}>Home</button>
-              <button onClick={() => navigateTo("/contact")}>Contact</button>
+              <button onClick={() => navigateTo("/driverhome")}>Home</button>
               <input
                 className={styles.searchbar}
                 type="text"
                 placeholder="Search"
               />
-              <button onClick={() => navigateTo("/vieworder")}>
-                <MdOutlineLocalShipping />
-                {orderCount > 0 && <span>{orderCount}</span>} {/* Show order count */}
-              </button>
-              <button onClick={() => navigateTo("/viewhistory")}>
-                <FaHistory />
-              </button>
               <button onClick={handleLogout}>Logout</button>
             </>
           ) : (

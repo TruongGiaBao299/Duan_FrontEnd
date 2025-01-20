@@ -3,43 +3,86 @@ import { getOrderByEmailApi } from "../../utils/orderAPI/orderAPI";
 import { toast } from "react-toastify";
 
 const ViewHistory = () => {
-  const [orders, setOrders] = useState([]);
+  const [orders, setOrders] = useState([]); // All orders fetched from API
+  const [filteredOrders, setFilteredOrders] = useState([]); // Orders to display based on filter
+  const [filter, setFilter] = useState("all"); // Filter state: "all", "shipped", "canceled"
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
         const res = await getOrderByEmailApi();
         console.log("Order by email:", res);
-        console.log("Order by email length:", res.length);
-  
-        // Filter orders to show only those with status "shipped" or "canceled"
+
         if (res && res.length > 0) {
-          const filteredOrders = res.filter(
-            (order) => order.status === "shipped" || order.status === "canceled"
-          );
-          setOrders(filteredOrders); // Update state with filtered orders
+          setOrders(res); // Store all orders
+          setFilteredOrders(
+            res.filter(
+              (order) =>
+                order.status === "shipped" || order.status === "canceled"
+            )
+          ); // Initially show only shipped and canceled orders
         } else {
-          setOrders([]); // If no orders, set as empty
+          setOrders([]);
+          setFilteredOrders([]);
         }
       } catch (error) {
         console.error("Error:", error);
         toast.error("Error fetching orders");
       }
     };
-  
+
     fetchUser();
   }, []);
-  
+
+  const handleFilterChange = (status) => {
+    setFilter(status);
+
+    if (status === "all") {
+      setFilteredOrders(
+        orders.filter(
+          (order) => order.status === "shipped" || order.status === "canceled"
+        )
+      );
+    } else {
+      setFilteredOrders(orders.filter((order) => order.status === status));
+    }
+  };
 
   return (
     <div>
-      {orders.length === 0 ? (
-        <p>You don't have any order in history!</p> // Display message if no orders
+      <h2>Order History</h2>
+
+      {/* Filter Buttons */}
+      <div>
+        <button
+          onClick={() => handleFilterChange("all")}
+          style={{ marginRight: "10px" }}
+        >
+          All
+        </button>
+        <button
+          onClick={() => handleFilterChange("shipped")}
+          style={{ marginRight: "10px" }}
+        >
+          Shipped
+        </button>
+        <button onClick={() => handleFilterChange("canceled")}>Canceled</button>
+      </div>
+
+      {/* Orders List */}
+      {filteredOrders.length === 0 ? (
+        <p>No orders match the selected filter!</p>
       ) : (
         <div>
-          <h2>Order Information</h2>
-          {orders.map((order) => (
-            <div key={order._id}>
+          {filteredOrders.map((order) => (
+            <div
+              key={order._id}
+              style={{
+                border: "1px solid #ccc",
+                margin: "10px 0",
+                padding: "10px",
+              }}
+            >
               <p>
                 <strong>Order ID:</strong> {order._id}
               </p>
