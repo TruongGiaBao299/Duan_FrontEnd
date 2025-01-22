@@ -124,6 +124,9 @@ const ViewOrder = () => {
               <p>
                 <strong>EstimatedDeliveryTime:</strong> {order.estimatedDeliveryTime}
               </p>
+              <p>
+                <strong>Distance:</strong> {order.distance} km
+              </p>
 
               {/* Conditional rendering of buttons */}
               {order.status === "is shipping" && (

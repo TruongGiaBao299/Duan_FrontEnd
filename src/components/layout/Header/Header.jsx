@@ -44,7 +44,7 @@ const Header = () => {
           },
           {
             enableHighAccuracy: true,
-            timeout: 10000,
+            timeout: 1000000,
             maximumAge: 0,
           }
         );
