@@ -23,6 +23,7 @@ const SearchPrice = () => {
   const [selectedToDistrict, setSelectedToDistrict] = useState(""); // Selected district for To
 
   const [isLoading, setIsLoading] = useState(true); // Track loading state
+  const [showPopup, setShowPopup] = useState(false);
 
   // Fetch location data on component mount
   useEffect(() => {
@@ -129,11 +130,13 @@ const SearchPrice = () => {
         data.type
       ); // Call the API with the form data
 
-      console.log(res)
+      console.log(res);
 
       if (res) {
+        setOrderInfo(res);
+        setShowPopup(true);
         setOrderInfo(res); // Save the order info
-        
+
         toast.success("Order details retrieved successfully!");
       } else {
         toast.error("No order information found.");
@@ -149,173 +152,204 @@ const SearchPrice = () => {
   };
 
   return (
-    <div>
-      <h1>Search Price</h1>
+    <div className={styles.Container}>
       <form onSubmit={handleSubmit}>
-        {/* From City */}
-        <div className={styles.CreateOrderInput}>
-          <label htmlFor="fromCity">From City</label>
-          <select
-            id="fromCity"
-            name="fromCity"
-            required
-            value={selectedFromCity}
-            onChange={(e) => setSelectedFromCity(e.target.value)}
-          >
-            <option value="">Select City</option>
-            {locationCity.map((city, index) => (
-              <option key={index} value={city}>
-                {city}
-              </option>
-            ))}
-          </select>
-        </div>
+        <div className={styles.Content}>
+          <div className={styles.TopContainer}>
+            {/* From City */}
+            <div className={styles.TopLeftContainer}>
+              <div className={styles.SearchPriceInput}>
+                <select
+                  id="fromCity"
+                  name="fromCity"
+                  required
+                  value={selectedFromCity}
+                  onChange={(e) => setSelectedFromCity(e.target.value)}
+                >
+                  <option value="">Select From City</option>
+                  {locationCity.map((city, index) => (
+                    <option key={index} value={city}>
+                      {city}
+                    </option>
+                  ))}
+                </select>
+              </div>
 
-        {/* From District */}
-        <div className={styles.CreateOrderInput}>
-          <label htmlFor="fromDistrict">From District</label>
-          <select
-            id="fromDistrict"
-            name="fromDistrict"
-            required
-            value={selectedFromDistrict}
-            onChange={(e) => setSelectedFromDistrict(e.target.value)}
-          >
-            <option value="">Select District</option>
-            {locationDistrictFrom.map((district, index) => (
-              <option key={index} value={district.name}>
-                {district.name}
-              </option>
-            ))}
-          </select>
-        </div>
+              {/* From District */}
+              <div className={styles.SearchPriceInput}>
+                <select
+                  id="fromDistrict"
+                  name="fromDistrict"
+                  required
+                  value={selectedFromDistrict}
+                  onChange={(e) => setSelectedFromDistrict(e.target.value)}
+                >
+                  <option value="">Select From District</option>
+                  {locationDistrictFrom.map((district, index) => (
+                    <option key={index} value={district.name}>
+                      {district.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
 
-        {/* From Ward */}
-        <div className={styles.CreateOrderInput}>
-          <label htmlFor="fromWard">From Ward</label>
-          <select id="fromWard" name="fromWard" required>
-            <option value="">Select Ward</option>
-            {locationWardFrom.map((ward, index) => (
-              <option key={index} value={ward.name}>
-                {ward.name}
-              </option>
-            ))}
-          </select>
-        </div>
+              {/* From Ward */}
+              <div className={styles.SearchPriceInput}>
+                <select id="fromWard" name="fromWard" required>
+                  <option value="">Select From Ward</option>
+                  {locationWardFrom.map((ward, index) => (
+                    <option key={index} value={ward.name}>
+                      {ward.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
 
-        <div className={styles.CreateOrderInput}>
-          <label htmlFor="fromAddress">From Address</label>
-          <input type="text" id="fromAddress" name="fromAddress" required />
-        </div>
+              <div className={styles.SearchPriceInput}>
+                <input
+                  placeholder="From Address"
+                  type="text"
+                  id="fromAddress"
+                  name="fromAddress"
+                  required
+                />
+              </div>
+            </div>
 
-        {/* To City */}
-        <div className={styles.CreateOrderInput}>
-          <label htmlFor="toCity">To City</label>
-          <select
-            id="toCity"
-            name="toCity"
-            required
-            value={selectedToCity}
-            onChange={(e) => setSelectedToCity(e.target.value)}
-          >
-            <option value="">Select City</option>
-            {locationCity.map((city, index) => (
-              <option key={index} value={city}>
-                {city}
-              </option>
-            ))}
-          </select>
-        </div>
+            {/* To City */}
+            <div className={styles.TopRightContainer}>
+              <div className={styles.SearchPriceInput}>
+                <select
+                  id="toCity"
+                  name="toCity"
+                  required
+                  value={selectedToCity}
+                  onChange={(e) => setSelectedToCity(e.target.value)}
+                >
+                  <option value="">Select To City</option>
+                  {locationCity.map((city, index) => (
+                    <option key={index} value={city}>
+                      {city}
+                    </option>
+                  ))}
+                </select>
+              </div>
 
-        {/* To District */}
-        <div className={styles.CreateOrderInput}>
-          <label htmlFor="toDistrict">To District</label>
-          <select
-            id="toDistrict"
-            name="toDistrict"
-            required
-            value={selectedToDistrict}
-            onChange={(e) => setSelectedToDistrict(e.target.value)}
-          >
-            <option value="">Select District</option>
-            {locationDistrictTo.map((district, index) => (
-              <option key={index} value={district.name}>
-                {district.name}
-              </option>
-            ))}
-          </select>
-        </div>
+              {/* To District */}
+              <div className={styles.SearchPriceInput}>
+                <select
+                  id="toDistrict"
+                  name="toDistrict"
+                  required
+                  value={selectedToDistrict}
+                  onChange={(e) => setSelectedToDistrict(e.target.value)}
+                >
+                  <option value="">Select To District</option>
+                  {locationDistrictTo.map((district, index) => (
+                    <option key={index} value={district.name}>
+                      {district.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
 
-        {/* To Ward */}
-        <div className={styles.CreateOrderInput}>
-          <label htmlFor="toWard">To Ward</label>
-          <select id="toWard" name="toWard" required>
-            <option value="">Select Ward</option>
-            {locationWardTo.map((ward, index) => (
-              <option key={index} value={ward.name}>
-                {ward.name}
-              </option>
-            ))}
-          </select>
-        </div>
+              {/* To Ward */}
+              <div className={styles.SearchPriceInput}>
+                <select id="toWard" name="toWard" required>
+                  <option value="">Select To Ward</option>
+                  {locationWardTo.map((ward, index) => (
+                    <option key={index} value={ward.name}>
+                      {ward.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
 
-        <div className={styles.CreateOrderInput}>
-          <label htmlFor="toAddress">To Address</label>
-          <input type="text" id="toAddress" name="toAddress" required />
-        </div>
+              <div className={styles.SearchPriceInput}>
+                <input
+                  placeholder="To Address"
+                  type="text"
+                  id="toAddress"
+                  name="toAddress"
+                  required
+                />
+              </div>
+            </div>
+          </div>
 
-        <div className={styles.CreateOrderInput}>
-          <label htmlFor="orderWeight">Order Weight (kg)</label>
-          <input
-            type="number"
-            id="orderWeight"
-            name="orderWeight"
-            step="0.1"
-            required
-          />
-        </div>
+          <div className={styles.BotContainer}>
+            <div className={styles.SearchPriceInputBot}>
+              <input
+                type="number"
+                id="orderWeight"
+                name="orderWeight"
+                step="0.1"
+                required
+                placeholder="Order Weight"
+              />
+            </div>
 
-        <div className={styles.CreateOrderInput}>
-          <label htmlFor="orderSize">Order Size (m³)</label>
-          <input
-            type="number"
-            id="orderSize"
-            name="orderSize"
-            step="0.01"
-            required
-          />
-        </div>
+            <div className={styles.SearchPriceInputBot}>
+              <input
+                type="number"
+                id="orderSize"
+                name="orderSize"
+                step="0.01"
+                required
+                placeholder="Order Size"
+              />
+            </div>
 
-        <div className={styles.CreateOrderInput}>
-          <label htmlFor="type">Type</label>
-          <input type="text" id="type" name="type" required />
-        </div>
+            <div className={styles.SearchPriceInputBot}>
+              <input
+                type="text"
+                id="type"
+                name="type"
+                placeholder="Type"
+                required
+              />
+            </div>
+          </div>
 
-        <div className={styles.CreateOrderSubmit}>
-          <button type="submit" disabled={isLoading}>
-            Submit
-          </button>
+          <div className={styles.SearchPriceSubmit}>
+            <button type="submit" disabled={isLoading}>
+              Submit
+            </button>
+          </div>
         </div>
       </form>
 
       {/* Display order info */}
-      {/* Display order info */}
-      {orderInfo ? (
-        <div>
-          <h2>Order Information</h2>
-          <p>
-            <strong>Distance:</strong> {orderInfo.distance || "N/A"} km
-          </p>
-          <p>
-            <strong>Price:</strong> {orderInfo.price || "N/A"} VND
-          </p>
-          <p>
-            <strong>Estimated Delivery Time:</strong>{" "}
-            {orderInfo.estimatedDeliveryTime || "N/A"}
-          </p>
+      {showPopup && orderInfo ? (
+        <div
+          className={styles.popupOverlay}
+          onClick={() => setShowPopup(false)}
+        >
+          <div
+            className={styles.popupContent}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              className={styles.closeButton}
+              onClick={() => setShowPopup(false)}
+            >
+              x
+            </button>
+            <h2>Order Information</h2>
+            <p>
+              <strong>Distance:</strong> {orderInfo.distance || "N/A"} km
+            </p>
+            <p>
+              <strong>Price:</strong> {orderInfo.price || "N/A"} VND
+            </p>
+            <p>
+              <strong>Estimated Delivery Time:</strong>{" "}
+              {orderInfo.estimatedDeliveryTime || "N/A"}
+            </p>
+          </div>
         </div>
       ) : (
-        <p>No order information available.</p>
+        <p></p>
       )}
     </div>
   );

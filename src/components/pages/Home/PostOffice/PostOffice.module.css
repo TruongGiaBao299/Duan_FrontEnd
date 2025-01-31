@@ -8,8 +8,9 @@
 .infocontent {
   display: flex;
   flex-direction: column;
-  max-height: 400px; /* Giới hạn chiều cao tối đa */
-  overflow-y: auto; /* Thêm scroll nếu nội dung vượt quá chiều cao */
+  max-height: 400px; 
+  overflow-y: auto; 
+  border: 1px solid black;
 }
 
 .infocontainer {
@@ -17,15 +18,25 @@
   gap: 20px;
   align-items: center;
   justify-content: center;
-  margin-top: 50px;
+  margin-top: 100px;
+  
 }
 
 .map {
   height: 100%; /* Ensure this is enough to display the map */
-  width: 700px; /* Set full width */
+  width: 1000px; /* Set full width */
 }
 
 .searchContainer{
   display: flex;
   flex-direction: column;
+}
+
+.searchContainer input{
+  padding: 5px;
+}
+
+.FindOrderInput select{
+  padding: 5px;
+  width: 263px;
 }

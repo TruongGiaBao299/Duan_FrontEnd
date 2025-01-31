@@ -11,10 +11,9 @@ import { getPostOfficeApi } from "../../utils/postOfficeAPI/postOfficeAPI";
 
 const DriverMangeOrder = () => {
   const [orders, setOrders] = useState([]);
-  const [emails, setEmails] = useState({}); // Lưu giá trị email cho từng đơn hàng
-  const [data, setData] = useState([]); // Dữ liệu bưu cục từ API
-  const [drivers, setDrivers] = useState([]);
-  const [filterStatus, setFilterStatus] = useState("all"); // Trạng thái bộ lọc
+  const [emails, setEmails] = useState({});
+  const [data, setData] = useState([]);
+  const [filterStatus, setFilterStatus] = useState("all");
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -38,9 +37,8 @@ const DriverMangeOrder = () => {
     const fetchPostOffices = async () => {
       try {
         const res = await getPostOfficeApi();
-        console.log("Post:", res);
         if (res) {
-          setData(res); // Lưu dữ liệu email bưu cục từ API
+          setData(res);
         } else {
           setData([]);
         }
@@ -72,7 +70,7 @@ const DriverMangeOrder = () => {
 
       setEmails((prev) => ({
         ...prev,
-        [orderId]: "", // Reset email sau khi cập nhật
+        [orderId]: "",
       }));
     } catch (error) {
       console.error("Error update:", error);
@@ -80,13 +78,45 @@ const DriverMangeOrder = () => {
     }
   };
 
-  // Lọc đơn hàng theo trạng thái
-  const filteredOrders = filterStatus === "all"
-    ? orders
-    : orders.filter((order) => order.status === filterStatus);
+  const filteredOrders =
+    filterStatus === "all"
+      ? orders
+      : orders.filter((order) => order.status === filterStatus);
+
+  const totalOrders = orders.length;
+  const totalShippedOrders = orders.filter(
+    (order) => order.status === "shipped"
+  ).length;
+  const totalIsShippingOrders = orders.filter(
+    (order) => order.status === "is shipping"
+  ).length;
+  const totalDeliveryToPostOfficeOrders = orders.filter(
+    (order) => order.status === "delivery to post office"
+  ).length;
+
+  const totalIncome = orders
+    .filter((order) => order.status === "shipped")
+    .reduce((sum, order) => sum + order.price * 0.1, 0);
 
   return (
     <div>
+      {/* Hiển thị số lượng đơn và thu nhập */}
+      <div style={{ marginBottom: "20px" }}>
+        <h3>Total Orders: {totalOrders}</h3>
+        <h3>Shipped Orders: {totalShippedOrders}</h3>
+        <h3>Is Shipping Orders: {totalIsShippingOrders}</h3>
+        <h3>
+          Delivery to Post Office Orders: {totalDeliveryToPostOfficeOrders}
+        </h3>
+        <h3>
+          Total Income:{" "}
+          {totalIncome.toLocaleString("vi-VN", {
+            style: "currency",
+            currency: "VND",
+          })}
+        </h3>
+      </div>
+
       {/* Nút bộ lọc */}
       <div style={{ marginBottom: "20px" }}>
         <button onClick={() => setFilterStatus("all")}>All</button>
@@ -169,7 +199,6 @@ const DriverMangeOrder = () => {
                 </p>
               )}
 
-              {/* Hiển thị form để cập nhật Post Office Email */}
               {!order.postOffice &&
                 order.status !== "shipped" &&
                 order.status !== "canceled" && (
@@ -191,19 +220,17 @@ const DriverMangeOrder = () => {
                           .filter(
                             (postOffice) =>
                               postOffice.OfficeDistrict ===
-                                order.fromDistrict || // Ưu tiên district
+                                order.fromDistrict ||
                               (postOffice.OfficeDistrict !==
                                 order.fromDistrict &&
-                                postOffice.OfficeCity === order.fromCity) // Sau đó xét đến city
+                                postOffice.OfficeCity === order.fromCity)
                           )
-
                           .map((postOffice) => (
                             <option
                               key={postOffice.email}
                               value={postOffice.email}
                             >
-                              {postOffice.OfficeName}{" "}
-                              {/* Hiển thị tên bưu cục */}
+                              {postOffice.OfficeName}
                             </option>
                           ))}
                       </select>

@@ -134,12 +134,16 @@ const PostOffice = () => {
 
     // Lọc theo thành phố
     if (selectedFromCity) {
-      filtered = filtered.filter((office) => office.OfficeCity === selectedFromCity);
+      filtered = filtered.filter(
+        (office) => office.OfficeCity === selectedFromCity
+      );
     }
 
     // Lọc theo quận
     if (selectedFromDistrict) {
-      filtered = filtered.filter((office) => office.OfficeDistrict === selectedFromDistrict);
+      filtered = filtered.filter(
+        (office) => office.OfficeDistrict === selectedFromDistrict
+      );
     }
 
     // Lọc theo tên bưu cục
@@ -158,54 +162,53 @@ const PostOffice = () => {
 
   return (
     <div className={styles.infocontainer}>
-      {/* Thanh tìm kiếm */}
-      <div className={styles.searchContainer}>
-        <input
-          type="text"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          placeholder="Tìm kiếm bưu cục..."
-          className={styles.searchInput}
-        />
-
-        {/* From City */}
-        <div className={styles.CreateOrderInput}>
-          <select
-            id="fromCity"
-            name="fromCity"
-            required
-            value={selectedFromCity}
-            onChange={(e) => setSelectedFromCity(e.target.value)}
-          >
-            <option value="">Select City</option>
-            {locationCity.map((city, index) => (
-              <option key={index} value={city}>
-                {city}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        {/* From District */}
-        <div className={styles.CreateOrderInput}>
-          <select
-            id="fromDistrict"
-            name="fromDistrict"
-            required
-            value={selectedFromDistrict}
-            onChange={(e) => setSelectedFromDistrict(e.target.value)}
-          >
-            <option value="">Select District</option>
-            {locationDistrictFrom.map((district, index) => (
-              <option key={index} value={district.name}>
-                {district.name}
-              </option>
-            ))}
-          </select>
-        </div>
-      </div>
-
       <div className={styles.infocontent}>
+        {/* Thanh tìm kiếm */}
+        <div className={styles.searchContainer}>
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Tìm kiếm bưu cục..."
+            className={styles.searchInput}
+          />
+
+          {/* From City */}
+          <div className={styles.FindOrderInput}>
+            <select
+              id="fromCity"
+              name="fromCity"
+              required
+              value={selectedFromCity}
+              onChange={(e) => setSelectedFromCity(e.target.value)}
+            >
+              <option value="">Select City</option>
+              {locationCity.map((city, index) => (
+                <option key={index} value={city}>
+                  {city}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* From District */}
+          <div className={styles.FindOrderInput}>
+            <select
+              id="fromDistrict"
+              name="fromDistrict"
+              required
+              value={selectedFromDistrict}
+              onChange={(e) => setSelectedFromDistrict(e.target.value)}
+            >
+              <option value="">Select District</option>
+              {locationDistrictFrom.map((district, index) => (
+                <option key={index} value={district.name}>
+                  {district.name}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
         {filteredData.length === 0 ? (
           <p>Không có bưu cục nào phù hợp với yêu cầu của bạn.</p>
         ) : (

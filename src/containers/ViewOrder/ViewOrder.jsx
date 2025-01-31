@@ -19,7 +19,7 @@ const ViewOrder = () => {
         if (res && res.length > 0) {
           const filteredOrders = res.filter(
             (order) =>
-              order.status === "pending" || order.status === "is shipping" || order.status === "delivery to post office"
+              order.status === "pending" || order.status === "is shipping" || order.status === "delivery to post office" || order.status === "prepare to delivery"
           );
           setOrders(filteredOrders);
         } else {

@@ -1,0 +1,82 @@
+.CreateOrderContainer{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 100px;
+}
+
+.FormContainer{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    border: 1px solid black;
+    border-radius: 20px;
+    padding: 20px;
+}
+
+.CreateOrderInput input{
+    padding: 10px;
+    width: 200px;
+    color: black;
+    place-content: black;
+}
+
+.CreateOrderInput textarea{
+    padding: 10px;
+    width: 445px;
+    color: black;
+    place-content: black;
+}
+
+.CreateOrderInputBot input{
+    padding: 10px;
+    width: 125px;
+    color: black;
+}
+
+.CreateOrderInput input::placeholder{
+    color: black;
+}
+
+.CreateOrderInput textarea::placeholder{
+    color: black;
+}
+
+.CreateOrderInputBot input::placeholder{
+    color: black;
+}
+
+.CreateOrderInput select{
+    padding: 10px;
+    width: 225px;
+}
+
+.FormTopContainer{
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+}
+
+.FormLeftContainer, .FormRightContainer{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.FormBotContainer{
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+.CreateOrderSubmit button{
+    padding: 10px 20px;
+    background-color: yellow;
+    cursor: pointer;
+}
+
+.CreateOrderSubmit button:hover{
+    background-color: lightgreen;
+}

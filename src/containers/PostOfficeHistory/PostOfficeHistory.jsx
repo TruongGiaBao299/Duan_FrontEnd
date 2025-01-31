@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import styles from "./PostOfficeHistory.module.css";
-import { SentPostOfficeApi } from "../../utils/driverAPI/driverAPI";
 import {
   getPostOfficeByEmailApi,
   getPostOfficeOrderByEmailApi,
@@ -50,13 +49,34 @@ const PostOfficeHistory = () => {
     fetchPostOffice();
   }, []);
 
+  // Calculate total orders and commission
+  const totalOrders = orders.length;
+  const totalShippedOrders = orders.filter(
+    (order) => order.status === "shipped" && order.postOffice === postEmail
+  ).length;
+
+  const totalCommission = orders
+    .filter(
+      (order) => order.status === "shipped" && order.postOffice === postEmail
+    )
+    .reduce((sum, order) => sum + order.price * 0.2, 0);
+
   return (
     <div className={styles.driverordercontainer}>
-      {orders.filter(
-        (order) =>
-          order.status === "shipped" && order.postOffice === postEmail
-      ).length === 0 ? (
-        <p>You don't have any orders!</p>
+      {/* Display total orders and commission */}
+      <div className={styles.stats}>
+        <h3>Total Orders: {totalOrders}</h3>
+        <h3>
+          Total Commission:{" "}
+          {totalCommission.toLocaleString("vi-VN", {
+            style: "currency",
+            currency: "VND",
+          })}
+        </h3>
+      </div>
+
+      {totalShippedOrders === 0 ? (
+        <p>You don't have any shipped orders!</p>
       ) : (
         <div>
           <table className={styles.driverordertable}>
