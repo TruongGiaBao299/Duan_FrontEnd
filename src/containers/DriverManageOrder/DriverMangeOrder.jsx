@@ -18,6 +18,8 @@ const DriverMangeOrder = () => {
   const [showPopup, setShowPopup] = useState(false); // Add state for showing the popup
   const [expandedOrder, setExpandedOrder] = useState(null); // Store the selected order for details
 
+  const HERE_API_KEY = "MnTadIKOVDRqhQYalpBxtEG3AiWROupfqiPOBzfiWsw";
+
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -106,6 +108,73 @@ const DriverMangeOrder = () => {
     setShowPopup(true);
   };
 
+  // 📍 Hàm lấy tọa độ từ địa chỉ dùng API Geocoding của HERE
+  const getCoordinates = async (address) => {
+    try {
+      const response = await fetch(
+        `https://geocode.search.hereapi.com/v1/geocode?q=${encodeURIComponent(
+          address
+        )}&apiKey=${HERE_API_KEY}`
+      );
+      const data = await response.json();
+      if (data.items.length > 0) {
+        return {
+          lat: data.items[0].position.lat,
+          lng: data.items[0].position.lng,
+        };
+      }
+      return null;
+    } catch (error) {
+      console.error("Error fetching coordinates:", error);
+      return null;
+    }
+  };
+
+  // 🗺️ Mở bản đồ HERE với hướng dẫn đường đi
+  const handleOpenMap = async (order) => {
+    let addressToUse = "";
+    let mapUrl = "";
+
+    // Chọn địa chỉ cần hiển thị (tùy thuộc vào trạng thái đơn hàng)
+    if (order.status === "delivery to post office") {
+      addressToUse = order.fromAddress; // Địa chỉ người gửi
+    } else if (order.status === "is shipping") {
+      addressToUse = order.toAddress; // Địa chỉ người nhận
+    }
+
+    if (addressToUse) {
+      try {
+        // Lấy tọa độ hiện tại của người dùng
+        const userPosition = await new Promise((resolve, reject) => {
+          if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(resolve, reject);
+          } else {
+            reject(new Error("Geolocation is not supported by this browser."));
+          }
+        });
+
+        const userCoords = {
+          lat: userPosition.coords.latitude,
+          lng: userPosition.coords.longitude,
+        };
+
+        // Lấy tọa độ của địa chỉ (fromAddress/toAddress)
+        const coords = await getCoordinates(addressToUse);
+
+        if (coords) {
+          // Tạo đường dẫn bản đồ với HERE API
+          mapUrl = `https://www.here.com/directions/drive/${userCoords.lat},${userCoords.lng}/${coords.lat},${coords.lng}`;
+          window.open(mapUrl, "_blank");
+        } else {
+          toast.error("Unable to fetch location coordinates.");
+        }
+      } catch (error) {
+        console.error("Error getting user location:", error);
+        toast.error("Unable to fetch your current location.");
+      }
+    }
+  };
+
   return (
     <div className={styles.Container}>
       {/* Hiển thị số lượng đơn và thu nhập */}
@@ -140,7 +209,7 @@ const DriverMangeOrder = () => {
       {filteredOrders.length === 0 ? (
         <p>No orders match the selected filter!</p>
       ) : (
-        <div >
+        <div>
           {filteredOrders.map((order) => (
             <div className={styles.OrderContainer} key={order._id}>
               <p>
@@ -165,6 +234,11 @@ const DriverMangeOrder = () => {
                 <button onClick={() => handleShowDetails(order)}>
                   Show Details
                 </button>
+
+                {/* Nút mở bản đồ HERE */}
+                {order.status !== "shipped" && order.status !== "canceled" && (
+                  <button onClick={() => handleOpenMap(order)}>Open Map</button>
+                )}
 
                 {!order.postOffice &&
                   order.status !== "shipped" &&
