@@ -1,0 +1,54 @@
+.Container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.FormContainer{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    border: 1px solid black;
+    border-radius: 20px;
+    padding: 20px;
+}
+
+.PostInfoAddress{
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+.PostInfo{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.PostInput select{
+    padding: 10px;
+    width: 235px;
+}
+
+.PostInput input{
+    padding: 10px;
+    width: 700px;
+}
+
+.PostSubmit button{
+    padding: 10px 20px;
+    background-color: yellow;
+    cursor: pointer;
+}
+
+.PostSubmit button:hover{
+    background-color: lightgreen;
+}
+
+.Alert{
+    color: red;
+    background-color: lightgray;
+    padding: 20px 200px;
+}

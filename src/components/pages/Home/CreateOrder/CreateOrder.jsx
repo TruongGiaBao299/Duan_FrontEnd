@@ -166,6 +166,7 @@ const CreateOrder = () => {
         <div className={styles.FormContainer}>
           <div className={styles.FormTopContainer}>
             <div className={styles.FormLeftContainer}>
+              <p>1. Sender Infomation</p>
               <div className={styles.CreateOrderInput}>
                 <input
                   placeholder="Sender Name"
@@ -246,6 +247,7 @@ const CreateOrder = () => {
             </div>
 
             <div className={styles.FormRightContainer}>
+              <p>2. Recipient Infomation</p>
               <div className={styles.CreateOrderInput}>
                 <input
                   placeholder="Recipient Name"

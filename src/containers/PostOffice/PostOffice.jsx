@@ -9,7 +9,7 @@ import {
 } from "../../utils/postOfficeAPI/postOfficeAPI";
 import { AuthContext } from "../../context/auth.context";
 import { useNavigate } from "react-router-dom";
-import { makePostOfficeApi } from "../../utils/userAPI/userAPI";
+import { makeGuestApi, makePostOfficeApi } from "../../utils/userAPI/userAPI";
 
 const PostOffice = () => {
   const [data, setData] = useState([]);
@@ -89,6 +89,7 @@ const PostOffice = () => {
       // Thực hiện hai API đồng thời
       const [statusResponse, deleteResponse] = await Promise.allSettled([
         changeStatusNotActivatedPostOfficeApi(email),
+        makeGuestApi(email),
         deleteRequestPostOffice(email),
       ]);
 

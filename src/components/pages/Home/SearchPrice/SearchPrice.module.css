@@ -36,17 +36,17 @@
 
 .SearchPriceInput select{
     padding: 10px;
-    width: 225px;
+    width: 525px;
 }
 
 .SearchPriceInput input{
     padding: 10px;
-    width: 200px;
+    width: 500px;
 }
 
 .SearchPriceInputBot input{
     padding: 10px;
-    width: 125px;
+    width: 325px;
     color: black;
 }
 

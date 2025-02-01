@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { getOrderByEmailApi } from "../../utils/orderAPI/orderAPI";
 import { toast } from "react-toastify";
+import styles from "./ViewHistory.module.css";
 
 const ViewHistory = () => {
   const [orders, setOrders] = useState([]); // All orders fetched from API
   const [filteredOrders, setFilteredOrders] = useState([]); // Orders to display based on filter
   const [filter, setFilter] = useState("all"); // Filter state: "all", "shipped", "canceled"
+  const [expandedOrder, setExpandedOrder] = useState(null);
+  const [showPopup, setShowPopup] = useState(false);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -49,11 +52,11 @@ const ViewHistory = () => {
   };
 
   return (
-    <div>
+    <div className={styles.Container}>
       <h2>Order History</h2>
 
       {/* Filter Buttons */}
-      <div>
+      <div className={styles.FilterButton}>
         <button
           onClick={() => handleFilterChange("all")}
           style={{ marginRight: "10px" }}
@@ -75,73 +78,89 @@ const ViewHistory = () => {
       ) : (
         <div>
           {filteredOrders.map((order) => (
-            <div
-              key={order._id}
-              style={{
-                border: "1px solid #ccc",
-                margin: "10px 0",
-                padding: "10px",
-              }}
-            >
+            <div key={order._id} className={styles.orderContainer}>
               <p>
                 <strong>Order ID:</strong> {order._id}
               </p>
               <p>
-                <strong>Sender Name:</strong> {order.senderName}
+                <strong>From:</strong> {order.fromAddress}, {order.fromDistrict},{" "}
+                {order.fromCity}
               </p>
               <p>
-                <strong>Sender Number:</strong> {order.senderNumber}
-              </p>
-              <p>
-                <strong>From Address:</strong> {order.fromAddress}
-              </p>
-              <p>
-                <strong>From District:</strong> {order.fromDistrict}
-              </p>
-              <p>
-                <strong>From City:</strong> {order.fromCity}
-              </p>
-              <p>
-                <strong>Recipient Name:</strong> {order.recipientName}
-              </p>
-              <p>
-                <strong>Recipient Number:</strong> {order.recipientNumber}
-              </p>
-              <p>
-                <strong>To Address:</strong> {order.toAddress}
-              </p>
-              <p>
-                <strong>To District:</strong> {order.toDistrict}
-              </p>
-              <p>
-                <strong>To City:</strong> {order.toCity}
-              </p>
-              <p>
-                <strong>Order Weight:</strong> {order.orderWeight}
-              </p>
-              <p>
-                <strong>Order Size:</strong> {order.orderSize}
-              </p>
-              <p>
-                <strong>Type:</strong> {order.type}
-              </p>
-              <p>
-                <strong>Message:</strong> {order.message}
-              </p>
-              <p>
-                <strong>Price:</strong> {order.price}
+                <strong>To:</strong> {order.toAddress}, {order.toDistrict},{" "}
+                {order.toCity}
               </p>
               <p>
                 <strong>Status:</strong> {order.status}
               </p>
-              <p>
-                <strong>Created By:</strong> {order.createdBy}
-              </p>
-              <p>
-                <strong>Driver:</strong> {order.driver}
-              </p>
+              <button
+                onClick={() => {
+                  setExpandedOrder(order);
+                  setShowPopup(true);
+                }}
+              >
+                Show Details
+              </button>
             </div>
           ))}
+        </div>
+      )}
+
+      {/* Popup */}
+      {showPopup && expandedOrder && (
+        <div className={styles.popupOverlay} onClick={() => setShowPopup(false)}>
+          <div
+            className={styles.popupContent}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              className={styles.closeButton}
+              onClick={() => setShowPopup(false)}
+            >
+              x
+            </button>
+            <div className={styles.orderDetails}>
+              <p>
+                <strong>Order ID:</strong> {expandedOrder._id}
+              </p>
+              <p>
+                <strong>Sender Name:</strong> {expandedOrder.senderName}
+              </p>
+              <p>
+                <strong>Sender Number:</strong> {expandedOrder.senderNumber}
+              </p>
+              <p>
+                <strong>Recipient Name:</strong> {expandedOrder.recipientName}
+              </p>
+              <p>
+                <strong>Recipient Number:</strong> {expandedOrder.recipientNumber}
+              </p>
+              <p>
+                <strong>Order Weight:</strong> {expandedOrder.orderWeight}
+              </p>
+              <p>
+                <strong>Order Size:</strong> {expandedOrder.orderSize}
+              </p>
+              <p>
+                <strong>Type:</strong> {expandedOrder.type}
+              </p>
+              <p>
+                <strong>Message:</strong> {expandedOrder.message}
+              </p>
+              <p>
+                <strong>Price:</strong> {expandedOrder.price}
+              </p>
+              <p>
+                <strong>Created By:</strong> {expandedOrder.createdBy}
+              </p>
+              <p>
+                <strong>Driver:</strong> {expandedOrder.driver}
+              </p>
+              <p>
+                <strong>Distance:</strong> {expandedOrder.distance} km
+              </p>
+            </div>
+          </div>
         </div>
       )}
     </div>

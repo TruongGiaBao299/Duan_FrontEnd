@@ -48,14 +48,14 @@
   }
 }
 
-.Container {
-  padding: 10px;
+.Container{
+    padding: 20px;
 }
 
-.OrderInfo {
-  padding: 20px 30px;
-  border: 1px solid black;
-  width: 700px;
-  border-radius: 20px;
-  margin-bottom: 10px;
+.orderContainer{
+    padding: 20px 30px;
+    border: 1px solid black;
+    width: 500px;
+    border-radius: 20px;
+    margin-bottom: 10px;
 }

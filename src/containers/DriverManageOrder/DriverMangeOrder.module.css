@@ -1,3 +1,26 @@
+.OrderInfo {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+
+.SentContent {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+
+.OrderContainer {
+  padding: 20px 30px;
+  border: 1px solid black;
+  width: 700px;
+  border-radius: 20px;
+  margin-bottom: 10px;
+}
+
+.Container{
+    padding: 10px;
+}
 /* Overlay background khi hiển thị popup */
 .popupOverlay {
   position: fixed;
@@ -46,16 +69,4 @@
     opacity: 1;
     transform: scale(1);
   }
-}
-
-.Container {
-  padding: 10px;
-}
-
-.OrderInfo {
-  padding: 20px 30px;
-  border: 1px solid black;
-  width: 700px;
-  border-radius: 20px;
-  margin-bottom: 10px;
 }

@@ -8,12 +8,15 @@ import {
   getDriverByEmailApi,
 } from "../../utils/driverAPI/driverAPI";
 import { getPostOfficeApi } from "../../utils/postOfficeAPI/postOfficeAPI";
+import styles from "./DriverMangeOrder.module.css";
 
 const DriverMangeOrder = () => {
   const [orders, setOrders] = useState([]);
   const [emails, setEmails] = useState({});
   const [data, setData] = useState([]);
   const [filterStatus, setFilterStatus] = useState("all");
+  const [showPopup, setShowPopup] = useState(false); // Add state for showing the popup
+  const [expandedOrder, setExpandedOrder] = useState(null); // Store the selected order for details
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -98,10 +101,15 @@ const DriverMangeOrder = () => {
     .filter((order) => order.status === "shipped")
     .reduce((sum, order) => sum + order.price * 0.1, 0);
 
+  const handleShowDetails = (order) => {
+    setExpandedOrder(order);
+    setShowPopup(true);
+  };
+
   return (
-    <div>
+    <div className={styles.Container}>
       {/* Hiển thị số lượng đơn và thu nhập */}
-      <div style={{ marginBottom: "20px" }}>
+      <div className={styles.OrderInfo}>
         <h3>Total Orders: {totalOrders}</h3>
         <h3>Shipped Orders: {totalShippedOrders}</h3>
         <h3>Is Shipping Orders: {totalIsShippingOrders}</h3>
@@ -132,54 +140,19 @@ const DriverMangeOrder = () => {
       {filteredOrders.length === 0 ? (
         <p>No orders match the selected filter!</p>
       ) : (
-        <div>
-          <h2>Order Information</h2>
+        <div >
           {filteredOrders.map((order) => (
-            <div key={order._id}>
+            <div className={styles.OrderContainer} key={order._id}>
               <p>
                 <strong>Order ID:</strong> {order._id}
               </p>
               <p>
-                <strong>Sender Name:</strong> {order.senderName}
+                <strong>From Address:</strong> {order.fromAddress},{" "}
+                {order.fromDistrict}, {order.fromWard}, {order.fromCity}
               </p>
               <p>
-                <strong>Sender Number:</strong> {order.senderNumber}
-              </p>
-              <p>
-                <strong>From Address:</strong> {order.fromAddress}
-              </p>
-              <p>
-                <strong>From District:</strong> {order.fromDistrict}
-              </p>
-              <p>
-                <strong>From City:</strong> {order.fromCity}
-              </p>
-              <p>
-                <strong>Recipient Name:</strong> {order.recipientName}
-              </p>
-              <p>
-                <strong>Recipient Number:</strong> {order.recipientNumber}
-              </p>
-              <p>
-                <strong>To Address:</strong> {order.toAddress}
-              </p>
-              <p>
-                <strong>To District:</strong> {order.toDistrict}
-              </p>
-              <p>
-                <strong>To City:</strong> {order.toCity}
-              </p>
-              <p>
-                <strong>Order Weight:</strong> {order.orderWeight}
-              </p>
-              <p>
-                <strong>Order Size:</strong> {order.orderSize}
-              </p>
-              <p>
-                <strong>Type:</strong> {order.type}
-              </p>
-              <p>
-                <strong>Message:</strong> {order.message}
+                <strong>To Address:</strong> {order.toAddress},{" "}
+                {order.toDistrict}, {order.toWard}, {order.toCity}
               </p>
               <p>
                 <strong>Price:</strong> {order.price}
@@ -187,59 +160,136 @@ const DriverMangeOrder = () => {
               <p>
                 <strong>Status:</strong> {order.status}
               </p>
-              <p>
-                <strong>Created By:</strong> {order.createdBy}
-              </p>
-              <p>
-                <strong>Driver:</strong> {order.driver}
-              </p>
-              {order.postOffice && (
-                <p>
-                  <strong>PostOffice:</strong> {order.postOffice}
-                </p>
-              )}
 
-              {!order.postOffice &&
-                order.status !== "shipped" &&
-                order.status !== "canceled" && (
-                  <div>
-                    <h3>Update Post Office Email</h3>
-                    <form onSubmit={(e) => handleSubmit(e, order._id)}>
-                      <select
-                        value={emails[order._id] || ""}
-                        onChange={(e) =>
-                          setEmails((prev) => ({
-                            ...prev,
-                            [order._id]: e.target.value,
-                          }))
-                        }
-                        required
-                      >
-                        <option value="">Select a Post Office</option>
-                        {data
-                          .filter(
-                            (postOffice) =>
-                              postOffice.OfficeDistrict ===
-                                order.fromDistrict ||
-                              (postOffice.OfficeDistrict !==
-                                order.fromDistrict &&
-                                postOffice.OfficeCity === order.fromCity)
-                          )
-                          .map((postOffice) => (
-                            <option
-                              key={postOffice.email}
-                              value={postOffice.email}
-                            >
-                              {postOffice.OfficeName}
-                            </option>
-                          ))}
-                      </select>
-                      <button type="submit">Submit</button>
-                    </form>
-                  </div>
-                )}
+              <div className={styles.SentContent}>
+                <button onClick={() => handleShowDetails(order)}>
+                  Show Details
+                </button>
+
+                {!order.postOffice &&
+                  order.status !== "shipped" &&
+                  order.status !== "canceled" && (
+                    <div>
+                      <form onSubmit={(e) => handleSubmit(e, order._id)}>
+                        <select
+                          value={emails[order._id] || ""}
+                          onChange={(e) =>
+                            setEmails((prev) => ({
+                              ...prev,
+                              [order._id]: e.target.value,
+                            }))
+                          }
+                          required
+                        >
+                          <option value="">Select a Post Office</option>
+                          {data
+                            .filter(
+                              (postOffice) =>
+                                postOffice.OfficeDistrict ===
+                                  order.fromDistrict ||
+                                (postOffice.OfficeDistrict !==
+                                  order.fromDistrict &&
+                                  postOffice.OfficeCity === order.fromCity)
+                            )
+                            .map((postOffice) => (
+                              <option
+                                key={postOffice.email}
+                                value={postOffice.email}
+                              >
+                                {postOffice.OfficeName}
+                              </option>
+                            ))}
+                        </select>
+                        <button type="submit">Sent to</button>
+                      </form>
+                    </div>
+                  )}
+              </div>
             </div>
           ))}
+        </div>
+      )}
+
+      {/* Show Details Popup */}
+      {showPopup && expandedOrder && (
+        <div
+          className={styles.popupOverlay}
+          onClick={() => setShowPopup(false)}
+        >
+          <div
+            className={styles.popupContent}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              className={styles.closeButton}
+              onClick={() => setShowPopup(false)}
+            >
+              x
+            </button>
+            <h3>Order Details</h3>
+            <p>
+              <strong>Order ID:</strong> {expandedOrder._id}
+            </p>
+            <p>
+              <strong>Sender Name:</strong> {expandedOrder.senderName}
+            </p>
+            <p>
+              <strong>Sender Number:</strong> {expandedOrder.senderNumber}
+            </p>
+            <p>
+              <strong>From Address:</strong> {expandedOrder.fromAddress}
+            </p>
+            <p>
+              <strong>From District:</strong> {expandedOrder.fromDistrict}
+            </p>
+            <p>
+              <strong>From City:</strong> {expandedOrder.fromCity}
+            </p>
+            <p>
+              <strong>Recipient Name:</strong> {expandedOrder.recipientName}
+            </p>
+            <p>
+              <strong>Recipient Number:</strong> {expandedOrder.recipientNumber}
+            </p>
+            <p>
+              <strong>To Address:</strong> {expandedOrder.toAddress}
+            </p>
+            <p>
+              <strong>To District:</strong> {expandedOrder.toDistrict}
+            </p>
+            <p>
+              <strong>To City:</strong> {expandedOrder.toCity}
+            </p>
+            <p>
+              <strong>Order Weight:</strong> {expandedOrder.orderWeight}
+            </p>
+            <p>
+              <strong>Order Size:</strong> {expandedOrder.orderSize}
+            </p>
+            <p>
+              <strong>Type:</strong> {expandedOrder.type}
+            </p>
+            <p>
+              <strong>Message:</strong> {expandedOrder.message}
+            </p>
+            <p>
+              <strong>Price:</strong> {expandedOrder.price}
+            </p>
+            <p>
+              <strong>Status:</strong> {expandedOrder.status}
+            </p>
+            <p>
+              <strong>Created By:</strong> {expandedOrder.createdBy}
+            </p>
+            <p>
+              <strong>Driver:</strong> {expandedOrder.driver}
+            </p>
+            {expandedOrder.postOffice && (
+              <p>
+                <strong>PostOffice:</strong> {expandedOrder.postOffice}
+              </p>
+            )}
+          </div>
         </div>
       )}
     </div>

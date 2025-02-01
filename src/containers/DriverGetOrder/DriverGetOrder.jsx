@@ -17,6 +17,8 @@ const DriverGetOrder = () => {
   const [driverCity, setDriverCity] = useState("");
   const [driverLocation, setDriverLocation] = useState(null);
   const [distanceCache, setDistanceCache] = useState({}); // Cache for distances
+  const [showPopup, setShowPopup] = useState(false); // To control popup visibility
+  const [expandedOrder, setExpandedOrder] = useState(null); // To store the selected order
 
   useEffect(() => {
     // Get the driver's current location
@@ -111,7 +113,8 @@ const DriverGetOrder = () => {
       );
 
       if (geocodeRes.data.items.length > 0) {
-        const { lat: fromLat, lng: fromLng } = geocodeRes.data.items[0].position;
+        const { lat: fromLat, lng: fromLng } =
+          geocodeRes.data.items[0].position;
 
         if (driverLocation) {
           const toLat = driverLocation.lat;
@@ -178,8 +181,7 @@ const DriverGetOrder = () => {
 
   const sortedOrders = orders
     .filter(
-      (order) =>
-        order.status === "pending" && order.fromCity === driverCity
+      (order) => order.status === "pending" && order.fromCity === driverCity
     )
     .sort((a, b) => {
       const distanceA = parseFloat(distanceCache[a._id]) || Infinity;
@@ -188,51 +190,23 @@ const DriverGetOrder = () => {
     });
 
   return (
-    <div className={styles.driverordercontainer}>
+    <div className={styles.Container}>
       {sortedOrders.length === 0 ? (
         <p>You don't have any pending orders!</p>
       ) : (
         <div>
-          <table className={styles.driverordertable}>
-            <thead>
-              <tr>
-                <th>Order ID</th>
-                <th>Sender Name</th>
-                <th>Sender Number</th>
-                <th>From Address</th>
-                <th>Distance (km)</th>
-                <th>Recipient Name</th>
-                <th>Recipient Number</th>
-                <th>To Address</th>
-                <th>Order Weight</th>
-                <th>Order Size</th>
-                <th>Type</th>
-                <th>Message</th>
-                <th>Price</th>
-                <th>Status</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
+          <div >
+            <div>
               {sortedOrders.map((order) => (
-                <tr key={order._id}>
-                  <td>{order._id}</td>
-                  <td>{order.senderName}</td>
-                  <td>{order.senderNumber}</td>
-                  <td>{order.fromAddress}</td>
-                  <td>
-                    {distanceCache[order._id] || "Calculating..."}
-                  </td>
-                  <td>{order.recipientName}</td>
-                  <td>{order.recipientNumber}</td>
-                  <td>{order.toAddress}</td>
-                  <td>{order.orderWeight}</td>
-                  <td>{order.orderSize}</td>
-                  <td>{order.type}</td>
-                  <td>{order.message}</td>
-                  <td>{order.price}</td>
-                  <td>{order.status}</td>
-                  <td>
+                <div className={styles.OrderInfo}  key={order._id}>
+                  <p><strong>Order ID:</strong> {order._id}</p>
+                  <p><strong>Distance:</strong> {distanceCache[order._id] || "Calculating..."}</p>
+                  <p><strong>Sender Address:</strong> {order.fromAddress}, {order.fromDistrict}, {order.fromWard}, {order.fromCity}</p>
+                  <p><strong>Recipient Address:</strong> {order.toAddress}, {order.toDistrict}, {order.toWard}, {order.toCity}</p>
+                  <p><strong>Message:</strong> {order.message}</p>
+                  <p><strong>Price:</strong> {order.price}</p>
+                  <p><strong>Status:</strong> {order.status}</p>
+                  <p>
                     <button
                       className={styles.acceptButton}
                       onClick={() =>
@@ -243,11 +217,42 @@ const DriverGetOrder = () => {
                     >
                       Accept Request
                     </button>
-                  </td>
-                </tr>
+                    <button
+                      className={styles.detailsButton}
+                      onClick={() => {
+                        setExpandedOrder(order);
+                        setShowPopup(true);
+                      }}
+                    >
+                      Show Details
+                    </button>
+                  </p>
+                </div>
               ))}
-            </tbody>
-          </table>
+            </div>
+          </div>
+
+          {showPopup && expandedOrder && (
+            <div className={styles.popupOverlay} onClick={() => setShowPopup(false)}>
+              <div className={styles.popupContent} onClick={(e) => e.stopPropagation()}>
+                <button className={styles.closeButton} onClick={() => setShowPopup(false)}>
+                  x
+                </button>
+                <div className={styles.orderDetails}>
+                  <p><strong>Sender Name:</strong> {expandedOrder.senderName}</p>
+                  <p><strong>Sender Number:</strong> {expandedOrder.senderNumber}</p>
+                  <p><strong>Sender Address:</strong> {expandedOrder.fromAddress}, {expandedOrder.fromDistrict}, {expandedOrder.fromWard}, {expandedOrder.fromCity}</p>
+                  <p><strong>Recipient Name:</strong> {expandedOrder.recipientName}</p>
+                  <p><strong>Recipient Number:</strong> {expandedOrder.recipientNumber}</p>
+                  <p><strong>Recipient Address:</strong> {expandedOrder.toAddress}, {expandedOrder.toDistrict}, {expandedOrder.toWard}, {expandedOrder.toCity}</p>
+                  <p><strong>Weight:</strong> {expandedOrder.orderWeight}</p>
+                  <p><strong>Size:</strong> {expandedOrder.orderSize}</p>
+                  <p><strong>Price:</strong> {expandedOrder.price}</p>
+                  <p><strong>Status:</strong> {expandedOrder.status}</p>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       )}
     </div>

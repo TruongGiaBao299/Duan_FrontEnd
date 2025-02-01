@@ -135,7 +135,6 @@ const SearchPrice = () => {
       if (res) {
         setOrderInfo(res);
         setShowPopup(true);
-        setOrderInfo(res); // Save the order info
 
         toast.success("Order details retrieved successfully!");
       } else {

@@ -7,6 +7,7 @@ import {
   getPostOfficeApi,
 } from "../../../../utils/postOfficeAPI/postOfficeAPI";
 import { getLocationAPI } from "../../../../utils/locationAPI/locationAPI";
+import styles from "./BecomePostOffice.module.css";
 
 const BecomePostOffice = () => {
   const navigate = useNavigate();
@@ -151,7 +152,7 @@ const BecomePostOffice = () => {
       OfficeName: formData.get("OfficeName"),
       OfficeHotline: formData.get("OfficeHotline"),
       OfficeAddress: formData.get("OfficeAddress"),
-      OfficeDistrict: formData.get("OfficeDistrict"),  
+      OfficeDistrict: formData.get("OfficeDistrict"),
       OfficeWard: formData.get("OfficeWard"),
       OfficeCity: formData.get("OfficeCity"),
     };
@@ -168,9 +169,9 @@ const BecomePostOffice = () => {
         data.OfficeName,
         data.OfficeHotline,
         data.OfficeAddress,
-        data.OfficeDistrict, 
+        data.OfficeDistrict,
         data.OfficeWard,
-        data.OfficeCity,
+        data.OfficeCity
       );
 
       if (res && res.data === null) {
@@ -188,127 +189,147 @@ const BecomePostOffice = () => {
   };
 
   return (
-    <div>
+    <div className={styles.Container}>
       {loading ? (
         <p>Loading...</p>
       ) : isAlreadySubmitted ? ( // Kiểm tra nếu đã nộp
-        <p>Your request has been sent, please wait for us to review.</p>
+        <p className={styles.Alert}>Your request has been sent, please wait for us to review.</p>
       ) : (
         <form onSubmit={handleSubmit}>
-          <div>
-            <label htmlFor="OfficeUserName">OfficeUserName</label>
-            <input
-              type="text"
-              id="OfficeUserName"
-              name="OfficeUserName"
-              required
-            />
-          </div>
+          <div className={styles.FormContainer}>
+            <div className={styles.PostInfo}>
+              <div className={styles.PostInput}>
+                <p>1. Post Office User Name:</p>
+                <input
+                  placeholder="OfficeUserName"
+                  type="text"
+                  id="OfficeUserName"
+                  name="OfficeUserName"
+                  required
+                />
+              </div>
 
-          <div>
-            <label htmlFor="OfficeUserId">OfficeUserId</label>
-            <input type="text" id="OfficeUserId" name="OfficeUserId" required />
-          </div>
+              <div className={styles.PostInput}>
+              <p>2. Post Office User ID:</p>
+                <input
+                  placeholder="OfficeUserId"
+                  type="text"
+                  id="OfficeUserId"
+                  name="OfficeUserId"
+                  required
+                />
+              </div>
 
-          <div>
-            <label htmlFor="OfficeUserNumber">OfficeUserNumber</label>
-            <input
-              type="text"
-              id="OfficeUserNumber"
-              name="OfficeUserNumber"
-              required
-            />
-          </div>
+              <div className={styles.PostInput}>
+              <p>3. Post Office User Phone Number:</p>
+                <input
+                  placeholder="OfficeUserNumber"
+                  type="text"
+                  id="OfficeUserNumber"
+                  name="OfficeUserNumber"
+                  required
+                />
+              </div>
 
-          <div>
-            <label htmlFor="OfficeUserAddress">OfficeUserAddress</label>
-            <input
-              type="text"
-              id="OfficeUserAddress"
-              name="OfficeUserAddress"
-              required
-            />
-          </div>
+              <div className={styles.PostInput}>
+                <p>4. Post Office User Address:</p>
+                <input
+                  placeholder="OfficeUserAddress"
+                  type="text"
+                  id="OfficeUserAddress"
+                  name="OfficeUserAddress"
+                  required
+                />
+              </div>
 
-          <div>
-            <label htmlFor="OfficeName">OfficeName</label>
-            <input type="text" id="OfficeName" name="OfficeName" required />
-          </div>
+              <div className={styles.PostInput}>
+                <p>5. Post Office Name:</p>
+                <input
+                  placeholder="OfficeName"
+                  type="text"
+                  id="OfficeName"
+                  name="OfficeName"
+                  required
+                />
+              </div>
 
-          <div>
-            <label htmlFor="OfficeHotline">OfficeHotline</label>
-            <input
-              type="text"
-              id="OfficeHotline"
-              name="OfficeHotline"
-              required
-            />
-          </div>
+              <div className={styles.PostInput}>
+                <p>6. Post Office Hotline:</p>
+                <input
+                  placeholder="OfficeHotline"
+                  type="text"
+                  id="OfficeHotline"
+                  name="OfficeHotline"
+                  required
+                />
+              </div>
 
-          <div>
-            <label htmlFor="OfficeAddress">OfficeAddress</label>
-            <input
-              type="text"
-              id="OfficeAddress"
-              name="OfficeAddress"
-              required
-            />
-          </div>
+              <div className={styles.PostInput}>
+              <p>7. Post Office Address:</p>
+                <input
+                  placeholder="OfficeAddress"
+                  type="text"
+                  id="OfficeAddress"
+                  name="OfficeAddress"
+                  required
+                />
+              </div>
+            </div>
 
-          {/* From City */}
-          <div>
-            <label htmlFor="OfficeCity">OfficeCity</label>
-            <select
-              id="OfficeCity"
-              name="OfficeCity"
-              required
-              value={selectedFromCity}
-              onChange={(e) => setSelectedFromCity(e.target.value)}
-            >
-              <option value="">Select City</option>
-              {locationCity.map((city, index) => (
-                <option key={index} value={city}>
-                  {city}
-                </option>
-              ))}
-            </select>
-          </div>
+            <div className={styles.PostInfoAddress}>
+              {/* From City */}
+              <div className={styles.PostInput}>
+                <select
+                  id="OfficeCity"
+                  name="OfficeCity"
+                  required
+                  value={selectedFromCity}
+                  onChange={(e) => setSelectedFromCity(e.target.value)}
+                >
+                  <option value="">Select City</option>
+                  {locationCity.map((city, index) => (
+                    <option key={index} value={city}>
+                      {city}
+                    </option>
+                  ))}
+                </select>
+              </div>
 
-          {/* From District */}
-          <div>
-            <label htmlFor="OfficeDistrict">OfficeDistrict</label>
-            <select
-              id="OfficeDistrict"
-              name="OfficeDistrict"
-              required
-              value={selectedFromDistrict}
-              onChange={(e) => setSelectedFromDistrict(e.target.value)}
-            >
-              <option value="">Select District</option>
-              {locationDistrictFrom.map((district, index) => (
-                <option key={index} value={district.name}>
-                  {district.name}
-                </option>
-              ))}
-            </select>
-          </div>
+              {/* From District */}
+              <div className={styles.PostInput}>
+                <select
+                  id="OfficeDistrict"
+                  name="OfficeDistrict"
+                  required
+                  value={selectedFromDistrict}
+                  onChange={(e) => setSelectedFromDistrict(e.target.value)}
+                >
+                  <option value="">Select District</option>
+                  {locationDistrictFrom.map((district, index) => (
+                    <option key={index} value={district.name}>
+                      {district.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
 
-          {/* From Ward */}
-          <div>
-            <label htmlFor="OfficeWard">OfficeWard</label>
-            <select id="OfficeWard" name="OfficeWard" required>
-              <option value="">Select Ward</option>
-              {locationWardFrom.map((ward, index) => (
-                <option key={index} value={ward.name}>
-                  {ward.name}
-                </option>
-              ))}
-            </select>
-          </div>
+              {/* From Ward */}
+              <div className={styles.PostInput}>
+                <select id="OfficeWard" name="OfficeWard" required>
+                  <option value="">Select Ward</option>
+                  {locationWardFrom.map((ward, index) => (
+                    <option key={index} value={ward.name}>
+                      {ward.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
 
-          {/* Nút Submit */}
-          <div>
-            <button type="submit">Submit</button>
+            {/* Nút Submit */}
+            <div className={styles.PostSubmit}>
+              <button type="submit">Submit</button>
+            </div>
           </div>
         </form>
       )}
