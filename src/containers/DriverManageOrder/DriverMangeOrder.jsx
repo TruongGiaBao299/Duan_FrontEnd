@@ -130,21 +130,19 @@ const DriverMangeOrder = () => {
     }
   };
 
-  // 🗺️ Mở bản đồ HERE với hướng dẫn đường đi
+  // Mở bản đồ HERE với hướng dẫn đường đi
   const handleOpenMap = async (order) => {
     let addressToUse = "";
     let mapUrl = "";
 
-    // Chọn địa chỉ cần hiển thị (tùy thuộc vào trạng thái đơn hàng)
     if (order.status === "delivery to post office") {
-      addressToUse = order.fromAddress; // Địa chỉ người gửi
+      addressToUse = order.fromAddress;
     } else if (order.status === "is shipping") {
-      addressToUse = order.toAddress; // Địa chỉ người nhận
+      addressToUse = order.toAddress;
     }
 
     if (addressToUse) {
       try {
-        // Lấy tọa độ hiện tại của người dùng
         const userPosition = await new Promise((resolve, reject) => {
           if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(resolve, reject);
@@ -158,13 +156,25 @@ const DriverMangeOrder = () => {
           lng: userPosition.coords.longitude,
         };
 
-        // Lấy tọa độ của địa chỉ (fromAddress/toAddress)
         const coords = await getCoordinates(addressToUse);
 
         if (coords) {
-          // Tạo đường dẫn bản đồ với HERE API
+          // Tạo URL bản đồ HERE với các tọa độ
           mapUrl = `https://www.here.com/directions/drive/${userCoords.lat},${userCoords.lng}/${coords.lat},${coords.lng}`;
-          window.open(mapUrl, "_blank");
+
+          // Tính toán vị trí trung tâm của cửa sổ
+          const windowWidth = 1000; // Chiều rộng cửa sổ popup
+          const windowHeight = 800; // Chiều cao cửa sổ popup
+
+          const left = (window.innerWidth - windowWidth) / 2;
+          const top = (window.innerHeight - windowHeight) / 2;
+
+          // Mở cửa sổ popup ở vị trí trung tâm của màn hình
+          window.open(
+            mapUrl,
+            "_blank",
+            `width=${windowWidth},height=${windowHeight},top=${top},left=${left},scrollbars=no,toolbar=no,location=no`
+          );
         } else {
           toast.error("Unable to fetch location coordinates.");
         }
