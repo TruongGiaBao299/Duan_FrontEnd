@@ -8,6 +8,7 @@ import {
 } from "../../utils/driverAPI/driverAPI";
 import { getOrderApi } from "../../utils/orderAPI/orderAPI";
 import axios from "axios";
+import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 
 const HERE_API_KEY = "MnTadIKOVDRqhQYalpBxtEG3AiWROupfqiPOBzfiWsw"; // Replace with your actual API key from HERE API
 
@@ -19,6 +20,8 @@ const DriverSentOrder = () => {
   const [distanceCache, setDistanceCache] = useState({}); // Cache for distances
   const [showPopup, setShowPopup] = useState(false); // Popup visibility state
   const [expandedOrder, setExpandedOrder] = useState(null); // Store the selected order for details
+  const [isLoading, setIsLoading] = useState(true);
+  const [isCalculatingDistance, setIsCalculatingDistance] = useState(false);
 
   const AcceptOrder = async (orderId) => {
     try {
@@ -109,27 +112,32 @@ const DriverSentOrder = () => {
 
   // Calculate distance between driver's location and order's toAddress
   useEffect(() => {
-    const calculateDistances = async () => {
-      if (!driverLocation) return;
-
-      const updatedCache = { ...distanceCache };
-      for (const order of orders) {
-        if (!updatedCache[order._id]) {
-          try {
-            const distance = await calculateDistance(order.toAddress);
-            updatedCache[order._id] = distance;
-
-            await new Promise((resolve) => setTimeout(resolve, 1000)); // Delay to avoid exceeding rate limits
-          } catch (error) {
-            console.error("Error calculating distance:", error);
+      const calculateDistances = async () => {
+        if (!driverLocation || orders.length === 0) return;
+  
+        setIsCalculatingDistance(true); // Bắt đầu tính khoảng cách
+  
+        const updatedCache = { ...distanceCache };
+        for (const order of orders) {
+          if (!updatedCache[order._id]) {
+            try {
+              const distance = await calculateDistance(order.fromAddress);
+              updatedCache[order._id] = distance;
+  
+              // Thêm delay để tránh bị rate limit API
+              await new Promise((resolve) => setTimeout(resolve, 1000));
+            } catch (error) {
+              console.error("Error calculating distance:", error);
+            }
           }
         }
-      }
-      setDistanceCache(updatedCache);
-    };
-
-    calculateDistances();
-  }, [driverLocation, orders]);
+  
+        setDistanceCache(updatedCache);
+        setIsCalculatingDistance(false); // Hoàn tất tính toán
+      };
+  
+      calculateDistances();
+    }, [driverLocation, orders]);
 
   // Function to calculate distance using HERE API
   const calculateDistance = async (toAddress) => {
@@ -180,6 +188,7 @@ const DriverSentOrder = () => {
 
   return (
     <div className={styles.driverordercontainer}>
+      {isCalculatingDistance && <LoadingSpinner isLoading={true} />}
       {orders.filter(
         (order) =>
           order.status === "prepare to delivery" && order.toCity === driverCity
@@ -197,12 +206,27 @@ const DriverSentOrder = () => {
                 )
                 .map((order) => (
                   <div key={order._id}>
-                    <p><strong>Order ID:</strong> {order._id}</p>
-                    <p><strong>Distance (km):</strong> {distanceCache[order._id] || "Calculating..."}</p>
-                    <p><strong>From Address:</strong> {`${order.fromAddress}, ${order.fromDistrict}, ${order.fromCity}`}</p>
-                    <p><strong>To Address:</strong> {`${order.toAddress}, ${order.toDistrict}, ${order.toCity}`}</p>
-                    <p><strong>Price:</strong> {order.price}</p>
-                    <p><strong>Status:</strong> {order.status}</p>
+                    <p>
+                      <strong>Order ID:</strong> {order._id}
+                    </p>
+                    <p>
+                      <strong>Distance (km):</strong>{" "}
+                      {distanceCache[order._id] || "Calculating..."}
+                    </p>
+                    <p>
+                      <strong>From Address:</strong>{" "}
+                      {`${order.fromAddress}, ${order.fromDistrict}, ${order.fromCity}`}
+                    </p>
+                    <p>
+                      <strong>To Address:</strong>{" "}
+                      {`${order.toAddress}, ${order.toDistrict}, ${order.toCity}`}
+                    </p>
+                    <p>
+                      <strong>Price:</strong> {order.price}
+                    </p>
+                    <p>
+                      <strong>Status:</strong> {order.status}
+                    </p>
                     <div>
                       <button
                         className={styles.becomeDriverButton}
@@ -245,17 +269,45 @@ const DriverSentOrder = () => {
                   x
                 </button>
                 <div className={styles.orderDetails}>
-                  <p><strong>Sender Name:</strong> {expandedOrder.senderName}</p>
-                  <p><strong>Sender Number:</strong> {expandedOrder.senderNumber}</p>
-                  <p><strong>From Address:</strong> {expandedOrder.fromAddress}, {expandedOrder.fromDistrict}, {expandedOrder.fromWard}, {expandedOrder.fromCity}</p>
-                  <p><strong>Recipient Name:</strong> {expandedOrder.recipientName}</p>
-                  <p><strong>Recipient Number:</strong> {expandedOrder.recipientNumber}</p>
-                  <p><strong>To Address:</strong> {expandedOrder.toAddress}, {expandedOrder.toDistrict}, {expandedOrder.toWard}, {expandedOrder.toCity}</p>
-                  <p><strong>Order Weight:</strong> {expandedOrder.orderWeight}</p>
-                  <p><strong>Order Size:</strong> {expandedOrder.orderSize}</p>
-                  <p><strong>Price:</strong> {expandedOrder.price}</p>
-                  <p><strong>Status:</strong> {expandedOrder.status}</p>
-                  <p><strong>Created By:</strong> {expandedOrder.createdBy}</p>
+                  <p>
+                    <strong>Sender Name:</strong> {expandedOrder.senderName}
+                  </p>
+                  <p>
+                    <strong>Sender Number:</strong> {expandedOrder.senderNumber}
+                  </p>
+                  <p>
+                    <strong>From Address:</strong> {expandedOrder.fromAddress},{" "}
+                    {expandedOrder.fromDistrict}, {expandedOrder.fromWard},{" "}
+                    {expandedOrder.fromCity}
+                  </p>
+                  <p>
+                    <strong>Recipient Name:</strong>{" "}
+                    {expandedOrder.recipientName}
+                  </p>
+                  <p>
+                    <strong>Recipient Number:</strong>{" "}
+                    {expandedOrder.recipientNumber}
+                  </p>
+                  <p>
+                    <strong>To Address:</strong> {expandedOrder.toAddress},{" "}
+                    {expandedOrder.toDistrict}, {expandedOrder.toWard},{" "}
+                    {expandedOrder.toCity}
+                  </p>
+                  <p>
+                    <strong>Order Weight:</strong> {expandedOrder.orderWeight}
+                  </p>
+                  <p>
+                    <strong>Order Size:</strong> {expandedOrder.orderSize}
+                  </p>
+                  <p>
+                    <strong>Price:</strong> {expandedOrder.price}
+                  </p>
+                  <p>
+                    <strong>Status:</strong> {expandedOrder.status}
+                  </p>
+                  <p>
+                    <strong>Created By:</strong> {expandedOrder.createdBy}
+                  </p>
                 </div>
               </div>
             </div>

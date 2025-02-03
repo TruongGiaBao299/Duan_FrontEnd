@@ -2,18 +2,19 @@ import React, { useEffect, useState } from "react";
 import styles from "./User.module.css";
 import { toast } from "react-toastify";
 import { getUserApi } from "../../utils/userAPI/userAPI";
+import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 
 const User = () => {
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
   const [roleFilter, setRoleFilter] = useState("All");
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        setLoading(true);
+        setIsLoading(true);
         const res = await getUserApi();
         console.log("User:", res);
         if (res) {
@@ -26,7 +27,7 @@ const User = () => {
       } catch (err) {
         toast.error("Failed to fetch user data. Please try again later.");
       } finally {
-        setLoading(false);
+        setIsLoading(false);
       }
     };
     fetchUser();
@@ -60,8 +61,8 @@ const User = () => {
         ))}
       </div>
 
-      {loading ? (
-        <p className={styles.loading}>Loading users...</p>
+      {isLoading ? (
+        <LoadingSpinner isLoading={isLoading}></LoadingSpinner>
       ) : error ? (
         <p className={styles.error}>{error}</p>
       ) : filteredData.length === 0 ? (

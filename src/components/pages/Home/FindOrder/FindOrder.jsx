@@ -3,14 +3,17 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { getOrderByIdApi } from "../../../../utils/orderAPI/orderAPI";
 import styles from "./FindOrder.module.css";
+import LoadingSpinner from "../../../../containers/LoadingSpinner/LoadingSpinner";
 
 const FindOrder = () => {
   const [orderInfo, setOrderInfo] = useState(null);
   const [showPopup, setShowPopup] = useState(false); // Kiểm soát popup hiển thị
+  const [isLoading, setIsLoading] = useState(false); // Track loading state
   const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setIsLoading(true);
     const form = event.currentTarget;
     const formData = new FormData(form);
 
@@ -31,8 +34,12 @@ const FindOrder = () => {
       console.error("Error:", error);
       navigate("/login");
       toast.error("You need login to find your order");
+    } finally {
+      setIsLoading(false); // Mark loading as complete
     }
   };
+
+  {isLoading && <LoadingSpinner />}
 
   return (
     <div className={styles.FindOrderContainer}>

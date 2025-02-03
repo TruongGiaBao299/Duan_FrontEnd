@@ -14,11 +14,12 @@ import {
   makeDriverApi,
   makeGuestApi,
 } from "../../utils/userAPI/userAPI";
+import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 
 const Driver = () => {
   const [userData, setUserData] = useState([]);
   const [driverData, setDriverData] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
 
   const { auth, setAuth } = useContext(AuthContext);
@@ -29,7 +30,7 @@ const Driver = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        setLoading(true);
+        setIsLoading(true);
 
         // Making both API calls concurrently using Promise.all
         const [userRes, driverRes] = await Promise.all([
@@ -57,7 +58,7 @@ const Driver = () => {
       } catch (err) {
         toast.error("Failed to fetch data. Please try again later.");
       } finally {
-        setLoading(false);
+        setIsLoading(false);
       }
     };
 
@@ -157,8 +158,8 @@ const Driver = () => {
 
   return (
     <div className={styles.pageWrapper}>
-      {loading ? (
-        <p className={styles.loading}>Loading users...</p>
+      {isLoading ? (
+        <LoadingSpinner isLoading={isLoading}></LoadingSpinner>
       ) : error ? (
         <p className={styles.error}>{error}</p>
       ) : driverData.length === 0 ? (

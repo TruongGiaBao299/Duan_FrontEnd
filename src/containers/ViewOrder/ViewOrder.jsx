@@ -6,14 +6,17 @@ import {
   ShippedOrderApi,
 } from "../../utils/driverAPI/driverAPI";
 import styles from "./ViewOrder.module.css";
+import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 
 const ViewOrder = () => {
   const [orders, setOrders] = useState([]);
   const [expandedOrder, setExpandedOrder] = useState(null);
   const [showPopup, setShowPopup] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchUser = async () => {
+      setIsLoading(true);
       try {
         const res = await getOrderByEmailApi();
         console.log("Order by email:", res);
@@ -33,6 +36,8 @@ const ViewOrder = () => {
       } catch (error) {
         console.error("Error:", error);
         toast.error("Error fetching orders");
+      } finally {
+        setIsLoading(false); // Mark loading as complete
       }
     };
 
@@ -68,6 +73,11 @@ const ViewOrder = () => {
       toast.error("Failed to update. Please try again.");
     }
   };
+
+  if (isLoading) {
+    // Hiển thị trạng thái Loading
+    return <LoadingSpinner isLoading={isLoading}></LoadingSpinner>
+  }
 
   return (
     <div className={styles.Container}>

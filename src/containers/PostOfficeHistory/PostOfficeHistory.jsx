@@ -5,6 +5,7 @@ import {
   getPostOfficeByEmailApi,
   getPostOfficeOrderByEmailApi,
 } from "../../utils/postOfficeAPI/postOfficeAPI";
+import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 
 const PostOfficeHistory = () => {
   const [orders, setOrders] = useState([]);
@@ -12,15 +13,19 @@ const PostOfficeHistory = () => {
   const [postEmail, setPostEmail] = useState("");
   const [showPopup, setShowPopup] = useState(false);
   const [expandedOrder, setExpandedOrder] = useState(null);
-
+  const [isLoading, setIsLoading] = useState(true);
+  
   useEffect(() => {
     const fetchOrders = async () => {
+      setIsLoading(true);
       try {
         const res = await getPostOfficeOrderByEmailApi();
         setOrders(res && res.length > 0 ? res : []);
       } catch (error) {
         console.error("Error fetching orders:", error);
         toast.error("Error fetching orders.");
+      } finally {
+        setIsLoading(false); // Mark loading as complete
       }
     };
     fetchOrders();
@@ -58,17 +63,22 @@ const PostOfficeHistory = () => {
     setShowPopup(true);
   };
 
+  if (isLoading) {
+    // Hiển thị trạng thái Loading
+    return <LoadingSpinner isLoading={isLoading}></LoadingSpinner>
+  }
+
   return (
     <div className={styles.driverordercontainer}>
       <div className={styles.stats}>
-        <h3>Total Orders: {totalOrders}</h3>
-        <h3>
+        <h3>Total Orders: {totalShippedOrders}</h3>
+        {/* <h3>
           Total Commission:{" "}
           {totalCommission.toLocaleString("vi-VN", {
             style: "currency",
             currency: "VND",
           })}
-        </h3>
+        </h3> */}
       </div>
 
       {totalShippedOrders === 0 ? (

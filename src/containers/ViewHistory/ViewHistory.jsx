@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { getOrderByEmailApi } from "../../utils/orderAPI/orderAPI";
 import { toast } from "react-toastify";
 import styles from "./ViewHistory.module.css";
+import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 
 const ViewHistory = () => {
   const [orders, setOrders] = useState([]); // All orders fetched from API
@@ -9,9 +10,11 @@ const ViewHistory = () => {
   const [filter, setFilter] = useState("all"); // Filter state: "all", "shipped", "canceled"
   const [expandedOrder, setExpandedOrder] = useState(null);
   const [showPopup, setShowPopup] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchUser = async () => {
+      setIsLoading(true);
       try {
         const res = await getOrderByEmailApi();
         console.log("Order by email:", res);
@@ -31,6 +34,8 @@ const ViewHistory = () => {
       } catch (error) {
         console.error("Error:", error);
         toast.error("Error fetching orders");
+      } finally {
+        setIsLoading(false); // Mark loading as complete
       }
     };
 
@@ -50,6 +55,11 @@ const ViewHistory = () => {
       setFilteredOrders(orders.filter((order) => order.status === status));
     }
   };
+
+  if (isLoading) {
+    // Hiển thị trạng thái Loading
+    return <LoadingSpinner isLoading={isLoading}></LoadingSpinner>
+  }
 
   return (
     <div className={styles.Container}>

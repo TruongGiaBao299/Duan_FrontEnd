@@ -9,6 +9,7 @@ import {
 import { getLocationAPI } from "../../../../utils/locationAPI/locationAPI";
 import { getPostOfficeApi } from "../../../../utils/postOfficeAPI/postOfficeAPI";
 import styles from "./BecomeDriver.module.css";
+import LoadingSpinner from "../../../../containers/LoadingSpinner/LoadingSpinner";
 
 const BecomeDriver = () => {
   const navigate = useNavigate();
@@ -206,6 +207,8 @@ const BecomeDriver = () => {
       setFilteredPostOffices([]);
     }
   }, [selectedFromCity, data]);
+
+  {isLoading && <LoadingSpinner />}
 
   return (
     <div className={styles.Container}>

@@ -1,14 +1,16 @@
 import React, { useContext, useEffect, useState } from "react";
-import styles from "./Orders.module.css"; 
+import styles from "./Orders.module.css";
 import { toast } from "react-toastify";
 import { AuthContext } from "../../context/auth.context";
 import { useNavigate } from "react-router-dom";
 import { getOrderApi } from "../../utils/orderAPI/orderAPI";
+import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 
 const Orders = () => {
   const [orders, setOrders] = useState([]);
   const [filteredOrders, setFilteredOrders] = useState([]);
   const [statusFilter, setStatusFilter] = useState("All");
+  const [isLoading, setIsLoading] = useState(true);
 
   const { auth } = useContext(AuthContext);
   console.log("check auth Orders: ", auth.user.role);
@@ -17,6 +19,7 @@ const Orders = () => {
 
   useEffect(() => {
     const fetchUser = async () => {
+      setIsLoading(true);
       try {
         const res = await getOrderApi();
         console.log("Order:", res);
@@ -31,6 +34,8 @@ const Orders = () => {
       } catch (error) {
         console.error("Error:", error);
         toast.error("Error fetching orders");
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -73,7 +78,9 @@ const Orders = () => {
         ))}
       </div>
 
-      {filteredOrders.length === 0 ? (
+      {isLoading ? (
+        <LoadingSpinner isLoading={isLoading} />
+      ) : filteredOrders.length === 0 ? (
         <p>You don't have any orders!</p>
       ) : (
         <div>

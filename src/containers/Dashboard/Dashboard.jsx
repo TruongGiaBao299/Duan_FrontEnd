@@ -16,6 +16,7 @@ import Orders from "../Orders/Orders";
 import { AuthContext } from "../../context/auth.context";
 import { useNavigate } from "react-router-dom";
 import { getOrderApi } from "../../utils/orderAPI/orderAPI";
+import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 
 ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend);
 
@@ -25,6 +26,7 @@ const Dashboard = () => {
   const [orders, setOrders] = useState([]);
   const [totalRevenue, setTotalRevenue] = useState(0);
   const [inWarehouseCount, setInWarehouseCount] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
 
   const navigate = useNavigate();
 
@@ -109,6 +111,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     const fetchUser = async () => {
+      setIsLoading(true);
       try {
         const res = await getOrderApi();
         console.log("Order:", res);
@@ -119,7 +122,8 @@ const Dashboard = () => {
         const Revenue = shippedOrders.map((order) => order.price * 0.7);
 
         // Tính tổng giá trị 70%
-        const totalRevenue = Revenue.reduce((sum, price) => sum + price, 0);
+        const totalRevenue = parseFloat(Revenue.reduce((sum, price) => sum + price, 0).toFixed(2));
+
         console.log("Shipped Prices (70% Total):", totalRevenue);
         // Cập nhật state với totalRevenue
         setTotalRevenue(totalRevenue);
@@ -139,11 +143,18 @@ const Dashboard = () => {
       } catch (error) {
         console.error("Error:", error);
         toast.error("Error fetching orders");
+      } finally {
+        setIsLoading(false);
       }
     };
 
     fetchUser();
   }, []);
+
+  if (isLoading) {
+    // Hiển thị trạng thái Loading
+    return <LoadingSpinner isLoading={isLoading}></LoadingSpinner>
+  }
 
   return (
     <div className={styles.container}>

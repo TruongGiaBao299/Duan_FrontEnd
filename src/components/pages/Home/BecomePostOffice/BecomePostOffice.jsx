@@ -8,6 +8,7 @@ import {
 } from "../../../../utils/postOfficeAPI/postOfficeAPI";
 import { getLocationAPI } from "../../../../utils/locationAPI/locationAPI";
 import styles from "./BecomePostOffice.module.css";
+import LoadingSpinner from "../../../../containers/LoadingSpinner/LoadingSpinner";
 
 const BecomePostOffice = () => {
   const navigate = useNavigate();
@@ -187,6 +188,8 @@ const BecomePostOffice = () => {
       navigate("/login");
     }
   };
+
+  {isLoading && <LoadingSpinner />}
 
   return (
     <div className={styles.Container}>

@@ -9,6 +9,7 @@ import { FaHome } from "react-icons/fa";
 import { getPostOfficeApi } from "../../../../utils/postOfficeAPI/postOfficeAPI";
 import { getDistance } from "geolib";
 import { getLocationAPI } from "../../../../utils/locationAPI/locationAPI";
+import LoadingSpinner from "../../../../containers/LoadingSpinner/LoadingSpinner";
 
 // Hook để cập nhật vị trí và zoom bản đồ
 const MapViewUpdater = ({ latitude, longitude }) => {
@@ -159,6 +160,11 @@ const PostOffice = () => {
   const handleDivClick = (latitude, longitude) => {
     setClickedLocation({ latitude, longitude });
   };
+
+  if (isLoading) {
+    // Hiển thị trạng thái Loading
+    return <LoadingSpinner isLoading={isLoading}></LoadingSpinner>
+  }
 
   return (
     <div className={styles.infocontainer}>

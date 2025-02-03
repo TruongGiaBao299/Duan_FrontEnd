@@ -9,6 +9,7 @@ import {
 } from "../../utils/driverAPI/driverAPI";
 import { getPostOfficeApi } from "../../utils/postOfficeAPI/postOfficeAPI";
 import styles from "./DriverMangeOrder.module.css";
+import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 
 const DriverMangeOrder = () => {
   const [orders, setOrders] = useState([]);
@@ -17,11 +18,13 @@ const DriverMangeOrder = () => {
   const [filterStatus, setFilterStatus] = useState("all");
   const [showPopup, setShowPopup] = useState(false); // Add state for showing the popup
   const [expandedOrder, setExpandedOrder] = useState(null); // Store the selected order for details
+  const [isLoading, setIsLoading] = useState(true);
 
   const HERE_API_KEY = "MnTadIKOVDRqhQYalpBxtEG3AiWROupfqiPOBzfiWsw";
 
   useEffect(() => {
     const fetchUser = async () => {
+      setIsLoading(true);
       try {
         const res = await getDriverOrderByEmailApi();
         if (res && res.length > 0) {
@@ -32,6 +35,8 @@ const DriverMangeOrder = () => {
       } catch (error) {
         console.error("Error:", error);
         toast.error("Error fetching orders");
+      } finally {
+        setIsLoading(false); // Mark loading as complete
       }
     };
 
@@ -185,8 +190,10 @@ const DriverMangeOrder = () => {
     }
   };
 
+
   return (
     <div className={styles.Container}>
+      {isLoading && <LoadingSpinner isLoading={true} />}
       {/* Hiển thị số lượng đơn và thu nhập */}
       <div className={styles.OrderInfo}>
         <h3>Total Orders: {totalOrders}</h3>

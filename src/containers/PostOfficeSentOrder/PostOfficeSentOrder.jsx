@@ -12,6 +12,7 @@ import {
   getPostOfficeOrderByEmailApi,
 } from "../../utils/postOfficeAPI/postOfficeAPI";
 import { getPostOfficeApi } from "../../utils/postOfficeAPI/postOfficeAPI";
+import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 
 const PostOfficeSentOrder = () => {
   const [orders, setOrders] = useState([]);
@@ -21,9 +22,11 @@ const PostOfficeSentOrder = () => {
   const [postCity, setPostCity] = useState("");
   const [showPopup, setShowPopup] = useState(false); // To control popup visibility
   const [selectedOrder, setSelectedOrder] = useState(null); // Store the selected order for details
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchOrders = async () => {
+      setIsLoading(true);
       try {
         const res = await getPostOfficeOrderByEmailApi();
         console.log("Post Office Order by email:", res);
@@ -35,6 +38,8 @@ const PostOfficeSentOrder = () => {
       } catch (error) {
         console.error("Error:", error);
         toast.error("Error fetching orders");
+      } finally {
+        setIsLoading(false); // Mark loading as complete
       }
     };
 
@@ -133,6 +138,11 @@ const PostOfficeSentOrder = () => {
     setSelectedOrder(order);
     setShowPopup(true);
   };
+
+  if (isLoading) {
+    // Hiển thị trạng thái Loading
+    return <LoadingSpinner isLoading={isLoading}></LoadingSpinner>
+  }
 
   return (
     <div className={styles.driverordercontainer}>

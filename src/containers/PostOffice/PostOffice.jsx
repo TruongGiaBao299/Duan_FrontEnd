@@ -10,10 +10,11 @@ import {
 import { AuthContext } from "../../context/auth.context";
 import { useNavigate } from "react-router-dom";
 import { makeGuestApi, makePostOfficeApi } from "../../utils/userAPI/userAPI";
+import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 
 const PostOffice = () => {
   const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
   const [isUpdating, setIsUpdating] = useState(false); // State để kiểm tra trạng thái xử lý
   const [error, setError] = useState("");
   const [userData, setUserData] = useState([]);
@@ -25,7 +26,7 @@ const PostOffice = () => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        setLoading(true);
+        setIsLoading(true);
         const res = await getPostOfficeApi();
         console.log("Post Office: ", res);
         if (res && Array.isArray(res)) {
@@ -39,7 +40,7 @@ const PostOffice = () => {
         setError("Failed to fetch Post Office data.");
         toast.error("Failed to fetch user data. Please try again later.");
       } finally {
-        setLoading(false);
+        setIsLoading(false);
       }
     };
     fetchUser();
@@ -127,8 +128,8 @@ const PostOffice = () => {
 
   return (
     <div className={styles.pageWrapper}>
-      {loading ? (
-        <p className={styles.loading}>Loading PostOffice...</p>
+      {isLoading ? (
+        <LoadingSpinner isLoading={isLoading}></LoadingSpinner>
       ) : error ? (
         <p className={styles.error}>{error}</p>
       ) : data.length === 0 ? (

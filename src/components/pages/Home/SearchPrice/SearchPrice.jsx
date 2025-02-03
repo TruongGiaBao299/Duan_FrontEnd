@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import styles from "./SearchPrice.module.css";
 import { getLocationAPI } from "../../../../utils/locationAPI/locationAPI";
 import { SearchPriceApi } from "../../../../utils/orderAPI/orderAPI";
+import LoadingSpinner from "../../../../containers/LoadingSpinner/LoadingSpinner";
 
 const SearchPrice = () => {
   const [orderInfo, setOrderInfo] = useState(null); // Store order information
@@ -149,6 +150,8 @@ const SearchPrice = () => {
       setIsLoading(false); // Mark loading as false once the API response is processed
     }
   };
+
+  {isLoading && <LoadingSpinner />}
 
   return (
     <div className={styles.Container}>

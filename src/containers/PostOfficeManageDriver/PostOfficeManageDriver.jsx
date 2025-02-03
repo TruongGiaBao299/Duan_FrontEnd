@@ -15,13 +15,14 @@ import {
 } from "../../utils/userAPI/userAPI";
 import "./PostOfficeManageDriver.css";
 import { getPostOfficeByEmailApi } from "../../utils/postOfficeAPI/postOfficeAPI";
+import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 
 const PostOfficeManageDriver = () => {
   const [userData, setUserData] = useState([]);
   const [driverData, setDriverData] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [postOfficeEmail, setPostOfficeEmail] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
 
   const { auth } = useContext(AuthContext);
   const navigate = useNavigate();
@@ -30,7 +31,7 @@ const PostOfficeManageDriver = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        setLoading(true);
+        setIsLoading(true);
         const [userRes, driverRes] = await Promise.all([
           getUserApi(),
           getDriverApi(),
@@ -41,7 +42,7 @@ const PostOfficeManageDriver = () => {
       } catch (err) {
         toast.error("Failed to fetch data. Please try again later.");
       } finally {
-        setLoading(false);
+        setIsLoading(false);
       }
     };
 
@@ -147,8 +148,8 @@ const PostOfficeManageDriver = () => {
 
   return (
     <div>
-      {loading ? (
-        <p>Loading users...</p>
+      {isLoading ? (
+        <LoadingSpinner isLoading={isLoading}></LoadingSpinner>
       ) : error ? (
         <p>{error}</p>
       ) : filteredDriverData.length === 0 ? (

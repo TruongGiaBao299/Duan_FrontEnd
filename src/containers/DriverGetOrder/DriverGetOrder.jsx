@@ -8,6 +8,7 @@ import {
   IsShippingOrderApi,
 } from "../../utils/driverAPI/driverAPI";
 import { getOrderApi } from "../../utils/orderAPI/orderAPI";
+import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 
 const HERE_API_KEY = "MnTadIKOVDRqhQYalpBxtEG3AiWROupfqiPOBzfiWsw"; // Replace with your actual API key from HERE API
 
@@ -19,6 +20,8 @@ const DriverGetOrder = () => {
   const [distanceCache, setDistanceCache] = useState({}); // Cache for distances
   const [showPopup, setShowPopup] = useState(false); // To control popup visibility
   const [expandedOrder, setExpandedOrder] = useState(null); // To store the selected order
+  const [isLoading, setIsLoading] = useState(true);
+  const [isCalculatingDistance, setIsCalculatingDistance] = useState(false);
 
   useEffect(() => {
     // Get the driver's current location
@@ -76,9 +79,10 @@ const DriverGetOrder = () => {
   }, []);
 
   useEffect(() => {
-    // Calculate distances for all orders with rate limiting
     const calculateDistances = async () => {
-      if (!driverLocation) return;
+      if (!driverLocation || orders.length === 0) return;
+
+      setIsCalculatingDistance(true); // Bắt đầu tính khoảng cách
 
       const updatedCache = { ...distanceCache };
       for (const order of orders) {
@@ -87,20 +91,23 @@ const DriverGetOrder = () => {
             const distance = await calculateDistance(order.fromAddress);
             updatedCache[order._id] = distance;
 
-            // Introduce a delay to avoid exceeding the API rate limits
+            // Thêm delay để tránh bị rate limit API
             await new Promise((resolve) => setTimeout(resolve, 1000));
           } catch (error) {
             console.error("Error calculating distance:", error);
           }
         }
       }
+
       setDistanceCache(updatedCache);
+      setIsCalculatingDistance(false); // Hoàn tất tính toán
     };
 
     calculateDistances();
   }, [driverLocation, orders]);
 
   const calculateDistance = async (fromAddress) => {
+    setIsLoading(true);
     try {
       const geocodeRes = await axios.get(
         `https://geocode.search.hereapi.com/v1/geocode`,
@@ -144,6 +151,8 @@ const DriverGetOrder = () => {
     } catch (error) {
       console.error("Error calculating distance:", error);
       return "N/A";
+    } finally {
+      setIsLoading(false); // Mark loading as complete
     }
   };
 
@@ -191,21 +200,40 @@ const DriverGetOrder = () => {
 
   return (
     <div className={styles.Container}>
+      {isCalculatingDistance && <LoadingSpinner isLoading={true} />}
+
       {sortedOrders.length === 0 ? (
         <p>You don't have any pending orders!</p>
       ) : (
         <div>
-          <div >
+          <div>
             <div>
               {sortedOrders.map((order) => (
-                <div className={styles.OrderInfo}  key={order._id}>
-                  <p><strong>Order ID:</strong> {order._id}</p>
-                  <p><strong>Distance:</strong> {distanceCache[order._id] || "Calculating..."}</p>
-                  <p><strong>Sender Address:</strong> {order.fromAddress}, {order.fromDistrict}, {order.fromWard}, {order.fromCity}</p>
-                  <p><strong>Recipient Address:</strong> {order.toAddress}, {order.toDistrict}, {order.toWard}, {order.toCity}</p>
-                  <p><strong>Message:</strong> {order.message}</p>
-                  <p><strong>Price:</strong> {order.price}</p>
-                  <p><strong>Status:</strong> {order.status}</p>
+                <div className={styles.OrderInfo} key={order._id}>
+                  <p>
+                    <strong>Order ID:</strong> {order._id}
+                  </p>
+                  <p>
+                    <strong>Distance:</strong>{" "}
+                    {distanceCache[order._id] || "Calculating..."}
+                  </p>
+                  <p>
+                    <strong>Sender Address:</strong> {order.fromAddress},{" "}
+                    {order.fromDistrict}, {order.fromWard}, {order.fromCity}
+                  </p>
+                  <p>
+                    <strong>Recipient Address:</strong> {order.toAddress},{" "}
+                    {order.toDistrict}, {order.toWard}, {order.toCity}
+                  </p>
+                  <p>
+                    <strong>Message:</strong> {order.message}
+                  </p>
+                  <p>
+                    <strong>Price:</strong> {order.price}
+                  </p>
+                  <p>
+                    <strong>Status:</strong> {order.status}
+                  </p>
                   <p>
                     <button
                       className={styles.acceptButton}
@@ -233,22 +261,57 @@ const DriverGetOrder = () => {
           </div>
 
           {showPopup && expandedOrder && (
-            <div className={styles.popupOverlay} onClick={() => setShowPopup(false)}>
-              <div className={styles.popupContent} onClick={(e) => e.stopPropagation()}>
-                <button className={styles.closeButton} onClick={() => setShowPopup(false)}>
+            <div
+              className={styles.popupOverlay}
+              onClick={() => setShowPopup(false)}
+            >
+              <div
+                className={styles.popupContent}
+                onClick={(e) => e.stopPropagation()}
+              >
+                <button
+                  className={styles.closeButton}
+                  onClick={() => setShowPopup(false)}
+                >
                   x
                 </button>
                 <div className={styles.orderDetails}>
-                  <p><strong>Sender Name:</strong> {expandedOrder.senderName}</p>
-                  <p><strong>Sender Number:</strong> {expandedOrder.senderNumber}</p>
-                  <p><strong>Sender Address:</strong> {expandedOrder.fromAddress}, {expandedOrder.fromDistrict}, {expandedOrder.fromWard}, {expandedOrder.fromCity}</p>
-                  <p><strong>Recipient Name:</strong> {expandedOrder.recipientName}</p>
-                  <p><strong>Recipient Number:</strong> {expandedOrder.recipientNumber}</p>
-                  <p><strong>Recipient Address:</strong> {expandedOrder.toAddress}, {expandedOrder.toDistrict}, {expandedOrder.toWard}, {expandedOrder.toCity}</p>
-                  <p><strong>Weight:</strong> {expandedOrder.orderWeight}</p>
-                  <p><strong>Size:</strong> {expandedOrder.orderSize}</p>
-                  <p><strong>Price:</strong> {expandedOrder.price}</p>
-                  <p><strong>Status:</strong> {expandedOrder.status}</p>
+                  <p>
+                    <strong>Sender Name:</strong> {expandedOrder.senderName}
+                  </p>
+                  <p>
+                    <strong>Sender Number:</strong> {expandedOrder.senderNumber}
+                  </p>
+                  <p>
+                    <strong>Sender Address:</strong> {expandedOrder.fromAddress}
+                    , {expandedOrder.fromDistrict}, {expandedOrder.fromWard},{" "}
+                    {expandedOrder.fromCity}
+                  </p>
+                  <p>
+                    <strong>Recipient Name:</strong>{" "}
+                    {expandedOrder.recipientName}
+                  </p>
+                  <p>
+                    <strong>Recipient Number:</strong>{" "}
+                    {expandedOrder.recipientNumber}
+                  </p>
+                  <p>
+                    <strong>Recipient Address:</strong>{" "}
+                    {expandedOrder.toAddress}, {expandedOrder.toDistrict},{" "}
+                    {expandedOrder.toWard}, {expandedOrder.toCity}
+                  </p>
+                  <p>
+                    <strong>Weight:</strong> {expandedOrder.orderWeight}
+                  </p>
+                  <p>
+                    <strong>Size:</strong> {expandedOrder.orderSize}
+                  </p>
+                  <p>
+                    <strong>Price:</strong> {expandedOrder.price}
+                  </p>
+                  <p>
+                    <strong>Status:</strong> {expandedOrder.status}
+                  </p>
                 </div>
               </div>
             </div>

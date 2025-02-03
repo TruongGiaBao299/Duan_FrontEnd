@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import styles from "./CreateOrder.module.css";
 import { createOrderApi } from "../../../../utils/orderAPI/orderAPI";
 import { getLocationAPI } from "../../../../utils/locationAPI/locationAPI";
+import LoadingSpinner from "../../../../containers/LoadingSpinner/LoadingSpinner";
 
 const CreateOrder = () => {
   const navigate = useNavigate();
@@ -157,7 +158,7 @@ const CreateOrder = () => {
 
   if (isLoading) {
     // Hiển thị trạng thái Loading
-    return <div>Loading...</div>;
+    return <LoadingSpinner isLoading={isLoading}></LoadingSpinner>
   }
 
   return (
