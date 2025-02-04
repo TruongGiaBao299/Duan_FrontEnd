@@ -1,10 +1,13 @@
 import React, { useContext } from "react";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import styles from "./Login.module.scss";
+import styles from "./Login.module.css";
 import Header from "../../layout/Header/Header";
 import { AuthContext } from "../../../context/auth.context";
 import { loginApi } from "../../../utils/userAPI/userAPI";
+import logo from "../../../assets/Logo.png";
+import { FaRegUserCircle } from "react-icons/fa";
+import { IoLockClosed } from "react-icons/io5";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -40,7 +43,7 @@ const Login = () => {
           navigate("/driverhome"); // Navigate to admin page if the user is admin
         } else if (res.user.role === "postoffice") {
           navigate("/postofficehome"); // Navigate to admin page if the user is admin
-        }else {
+        } else {
           navigate("/"); // Navigate to home for other users
         }
 
@@ -61,36 +64,76 @@ const Login = () => {
   return (
     <>
       <div className={styles.container}>
-        <form onSubmit={handleSubmit} className={styles.form}>
-          <h1 className={styles.title}>Login</h1>
-
-          {/* Email Field */}
-          <div className={styles.field}>
-            <label htmlFor="email">Email</label>
-            <input type="email" id="email" name="email" required />
+        <div className={styles.content}>
+          <div className={styles.leftcontent}>
+            <img src={logo} alt="Logo" />
+            <p>
+              Simplifying shipping, <br />
+              one B at a time.
+            </p>
           </div>
+          <div className={styles.rightcontent}>
+            <form onSubmit={handleSubmit} className={styles.form}>
+              <div className={styles.titlecontent}>
+                <h1 className={styles.title}>WELCOME BACK!</h1>
+                <h1 className={styles.subtitle}>Login to your account</h1>
+              </div>
 
-          {/* Password Field */}
-          <div className={styles.field}>
-            <label htmlFor="password">Password</label>
-            <input type="password" id="password" name="password" required />
+              <div className={styles.line}></div>
+
+              {/* Email Field */}
+              <div className={styles.field}>
+                <FaRegUserCircle className={styles.fieldlogo} />
+                <input
+                  placeholder="Email"
+                  type="email"
+                  id="email"
+                  name="email"
+                  required
+                />
+              </div>
+
+              {/* Password Field */}
+              <div className={styles.field}>
+                <IoLockClosed className={styles.fieldlogo} />
+                <input
+                  placeholder="Password"
+                  type="password"
+                  id="password"
+                  name="password"
+                  required
+                />
+              </div>
+
+              {/* Submit Button */}
+              <button type="submit" className={styles.button}>
+                Login
+              </button>
+
+              <div>
+                <div className={styles.ortitle}>
+                  <div className={styles.grayline}></div>
+                  <p className={styles.linetitle}>or</p>
+                  <div className={styles.grayline}></div>
+                </div>
+
+                <h1 className={styles.subtitle}>
+                  Don't have an account ?{" "}
+                  <span
+                    className={styles.linksubtitle}
+                    onClick={() => navigate("/register")}
+                  >
+                    Sign up
+                  </span>
+                </h1>
+              </div>
+
+              <div className={styles.bottomtitle}>
+                <p>BaShip</p>
+              </div>
+            </form>
           </div>
-
-          {/* Submit Button */}
-          <button type="submit" className={styles.button}>
-            Login
-          </button>
-
-          <h1 className={styles.subtitle}>
-            You don't have account ?{" "}
-            <span
-              className={styles.linksubtitle}
-              onClick={() => navigate("/register")}
-            >
-              Register
-            </span>
-          </h1>
-        </form>
+        </div>
       </div>
     </>
   );

@@ -3,6 +3,10 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import styles from "./Register.module.css";
 import { createUserApi } from "../../../utils/userAPI/userAPI";
+import logo from "../../../assets/Logo.png";
+import { FaRegUserCircle } from "react-icons/fa";
+import { IoLockClosed } from "react-icons/io5";
+import { MdOutlineEmail } from "react-icons/md";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -32,42 +36,88 @@ const Register = () => {
 
   return (
     <div className={styles.container}>
-      <form onSubmit={handleSubmit} className={styles.form}>
-        <h1 className={styles.title}>Register</h1>
-
-        {/* Name Field */}
-        <div className={styles.field}>
-          <label htmlFor="name">Name</label>
-          <input type="text" id="name" name="name" required />
+      <div className={styles.content}>
+        <div className={styles.leftcontent}>
+          <img src={logo} alt="Logo" />
+          <p>
+            Simplifying shipping, <br />
+            one B at a time.
+          </p>
         </div>
+        <div className={styles.rightcontent}>
+          <form onSubmit={handleSubmit} className={styles.form}>
+            <div className={styles.titlecontent}>
+              <h1 className={styles.title}>REGISTER</h1>
+              <h1 className={styles.subtitle}>Create your new account</h1>
+            </div>
 
-        {/* Email Field */}
-        <div className={styles.field}>
-          <label htmlFor="email">Email</label>
-          <input type="email" id="email" name="email" required />
+            <div className={styles.line}></div>
+
+            {/* Name Field */}
+            <div className={styles.field}>
+              <FaRegUserCircle className={styles.fieldlogo} />
+              <input
+                placeholder="Name"
+                type="text"
+                id="name"
+                name="name"
+                required
+              />
+            </div>
+
+            {/* Email Field */}
+            <div className={styles.field}>
+              <MdOutlineEmail className={styles.fieldlogo} />
+              <input
+                placeholder="Email"
+                type="email"
+                id="email"
+                name="email"
+                required
+              />
+            </div>
+
+            {/* Password Field */}
+            <div className={styles.field}>
+              <IoLockClosed className={styles.fieldlogo} />
+              <input
+                placeholder="Password"
+                type="password"
+                id="password"
+                name="password"
+                required
+              />
+            </div>
+
+            {/* Submit Button */}
+            <button type="submit" className={styles.button}>
+              Submit
+            </button>
+
+            <div>
+              <div className={styles.ortitle}>
+                <div className={styles.grayline}></div>
+                <p className={styles.linetitle}>or</p>
+                <div className={styles.grayline}></div>
+              </div>
+
+              <h1 className={styles.subtitle}>
+                already have account ?{" "}
+                <span
+                  className={styles.linksubtitle}
+                  onClick={() => navigate("/login")}
+                >
+                  Sign In
+                </span>
+              </h1>
+            </div>
+
+            <div className={styles.bottomtitle}>
+              <p>BaShip</p>
+            </div>
+          </form>
         </div>
-
-        {/* Password Field */}
-        <div className={styles.field}>
-          <label htmlFor="password">Password</label>
-          <input type="password" id="password" name="password" required />
-        </div>
-
-        {/* Submit Button */}
-        <button type="submit" className={styles.button}>
-          Submit
-        </button>
-
-        <h1 className={styles.subtitle}>
-          already have account ?{" "}
-          <span
-            className={styles.linksubtitle}
-            onClick={() => navigate("/login")}
-          >
-            Login
-          </span>
-        </h1>
-      </form>
+      </div>
     </div>
   );
 };
