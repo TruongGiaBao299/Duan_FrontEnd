@@ -107,6 +107,14 @@
     border-bottom-left-radius: 10px;
   }
 
+  .togglePassword{
+    width: 20px;
+    height: 20px;
+    color: #fcc737;
+    position: absolute;
+    right: 140px;
+  }
+
   .bottomtitle {
     position: absolute;
     color: #fcc737;

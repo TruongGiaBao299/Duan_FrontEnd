@@ -1,30 +1,29 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import styles from "./Login.module.css";
-import Header from "../../layout/Header/Header";
 import { AuthContext } from "../../../context/auth.context";
 import { loginApi } from "../../../utils/userAPI/userAPI";
 import logo from "../../../assets/Logo.png";
 import { FaRegUserCircle } from "react-icons/fa";
 import { IoLockClosed } from "react-icons/io5";
+import { IoEyeOff, IoEye } from "react-icons/io5"; // Import icon mắt
+import { motion } from "framer-motion";
 
 const Login = () => {
   const navigate = useNavigate();
   const { setAuth } = useContext(AuthContext);
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleSubmit = async (event) => {
-    event.preventDefault(); // Prevent the default form submission behavior
-
-    const formData = new FormData(event.currentTarget); // Extract form data
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
     const email = formData.get("email");
     const password = formData.get("password");
 
     try {
-      const res = await loginApi(email, password); // Call login API
-      console.log("Login:", res);
+      const res = await loginApi(email, password);
       if (res && res.EC === 0) {
-        console.log(res);
         setAuth({
           isAuthenthicate: true,
           user: {
@@ -36,16 +35,10 @@ const Login = () => {
         localStorage.setItem("access_token", res.access_token);
         localStorage.setItem("name", res.user.name);
 
-        // Check if the user is an admin and navigate accordingly
-        if (res.user.role === "admin") {
-          navigate("/dashboard"); // Navigate to admin page if the user is admin
-        } else if (res.user.role === "driver") {
-          navigate("/driverhome"); // Navigate to admin page if the user is admin
-        } else if (res.user.role === "postoffice") {
-          navigate("/postofficehome"); // Navigate to admin page if the user is admin
-        } else {
-          navigate("/"); // Navigate to home for other users
-        }
+        if (res.user.role === "admin") navigate("/dashboard");
+        else if (res.user.role === "driver") navigate("/driverhome");
+        else if (res.user.role === "postoffice") navigate("/postofficehome");
+        else navigate("/");
 
         toast.success("Login successfully!");
       } else if (res && res.EC === 2) {
@@ -56,13 +49,17 @@ const Login = () => {
         toast.error("Error !");
       }
     } catch (error) {
-      console.error("Login error:", error);
       toast.error("An error occurred while logging in.");
     }
   };
 
   return (
-    <>
+    <motion.div
+      initial={{ opacity: 0, x: -50 }} 
+      animate={{ opacity: 1, x: 0 }} 
+      exit={{ opacity: 0, x: 50 }} 
+      transition={{ duration: 1 }}
+    >
       <div className={styles.container}>
         <div className={styles.content}>
           <div className={styles.leftcontent}>
@@ -98,11 +95,22 @@ const Login = () => {
                 <IoLockClosed className={styles.fieldlogo} />
                 <input
                   placeholder="Password"
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   id="password"
                   name="password"
                   required
                 />
+                {/* Nút show/hide password */}
+                <span
+                  className={styles.togglePassword}
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? (
+                    <IoEyeOff className={styles.togglePassword} />
+                  ) : (
+                    <IoEye className={styles.togglePassword} />
+                  )}
+                </span>
               </div>
 
               {/* Submit Button */}
@@ -118,7 +126,7 @@ const Login = () => {
                 </div>
 
                 <h1 className={styles.subtitle}>
-                  Don't have an account ?{" "}
+                  Don't have an account?{" "}
                   <span
                     className={styles.linksubtitle}
                     onClick={() => navigate("/register")}
@@ -135,7 +143,7 @@ const Login = () => {
           </div>
         </div>
       </div>
-    </>
+    </motion.div>
   );
 };
 
