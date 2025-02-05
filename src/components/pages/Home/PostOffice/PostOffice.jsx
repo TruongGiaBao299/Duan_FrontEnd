@@ -163,132 +163,133 @@ const PostOffice = () => {
 
   if (isLoading) {
     // Hiển thị trạng thái Loading
-    return <LoadingSpinner isLoading={isLoading}></LoadingSpinner>
+    return <LoadingSpinner isLoading={isLoading}></LoadingSpinner>;
   }
 
   return (
     <div className={styles.infocontainer}>
-      <div className={styles.infocontent}>
-        {/* Thanh tìm kiếm */}
-        <div className={styles.searchContainer}>
-          <input
-            type="text"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Tìm kiếm bưu cục..."
-            className={styles.searchInput}
-          />
+      {/* Thanh tìm kiếm */}
+      <div className={styles.searchContainer}>
+        <input
+          type="text"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          placeholder="Tìm kiếm bưu cục..."
+          className={styles.searchInput}
+        />
 
-          {/* From City */}
-          <div className={styles.FindOrderInput}>
-            <select
-              id="fromCity"
-              name="fromCity"
-              required
-              value={selectedFromCity}
-              onChange={(e) => setSelectedFromCity(e.target.value)}
-            >
-              <option value="">Select City</option>
-              {locationCity.map((city, index) => (
-                <option key={index} value={city}>
-                  {city}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          {/* From District */}
-          <div className={styles.FindOrderInput}>
-            <select
-              id="fromDistrict"
-              name="fromDistrict"
-              required
-              value={selectedFromDistrict}
-              onChange={(e) => setSelectedFromDistrict(e.target.value)}
-            >
-              <option value="">Select District</option>
-              {locationDistrictFrom.map((district, index) => (
-                <option key={index} value={district.name}>
-                  {district.name}
-                </option>
-              ))}
-            </select>
-          </div>
+        {/* From City */}
+        <div className={styles.FindOrderInput}>
+          <select
+            id="fromCity"
+            name="fromCity"
+            required
+            value={selectedFromCity}
+            onChange={(e) => setSelectedFromCity(e.target.value)}
+          >
+            <option value="">Select City</option>
+            {locationCity.map((city, index) => (
+              <option key={index} value={city}>
+                {city}
+              </option>
+            ))}
+          </select>
         </div>
-        {filteredData.length === 0 ? (
-          <p>Không có bưu cục nào phù hợp với yêu cầu của bạn.</p>
-        ) : (
-          filteredData.map((office, index) => (
-            <div
-              className={styles.infobox}
-              key={index}
-              onClick={() =>
-                handleDivClick(office.OfficeLatitude, office.OfficeLongitude)
-              }
-            >
-              <p>
-                <FaHome /> {office.OfficeName}
-              </p>
-              <p>
-                <FaPhoneAlt /> {office.OfficeHotline}
-              </p>
-              <p>
-                <FaLocationDot /> {office.OfficeAddress}, {office.OfficeWard},{" "}
-                {office.OfficeDistrict}, {office.OfficeCity}
-              </p>
-              {userCoordinates && (
-                <p>Distance: {(office.distance / 1000).toFixed(2)} km</p>
-              )}
-            </div>
-          ))
-        )}
+
+        {/* From District */}
+        <div className={styles.FindOrderInput}>
+          <select
+            id="fromDistrict"
+            name="fromDistrict"
+            required
+            value={selectedFromDistrict}
+            onChange={(e) => setSelectedFromDistrict(e.target.value)}
+          >
+            <option value="">Select District</option>
+            {locationDistrictFrom.map((district, index) => (
+              <option key={index} value={district.name}>
+                {district.name}
+              </option>
+            ))}
+          </select>
+        </div>
       </div>
-
-      <div className={styles.map}>
-        <MapContainer
-          center={mapCenter}
-          zoom={12}
-          style={{ height: "400px", width: "100%" }}
-        >
-          <TileLayer
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          />
-
-          {/* Cập nhật vị trí bản đồ khi người dùng click */}
-          {clickedLocation && (
-            <MapViewUpdater
-              latitude={clickedLocation.latitude}
-              longitude={clickedLocation.longitude}
+      <div className={styles.mapContainer}>
+        <div className={styles.map}>
+          <MapContainer
+            center={mapCenter}
+            zoom={12}
+            style={{ height: "400px", width: "100%" }}
+          >
+            <TileLayer
+              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             />
-          )}
 
-          {filteredData.map((office, index) => (
-            <Marker
-              key={index}
-              position={[office.OfficeLatitude, office.OfficeLongitude]}
-            >
-              <Popup>
-                <div>
-                  <p>
-                    <strong>
-                      <FaHome /> {office.OfficeName}
-                    </strong>
-                  </p>
-                  <p>
-                    <FaLocationDot /> {office.OfficeAddress},{" "}
-                    {office.OfficeWard}, {office.OfficeDistrict},{" "}
-                    {office.OfficeCity}
-                  </p>
-                  <p>
-                    <FaPhoneAlt /> {office.OfficeHotline}
-                  </p>
-                  <p>Khoảng cách: {(office.distance / 1000).toFixed(2)} km</p>
-                </div>
-              </Popup>
-            </Marker>
-          ))}
-        </MapContainer>
+            {/* Cập nhật vị trí bản đồ khi người dùng click */}
+            {clickedLocation && (
+              <MapViewUpdater
+                latitude={clickedLocation.latitude}
+                longitude={clickedLocation.longitude}
+              />
+            )}
+
+            {filteredData.map((office, index) => (
+              <Marker
+                key={index}
+                position={[office.OfficeLatitude, office.OfficeLongitude]}
+              >
+                <Popup>
+                  <div>
+                    <p>
+                      <strong>
+                        <FaHome /> {office.OfficeName}
+                      </strong>
+                    </p>
+                    <p>
+                      <FaLocationDot /> {office.OfficeAddress},{" "}
+                      {office.OfficeWard}, {office.OfficeDistrict},{" "}
+                      {office.OfficeCity}
+                    </p>
+                    <p>
+                      <FaPhoneAlt /> {office.OfficeHotline}
+                    </p>
+                    <p>Khoảng cách: {(office.distance / 1000).toFixed(2)} km</p>
+                  </div>
+                </Popup>
+              </Marker>
+            ))}
+          </MapContainer>
+        </div>
+        <div className={styles.infocontent}>
+          {filteredData.length === 0 ? (
+            <p>Không có bưu cục nào phù hợp với yêu cầu của bạn.</p>
+          ) : (
+            filteredData.map((office, index) => (
+              <div
+                className={styles.infobox}
+                key={index}
+                onClick={() =>
+                  handleDivClick(office.OfficeLatitude, office.OfficeLongitude)
+                }
+              >
+                <p>
+                  <FaHome /> {office.OfficeName}
+                </p>
+                <p>
+                  <FaPhoneAlt /> {office.OfficeHotline}
+                </p>
+                <p>
+                  <FaLocationDot /> {office.OfficeAddress}, {office.OfficeWard},{" "}
+                  {office.OfficeDistrict}, {office.OfficeCity}
+                </p>
+                {userCoordinates && (
+                  <p>Distance: {(office.distance / 1000).toFixed(2)} km</p>
+                )}
+              </div>
+            ))
+          )}
+        </div>
       </div>
     </div>
   );

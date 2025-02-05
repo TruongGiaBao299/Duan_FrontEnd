@@ -1,9 +1,30 @@
-.Container{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    margin-top: 100px;
+.container {
+  display: flex;
+  justify-content: space-between; /* Chia đều hai bên */
+  align-items: center; /* Căn giữa theo chiều dọc */
+  width: 100%;
+  max-width: 1200px; /* Điều chỉnh theo nhu cầu */
+  margin: 0 auto; /* Canh giữa trang */
+  padding: 20px;
+  gap: 50px; /* Khoảng cách giữa ảnh và form */
+}
+
+.img {
+  flex: 1; /* Chia đều không gian */
+  display: flex;
+  justify-content: center;
+}
+
+.image {
+  max-width: 100%;
+  height: 350px;
+}
+
+.formContent {
+  flex: 1; /* Chia đều không gian */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .Content{
@@ -11,8 +32,6 @@
     flex-direction: column;
     align-items: center;
     gap: 20px;
-    border: 1px solid black;
-    border-radius: 20px;
     padding: 20px;
 }
 
@@ -36,17 +55,17 @@
 
 .SearchPriceInput select{
     padding: 10px;
-    width: 525px;
+    width: 325px;
 }
 
 .SearchPriceInput input{
     padding: 10px;
-    width: 500px;
+    width: 300px;
 }
 
 .SearchPriceInputBot input{
     padding: 10px;
-    width: 325px;
+    width: 192px;
     color: black;
 }
 

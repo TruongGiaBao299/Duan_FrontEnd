@@ -9,7 +9,7 @@
   display: flex;
   flex-direction: column;
   max-height: 400px; 
-  width: 400px;
+  width: 300px;
   overflow-y: auto; 
   border: 1px solid black;
   scrollbar-width: none; /* Ẩn thanh cuộn trên Firefox */
@@ -23,20 +23,30 @@
 
 .infocontainer {
   display: flex;
-  gap: 20px;
+  flex-direction: column;;
   align-items: center;
   justify-content: center;
-  margin-top: 100px;
-  
+  padding: 50px;
+}
+
+.mapContainer {
+  display: flex;
+  flex-direction: row;;
+  align-items: center;
+  justify-content: center;
 }
 
 .infobox{
-  width: 400px;
+  width: 300px;
+}
+
+.infobox p{
+  font-size: 15px;
 }
 
 .map {
   height: 100%; /* Ensure this is enough to display the map */
-  width: 1000px; /* Set full width */
+  width: 720px; /* Set full width */
 }
 
 .searchContainer{
@@ -45,11 +55,11 @@
 }
 
 .searchContainer input{
-  padding: 5px;
-  width: 400px;
+  padding: 10px;
+  width: 1000px;
 }
 
 .FindOrderInput select{
-  padding: 5px;
-  width: 400px;
+  padding: 10px;
+  width: 1024px;
 }

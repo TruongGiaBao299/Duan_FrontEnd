@@ -5,6 +5,7 @@ import styles from "./SearchPrice.module.css";
 import { getLocationAPI } from "../../../../utils/locationAPI/locationAPI";
 import { SearchPriceApi } from "../../../../utils/orderAPI/orderAPI";
 import LoadingSpinner from "../../../../containers/LoadingSpinner/LoadingSpinner";
+import stmImage from "../../../../../public/7.jpg";
 
 const SearchPrice = () => {
   const [orderInfo, setOrderInfo] = useState(null); // Store order information
@@ -151,208 +152,217 @@ const SearchPrice = () => {
     }
   };
 
-  {isLoading && <LoadingSpinner />}
+  {
+    isLoading && <LoadingSpinner />;
+  }
 
   return (
-    <div className={styles.Container}>
-      <form onSubmit={handleSubmit}>
-        <div className={styles.Content}>
-          <div className={styles.TopContainer}>
-            {/* From City */}
-            <div className={styles.TopLeftContainer}>
-              <div className={styles.SearchPriceInput}>
-                <select
-                  id="fromCity"
-                  name="fromCity"
-                  required
-                  value={selectedFromCity}
-                  onChange={(e) => setSelectedFromCity(e.target.value)}
-                >
-                  <option value="">Select From City</option>
-                  {locationCity.map((city, index) => (
-                    <option key={index} value={city}>
-                      {city}
-                    </option>
-                  ))}
-                </select>
+    <div className={styles.container}>
+      <div className={styles.img}>
+              <img src={stmImage} alt="STM intro" className={styles.image} />
+            </div>
+      <div className={styles.formContent}>
+        <form onSubmit={handleSubmit}>
+          <div className={styles.Content}>
+            <div className={styles.TopContainer}>
+              {/* From City */}
+              <div className={styles.TopLeftContainer}>
+                <label className={styles.Label}>Sent from:</label>
+                <div className={styles.SearchPriceInput}>
+                  <select
+                    id="fromCity"
+                    name="fromCity"
+                    required
+                    value={selectedFromCity}
+                    onChange={(e) => setSelectedFromCity(e.target.value)}
+                  >
+                    <option value="">Select From City</option>
+                    {locationCity.map((city, index) => (
+                      <option key={index} value={city}>
+                        {city}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* From District */}
+                <div className={styles.SearchPriceInput}>
+                  <select
+                    id="fromDistrict"
+                    name="fromDistrict"
+                    required
+                    value={selectedFromDistrict}
+                    onChange={(e) => setSelectedFromDistrict(e.target.value)}
+                  >
+                    <option value="">Select From District</option>
+                    {locationDistrictFrom.map((district, index) => (
+                      <option key={index} value={district.name}>
+                        {district.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* From Ward */}
+                <div className={styles.SearchPriceInput}>
+                  <select id="fromWard" name="fromWard" required>
+                    <option value="">Select From Ward</option>
+                    {locationWardFrom.map((ward, index) => (
+                      <option key={index} value={ward.name}>
+                        {ward.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className={styles.SearchPriceInput}>
+                  <input
+                    placeholder="From Address"
+                    type="text"
+                    id="fromAddress"
+                    name="fromAddress"
+                    required
+                  />
+                </div>
               </div>
 
-              {/* From District */}
-              <div className={styles.SearchPriceInput}>
-                <select
-                  id="fromDistrict"
-                  name="fromDistrict"
-                  required
-                  value={selectedFromDistrict}
-                  onChange={(e) => setSelectedFromDistrict(e.target.value)}
-                >
-                  <option value="">Select From District</option>
-                  {locationDistrictFrom.map((district, index) => (
-                    <option key={index} value={district.name}>
-                      {district.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
+              {/* To City */}
+              <div className={styles.TopRightContainer}>
+                <label className={styles.Label}>Get from:</label>
+                <div className={styles.SearchPriceInput}>
+                  <select
+                    id="toCity"
+                    name="toCity"
+                    required
+                    value={selectedToCity}
+                    onChange={(e) => setSelectedToCity(e.target.value)}
+                  >
+                    <option value="">Select To City</option>
+                    {locationCity.map((city, index) => (
+                      <option key={index} value={city}>
+                        {city}
+                      </option>
+                    ))}
+                  </select>
+                </div>
 
-              {/* From Ward */}
-              <div className={styles.SearchPriceInput}>
-                <select id="fromWard" name="fromWard" required>
-                  <option value="">Select From Ward</option>
-                  {locationWardFrom.map((ward, index) => (
-                    <option key={index} value={ward.name}>
-                      {ward.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
+                {/* To District */}
+                <div className={styles.SearchPriceInput}>
+                  <select
+                    id="toDistrict"
+                    name="toDistrict"
+                    required
+                    value={selectedToDistrict}
+                    onChange={(e) => setSelectedToDistrict(e.target.value)}
+                  >
+                    <option value="">Select To District</option>
+                    {locationDistrictTo.map((district, index) => (
+                      <option key={index} value={district.name}>
+                        {district.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
 
-              <div className={styles.SearchPriceInput}>
+                {/* To Ward */}
+                <div className={styles.SearchPriceInput}>
+                  <select id="toWard" name="toWard" required>
+                    <option value="">Select To Ward</option>
+                    {locationWardTo.map((ward, index) => (
+                      <option key={index} value={ward.name}>
+                        {ward.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className={styles.SearchPriceInput}>
+                  <input
+                    placeholder="To Address"
+                    type="text"
+                    id="toAddress"
+                    name="toAddress"
+                    required
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className={styles.BotContainer}>
+              <div className={styles.SearchPriceInputBot}>
                 <input
-                  placeholder="From Address"
+                  type="number"
+                  id="orderWeight"
+                  name="orderWeight"
+                  step="0.1"
+                  required
+                  placeholder="Order Weight"
+                />
+              </div>
+
+              <div className={styles.SearchPriceInputBot}>
+                <input
+                  type="number"
+                  id="orderSize"
+                  name="orderSize"
+                  step="0.01"
+                  required
+                  placeholder="Order Size"
+                />
+              </div>
+
+              <div className={styles.SearchPriceInputBot}>
+                <input
                   type="text"
-                  id="fromAddress"
-                  name="fromAddress"
+                  id="type"
+                  name="type"
+                  placeholder="Type"
                   required
                 />
               </div>
             </div>
 
-            {/* To City */}
-            <div className={styles.TopRightContainer}>
-              <div className={styles.SearchPriceInput}>
-                <select
-                  id="toCity"
-                  name="toCity"
-                  required
-                  value={selectedToCity}
-                  onChange={(e) => setSelectedToCity(e.target.value)}
-                >
-                  <option value="">Select To City</option>
-                  {locationCity.map((city, index) => (
-                    <option key={index} value={city}>
-                      {city}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              {/* To District */}
-              <div className={styles.SearchPriceInput}>
-                <select
-                  id="toDistrict"
-                  name="toDistrict"
-                  required
-                  value={selectedToDistrict}
-                  onChange={(e) => setSelectedToDistrict(e.target.value)}
-                >
-                  <option value="">Select To District</option>
-                  {locationDistrictTo.map((district, index) => (
-                    <option key={index} value={district.name}>
-                      {district.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              {/* To Ward */}
-              <div className={styles.SearchPriceInput}>
-                <select id="toWard" name="toWard" required>
-                  <option value="">Select To Ward</option>
-                  {locationWardTo.map((ward, index) => (
-                    <option key={index} value={ward.name}>
-                      {ward.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div className={styles.SearchPriceInput}>
-                <input
-                  placeholder="To Address"
-                  type="text"
-                  id="toAddress"
-                  name="toAddress"
-                  required
-                />
-              </div>
+            <div className={styles.SearchPriceSubmit}>
+              <button type="submit" disabled={isLoading}>
+                Submit
+              </button>
             </div>
           </div>
+        </form>
 
-          <div className={styles.BotContainer}>
-            <div className={styles.SearchPriceInputBot}>
-              <input
-                type="number"
-                id="orderWeight"
-                name="orderWeight"
-                step="0.1"
-                required
-                placeholder="Order Weight"
-              />
-            </div>
-
-            <div className={styles.SearchPriceInputBot}>
-              <input
-                type="number"
-                id="orderSize"
-                name="orderSize"
-                step="0.01"
-                required
-                placeholder="Order Size"
-              />
-            </div>
-
-            <div className={styles.SearchPriceInputBot}>
-              <input
-                type="text"
-                id="type"
-                name="type"
-                placeholder="Type"
-                required
-              />
-            </div>
-          </div>
-
-          <div className={styles.SearchPriceSubmit}>
-            <button type="submit" disabled={isLoading}>
-              Submit
-            </button>
-          </div>
-        </div>
-      </form>
-
-      {/* Display order info */}
-      {showPopup && orderInfo ? (
-        <div
-          className={styles.popupOverlay}
-          onClick={() => setShowPopup(false)}
-        >
+        {/* Display order info */}
+        {showPopup && orderInfo ? (
           <div
-            className={styles.popupContent}
-            onClick={(e) => e.stopPropagation()}
+            className={styles.popupOverlay}
+            onClick={() => setShowPopup(false)}
           >
-            <button
-              className={styles.closeButton}
-              onClick={() => setShowPopup(false)}
+            <div
+              className={styles.popupContent}
+              onClick={(e) => e.stopPropagation()}
             >
-              x
-            </button>
-            <h2>Order Information</h2>
-            <p>
-              <strong>Distance:</strong> {orderInfo.distance || "N/A"} km
-            </p>
-            <p>
-              <strong>Price:</strong> {orderInfo.price || "N/A"} VND
-            </p>
-            <p>
-              <strong>Estimated Delivery Time:</strong>{" "}
-              {orderInfo.estimatedDeliveryTime || "N/A"}
-            </p>
+              <button
+                className={styles.closeButton}
+                onClick={() => setShowPopup(false)}
+              >
+                x
+              </button>
+              <h2>Order Information</h2>
+              <p>
+                <strong>Distance:</strong> {orderInfo.distance || "N/A"} km
+              </p>
+              <p>
+                <strong>Price:</strong> {orderInfo.price || "N/A"} VND
+              </p>
+              <p>
+                <strong>Estimated Delivery Time:</strong>{" "}
+                {orderInfo.estimatedDeliveryTime || "N/A"}
+              </p>
+            </div>
           </div>
-        </div>
-      ) : (
-        <p></p>
-      )}
+        ) : (
+          <p></p>
+        )}
+      </div>
     </div>
   );
 };

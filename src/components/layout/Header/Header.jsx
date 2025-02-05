@@ -62,8 +62,12 @@ const Header = () => {
         <nav className={styles.navLinks}>
           {isLoggedIn ? (
             <>
+              <img className={styles.img} src="logo.png"></img>
               <span className={styles.greeting}>Hello, {username}!</span>
               <button onClick={() => navigate("/")}>Home</button>
+              <button onClick={() => navigate("/becomedriver")}>Driver</button>
+              <button onClick={() => navigate("/becomepostoffice")}>PostOffice</button>
+              <button onClick={() => navigate("/service")}>Service</button>
               <button onClick={() => navigate("/contact")}>Contact</button>
               <button onClick={() => navigate("/vieworder")}>
                 <MdOutlineLocalShipping />
@@ -107,17 +111,15 @@ const Header = () => {
             </>
           ) : (
             <>
+              <img className={styles.img} src="logo.png"></img>
               <button onClick={() => navigate("/")}>Home</button>
+              <button onClick={() => navigate("/becomedriver")}>Driver</button>
+              <button onClick={() => navigate("/becomepostoffice")}>PostOffice</button>
+              <button onClick={() => navigate("/service")}>Service</button>
               <button onClick={() => navigate("/contact")}>Contact</button>
-              <input
-                className={styles.searchbar}
-                type="text"
-                placeholder="Search"
-              />
               <div className={styles.signup}>
-                <button onClick={() => navigate("/login")}>Login</button>
-                <div>/</div>
-                <button onClick={() => navigate("/register")}>Register</button>
+                <button className={styles.login} onClick={() => navigate("/login")}>Login</button>
+                <button className={styles.register} onClick={() => navigate("/register")}>Register</button>
               </div>
             </>
           )}

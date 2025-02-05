@@ -10,6 +10,7 @@ import { getLocationAPI } from "../../../../utils/locationAPI/locationAPI";
 import { getPostOfficeApi } from "../../../../utils/postOfficeAPI/postOfficeAPI";
 import styles from "./BecomeDriver.module.css";
 import LoadingSpinner from "../../../../containers/LoadingSpinner/LoadingSpinner";
+import stmImage from "../../../../../public/5.jpg";
 
 const BecomeDriver = () => {
   const navigate = useNavigate();
@@ -208,150 +209,162 @@ const BecomeDriver = () => {
     }
   }, [selectedFromCity, data]);
 
-  {isLoading && <LoadingSpinner />}
+  {
+    isLoading && <LoadingSpinner />;
+  }
 
   return (
-    <div className={styles.Container}>
-      {loading ? (
-        <p>Loading...</p>
-      ) : isAlreadySubmitted ? ( // Kiểm tra nếu đã nộp
-        <p className={styles.Alert}>Your request has been sent, please wait for us to review.</p>
-      ) : (
-        <form onSubmit={handleSubmit}>
-          <div className={styles.FormContainer}>
-            <div>
-              <label htmlFor="">1. Personal information</label>
-            </div>
-
-            <div className={styles.PersonalInfo}>
-              <p>a. Driver Full name:</p>
-              <div className={styles.PersonalInfoInput}>
-                <input
-                  placeholder="DriverName"
-                  type="text"
-                  id="driverName"
-                  name="driverName"
-                  required
-                />
+    <div className={styles.container}>
+      <div className={styles.content}>
+        {loading ? (
+          <p>Loading...</p>
+        ) : isAlreadySubmitted ? ( // Kiểm tra nếu đã nộp
+          <p className={styles.alert}>
+            Your request has been sent, please wait for us to review.
+          </p>
+        ) : (
+          <form onSubmit={handleSubmit}>
+            <div className={styles.formContainer}>
+              <h1 className={styles.title}>
+                Register to become a BaShip driver
+              </h1>
+              <div className={styles.label}>
+                <label htmlFor="">1. Personal information</label>
               </div>
 
-              <div className={styles.PersonalInfoInput}>
-                <p>b. Driver Phone Number:</p>
-                <input
-                  placeholder="DriverNumber"
-                  type="text"
-                  id="driverNumber"
-                  name="driverNumber"
-                  required
-                />
-              </div>
-
-              <div className={styles.PersonalInfoInput}>
-                <p>c. Driver Date of Birth:</p>
-                <input
-                  placeholder="DriverBirth"
-                  type="text"
-                  id="driverBirth"
-                  name="driverBirth"
-                  required
-                />
-              </div>
-
-              <div className={styles.PersonalInfoInput}>
-                <p>d. Driver ID:</p>
-                <input
-                  placeholder="DriverId"
-                  type="text"
-                  id="driverId"
-                  name="driverId"
-                  required
-                />
-              </div>
-
-              <div className={styles.PersonalInfoInput}>
-                <p>e. Driver Address</p>
-                <input
-                  placeholder="DriverAddress"
-                  type="text"
-                  id="driverAddress"
-                  name="driverAddress"
-                  required
-                />
-              </div>
-
-              <div className={styles.PersonalInfoAddress}>
-                {/* From City */}
-                <div className={styles.PersonalInfoInput}>
-                  <select
-                    id="driverCity"
-                    name="driverCity"
+              <div className={styles.personalInfo}>
+                <p>a. Driver Full name:</p>
+                <div className={styles.personalInfoInput}>
+                  <input
+                    placeholder="DriverName"
+                    type="text"
+                    id="driverName"
+                    name="driverName"
                     required
-                    value={selectedFromCity}
-                    onChange={(e) => setSelectedFromCity(e.target.value)}
-                  >
-                    <option value="">Select City</option>
-                    {locationCity.map((city, index) => (
-                      <option key={index} value={city}>
-                        {city}
-                      </option>
-                    ))}
-                  </select>
+                  />
                 </div>
 
-                {/* From District */}
-                <div className={styles.PersonalInfoInput}>
-                  <select
-                    id="driverDistrict"
-                    name="driverDistrict"
+                <div className={styles.personalInfoInput}>
+                  <p>b. Driver Phone Number:</p>
+                  <input
+                    placeholder="DriverNumber"
+                    type="text"
+                    id="driverNumber"
+                    name="driverNumber"
                     required
-                    value={selectedFromDistrict}
-                    onChange={(e) => setSelectedFromDistrict(e.target.value)}
-                  >
-                    <option value="">Select District</option>
-                    {locationDistrictFrom.map((district, index) => (
-                      <option key={index} value={district.name}>
-                        {district.name}
-                      </option>
-                    ))}
-                  </select>
+                  />
                 </div>
 
-                {/* From Ward */}
-                <div className={styles.PersonalInfoInput}>
-                  <select id="driverWard" name="driverWard" required>
-                    <option value="">Select Ward</option>
-                    {locationWardFrom.map((ward, index) => (
-                      <option key={index} value={ward.name}>
-                        {ward.name}
-                      </option>
-                    ))}
-                  </select>
+                <div className={styles.personalInfoInput}>
+                  <p>c. Driver Date of Birth:</p>
+                  <input
+                    placeholder="DriverBirth"
+                    type="text"
+                    id="driverBirth"
+                    name="driverBirth"
+                    required
+                  />
+                </div>
+
+                <div className={styles.personalInfoInput}>
+                  <p>d. Driver ID:</p>
+                  <input
+                    placeholder="DriverId"
+                    type="text"
+                    id="driverId"
+                    name="driverId"
+                    required
+                  />
+                </div>
+
+                <div className={styles.personalInfoInput}>
+                  <p>e. Driver Address</p>
+                  <input
+                    placeholder="DriverAddress"
+                    type="text"
+                    id="driverAddress"
+                    name="driverAddress"
+                    required
+                  />
+                </div>
+
+                <div className={styles.personalInfoAddress}>
+                  {/* From City */}
+                  <div className={styles.personalInfoInput}>
+                    <select
+                      id="driverCity"
+                      name="driverCity"
+                      required
+                      value={selectedFromCity}
+                      onChange={(e) => setSelectedFromCity(e.target.value)}
+                    >
+                      <option value="">Select City</option>
+                      {locationCity.map((city, index) => (
+                        <option key={index} value={city}>
+                          {city}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  {/* From District */}
+                  <div className={styles.personalInfoInput}>
+                    <select
+                      id="driverDistrict"
+                      name="driverDistrict"
+                      required
+                      value={selectedFromDistrict}
+                      onChange={(e) => setSelectedFromDistrict(e.target.value)}
+                    >
+                      <option value="">Select District</option>
+                      {locationDistrictFrom.map((district, index) => (
+                        <option key={index} value={district.name}>
+                          {district.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  {/* From Ward */}
+                  <div className={styles.personalInfoInput}>
+                    <select id="driverWard" name="driverWard" required>
+                      <option value="">Select Ward</option>
+                      {locationWardFrom.map((ward, index) => (
+                        <option key={index} value={ward.name}>
+                          {ward.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
                 </div>
               </div>
-            </div>
 
-            <div>
-              <label htmlFor="">2. Choose your Post Office</label>
-            </div>
+              <div className={styles.label}>
+                <label htmlFor="">2. Choose your Post Office</label>
+              </div>
 
-            <div className={styles.PersonalInfoSelect}>
-              <select id="postOffice" name="postOffice" required>
-                <option value="">Select Post Office</option>
-                {filteredPostOffices.map((postOffice, index) => (
-                  <option key={index} value={postOffice.email}>
-                    {postOffice.OfficeName}
-                  </option>
-                ))}
-              </select>
-            </div>
+              <div className={styles.personalInfoSelect}>
+                <select id="postOffice" name="postOffice" required>
+                  <option value="">Select Post Office</option>
+                  {filteredPostOffices.map((postOffice, index) => (
+                    <option key={index} value={postOffice.email}>
+                      {postOffice.OfficeName}
+                    </option>
+                  ))}
+                </select>
+              </div>
 
-            {/* Nút Submit */}
-            <div className={styles.PersonalInfoSubmit}>
-              <button type="submit">Submit</button>
+              {/* Nút Submit */}
+              <div className={styles.personalInfoSubmit}>
+                <button type="submit">Submit</button>
+              </div>
             </div>
-          </div>
-        </form>
-      )}
+          </form>
+        )}
+      </div>
+      <div className={styles.img}>
+        <img src={stmImage} alt="STM intro" className={styles.image} />
+      </div>
     </div>
   );
 };

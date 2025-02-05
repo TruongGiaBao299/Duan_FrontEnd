@@ -1,54 +1,70 @@
-.Container{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
+.container {
+  display: flex;
+  justify-content: row;
+  align-items: center;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 50px;
+  gap: 100px;
 }
 
-.FormContainer{
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    border: 1px solid black;
-    border-radius: 20px;
-    padding: 20px;
+.content {
+  flex: 1;
+  padding-right: 20px;
 }
 
-.PostInfoAddress{
-    display: flex;
-    flex-direction: row;
-    gap: 10px;
+.img {
+  flex: 1;
+  display: flex;
+  justify-content: center;
 }
 
-.PostInfo{
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+.image {
+  max-width: 120%;
+  height: 800px;
 }
 
-.PostInput select{
-    padding: 10px;
-    width: 235px;
+.formContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
 }
 
-.PostInput input{
-    padding: 10px;
-    width: 700px;
+.postInfoAddress {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
 }
 
-.PostSubmit button{
-    padding: 10px 20px;
-    background-color: yellow;
-    cursor: pointer;
+.postInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
 }
 
-.PostSubmit button:hover{
-    background-color: lightgreen;
+.postInput select {
+  padding: 10px;
+  width: 185px;
 }
 
-.Alert{
-    color: red;
-    background-color: lightgray;
-    padding: 20px 200px;
+.postInput input {
+  padding: 10px;
+  width: 550px;
+}
+
+.postSubmit button {
+  padding: 10px 20px;
+  background-color: yellow;
+  cursor: pointer;
+}
+
+.postSubmit button:hover {
+  background-color: lightgreen;
+}
+
+.alert {
+  color: red;
+  background-color: lightgray;
+  padding: 20px 200px;
 }

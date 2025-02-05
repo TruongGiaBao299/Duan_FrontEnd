@@ -1,7 +1,12 @@
 .header {
-  background-color: #333;
   color: #fff;
-  padding: 20px;
+  background-color: #000;
+  padding: 1rem 0;
+}
+
+.img {
+  width: 65px;
+  height: 50px;
 }
 
 .toolbar {
@@ -44,17 +49,31 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: white;
-  color: black;
-  border-radius: 10px;
-  padding: 10px;
+  color: #ffffff;
+  gap: 20px;
 
-  button {
-    background: none;
-    border: none;
-    color: black;
-    font-size: 1rem;
+  .login{
+    color: #ffffff;
+  }
+
+  .login:hover{
+    color: #FCC737;
+  }
+  
+  .register{
+    color: #FCC737;
+    padding: 8px 16px; 
+    border: 1px solid #FCC737; 
+    border-radius: 4px; 
     cursor: pointer;
+    transition: all 0.3s ease; 
+    background-color: transparent; 
+  }
+
+  .register:hover{
+    background-color: #FFF574; 
+    color: black; 
+    border-color: #FFF574; 
   }
 }
 

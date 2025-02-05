@@ -20,6 +20,9 @@ import DriverHomePage from "./components/pages/DriverHomePage/DriverHomePage";
 import ViewHistoryPage from "./components/pages/ViewHistoryPage/ViewHistoryPage";
 import PostOfficeHomePage from "./components/pages/PostOfficeHomePage/PostOfficeHomePage";
 import UpdatePassword from "./containers/UpdatePassword/UpdatePassword";
+import ServicePage from "./components/pages/ServicePage/ServicePage";
+import BecomeDriverPage from "./components/pages/BecomeDriverPage/BecomeDriverPage";
+import BecomePostOfficePage from "./components/pages/BecomePostOfficePage/BecomePostOfficePage";
 
 function App() {
   const { setAuth, appLoading, setAppLoading } = useContext(AuthContext);
@@ -65,6 +68,9 @@ function App() {
             <Route path="/driverhome" element={<DriverHomePage></DriverHomePage>}></Route>
             <Route path="/postofficehome" element={<PostOfficeHomePage></PostOfficeHomePage>}></Route>
             <Route path="/updatepassword" element={<UpdatePassword></UpdatePassword>}></Route>
+            <Route path="/service" element={<ServicePage></ServicePage>}></Route>
+            <Route path="/becomedriver" element={<BecomeDriverPage></BecomeDriverPage>}></Route>
+            <Route path="/becomepostoffice" element={<BecomePostOfficePage></BecomePostOfficePage>}></Route>
           </Routes>
         </BrowserRouter>
     </>

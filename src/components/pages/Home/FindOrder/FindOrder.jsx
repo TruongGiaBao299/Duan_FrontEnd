@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { getOrderByIdApi } from "../../../../utils/orderAPI/orderAPI";
 import styles from "./FindOrder.module.css";
 import LoadingSpinner from "../../../../containers/LoadingSpinner/LoadingSpinner";
+import { GoArrowUpRight } from "react-icons/go";
+import containerImage from "../../../../../public/container.jpg";
 
 const FindOrder = () => {
   const [orderInfo, setOrderInfo] = useState(null);
@@ -39,29 +41,64 @@ const FindOrder = () => {
     }
   };
 
-  {isLoading && <LoadingSpinner />}
+  {
+    isLoading && <LoadingSpinner />;
+  }
 
   return (
     <div className={styles.FindOrderContainer}>
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="">Find Order</label>
-        <p htmlFor=""> ( Enter Order ID to check Order information )</p>
-        <div className={styles.FindOrderInputContainer}>
-          <div className={styles.FindOrderInput}>
-            <input
-              placeholder="Find Order by Enter Order Code"
-              type="text"
-              id="orderId"
-              name="orderId"
-              required
+      <div className={styles.container}>
+        <main className={styles.main}>
+          <div className={styles.content}>
+            <h1 className={styles.title}>
+              Freight transportation with full insurance and{" "}
+              <span className={styles.highlight}>real-time tracking</span>
+            </h1>
+            <form onSubmit={handleSubmit}>
+              <div className={styles.findOrderInputContainer}>
+                <div className={styles.findOrderInput}>
+                  <input
+                    placeholder="Tracking Number"
+                    type="text"
+                    id="orderId"
+                    name="orderId"
+                    required
+                  />
+                </div>
+                <div className={styles.findOrderSubmit}>
+                  <button type="submit">
+                    <GoArrowUpRight />
+                  </button>
+                </div>
+              </div>
+            </form>
+
+            <div className={styles.stats}>
+              <div className={styles.stat}>
+                <span className={styles.statValue}>1.2 days</span>
+                <span className={styles.statLabel}>Average delivery time</span>
+              </div>
+              <div className={styles.stat_center}>
+                <span className={styles.statValue}>+2.3k</span>
+                <span className={styles.statLabel}>
+                  Orders up from last year
+                </span>
+              </div>
+              <div className={styles.stat}>
+                <span className={styles.statValue}>85%</span>
+                <span className={styles.statLabel}>Return rate</span>
+              </div>
+            </div>
+          </div>
+          <div className={styles.imageContainer}>
+            <img
+              src={containerImage}
+              alt="Shipping Container"
+              className={styles.containerImage}
             />
           </div>
-
-          <div className={styles.FindOrderSubmit}>
-            <button type="submit">Submit</button>
-          </div>
-        </div>
-      </form>
+        </main>
+      </div>
 
       {/* Popup hiển thị thông tin đơn hàng */}
       {showPopup && orderInfo && (
