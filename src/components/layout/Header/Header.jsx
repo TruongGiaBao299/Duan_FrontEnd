@@ -5,16 +5,17 @@ import { toast } from "react-toastify";
 import { AuthContext } from "../../../context/auth.context";
 import { MdOutlineLocalShipping } from "react-icons/md";
 import { getOrderByEmailApi } from "../../../utils/orderAPI/orderAPI";
-import { FaHistory } from "react-icons/fa";
+import { FaUserCircle, FaHistory } from "react-icons/fa";
+import UpdatePassword from "../../../containers/UpdatePassword/UpdatePassword";
 
 const Header = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [username, setUsername] = useState("");
   const [orderCount, setOrderCount] = useState(0);
-  const [coordinates, setCoordinates] = useState({ latitude: null, longitude: null }); // Tọa độ
+  const [showDropdown, setShowDropdown] = useState(false);
+  const [showChangePasswordPopup, setShowChangePasswordPopup] = useState(false);
   const navigate = useNavigate();
   const { auth, setAuth } = useContext(AuthContext);
-  console.log("check auth: ", auth);
 
   useEffect(() => {
     const token = localStorage.getItem("access_token");
@@ -29,42 +30,12 @@ const Header = () => {
     }
   }, [auth]);
 
-  useEffect(() => {
-    const fetchCoordinates = () => {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-          (position) => {
-            const { latitude, longitude } = position.coords;
-            setCoordinates({ latitude, longitude });
-            console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
-          },
-          (error) => {
-            console.error("Error getting location:", error);
-            toast.error("Unable to fetch location. Please enable location services.");
-          },
-          {
-            enableHighAccuracy: true,
-            timeout: 1000000,
-            maximumAge: 0,
-          }
-        );
-      } else {
-        toast.error("Geolocation is not supported by this browser.");
-      }
-    };
-
-    fetchCoordinates();
-  }, []);
-
   const fetchUserOrders = async (email) => {
     try {
       const orders = await getOrderByEmailApi(email);
-      console.log("Header order: ", orders);
-
       const pendingOrders = orders.filter(
         (order) => order.status === "pending" || order.status === "is shipping"
       );
-
       setOrderCount(pendingOrders.length);
     } catch (error) {
       console.error("Error fetching orders:", error);
@@ -77,20 +48,12 @@ const Header = () => {
     setIsLoggedIn(false);
     setAuth({
       isAuthenthicate: false,
-      user: {
-        email: "",
-        name: "",
-        role: "",
-      },
+      user: { email: "", name: "", role: "" },
     });
 
-    navigateTo("/");
+    navigate("/");
     window.location.reload();
     toast.success("Logged out successfully!");
-  };
-
-  const navigateTo = (path) => {
-    navigate(path);
   };
 
   return (
@@ -100,38 +63,71 @@ const Header = () => {
           {isLoggedIn ? (
             <>
               <span className={styles.greeting}>Hello, {username}!</span>
-              <button onClick={() => navigateTo("/")}>Home</button>
-              <button onClick={() => navigateTo("/contact")}>Contact</button>
-              <input className={styles.searchbar} type="text" placeholder="Search" />
-              <button onClick={() => navigateTo("/vieworder")}>
+              <button onClick={() => navigate("/")}>Home</button>
+              <button onClick={() => navigate("/contact")}>Contact</button>
+              <button onClick={() => navigate("/vieworder")}>
                 <MdOutlineLocalShipping />
                 {orderCount > 0 && <span>{orderCount}</span>}
               </button>
-              <button onClick={() => navigateTo("/viewhistory")}>
+              <button onClick={() => navigate("/viewhistory")}>
                 <FaHistory />
               </button>
-              <button onClick={handleLogout}>Logout</button>
-              {/* {coordinates.latitude && coordinates.longitude && (
-                <div className={styles.coordinates}>
-                  <p>Latitude: {coordinates.latitude}</p>
-                  <p>Longitude: {coordinates.longitude}</p>
-                </div>
-              )} */}
+
+              {/* Nút User Icon để mở dropdown */}
+              <div className={styles.userMenu}>
+                <button onClick={() => setShowDropdown(!showDropdown)}>
+                  <FaUserCircle />
+                </button>
+
+                {/* Dropdown box */}
+                {showDropdown && (
+                  <div className={styles.dropdown}>
+                    <p>
+                      <strong>User Name: </strong>
+                      {auth.user.name}
+                    </p>
+                    <hr />
+                    <p>
+                      <strong>Email: </strong>
+                      {auth.user.email}
+                    </p>
+                    <hr />
+                    <button
+                      onClick={() => {
+                        setShowDropdown(false);
+                        setShowChangePasswordPopup(true);
+                      }}
+                    >
+                      Change Password
+                    </button>
+                    <button onClick={handleLogout}>Logout</button>
+                  </div>
+                )}
+              </div>
             </>
           ) : (
             <>
-              <button onClick={() => navigateTo("/")}>Home</button>
-              <button onClick={() => navigateTo("/contact")}>Contact</button>
-              <input className={styles.searchbar} type="text" placeholder="Search" />
+              <button onClick={() => navigate("/")}>Home</button>
+              <button onClick={() => navigate("/contact")}>Contact</button>
+              <input
+                className={styles.searchbar}
+                type="text"
+                placeholder="Search"
+              />
               <div className={styles.signup}>
-                <button onClick={() => navigateTo("/login")}>Login</button>
+                <button onClick={() => navigate("/login")}>Login</button>
                 <div>/</div>
-                <button onClick={() => navigateTo("/register")}>Register</button>
+                <button onClick={() => navigate("/register")}>Register</button>
               </div>
             </>
           )}
         </nav>
       </div>
+
+      {/* Popup Change Password */}
+      {showChangePasswordPopup && (
+        <UpdatePassword onClose={() => setShowChangePasswordPopup(false)} />
+      )}
     </header>
   );
 };

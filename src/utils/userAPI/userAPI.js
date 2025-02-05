@@ -48,3 +48,11 @@ export const makePostOfficeApi = (email) => {
 
   return axios.post(URL_API);
 };
+
+// Cập nhật mật khẩu
+export const updatePasswordApi = (oldPassword, newPassword) => {
+  const URL_API = "/user/updatepassword";
+  const data = { oldPassword, newPassword };
+
+  return axios.put(URL_API, data);
+};
