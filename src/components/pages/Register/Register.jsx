@@ -27,7 +27,6 @@ const Register = () => {
       if (res && res.data === null) {
         toast.error("Email has been registered!");
       } else {
-        navigate("/");
         toast.success("Registered successfully!");
       }
     } catch (error) {

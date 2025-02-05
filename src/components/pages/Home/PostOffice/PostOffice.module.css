@@ -9,8 +9,16 @@
   display: flex;
   flex-direction: column;
   max-height: 400px; 
+  width: 400px;
   overflow-y: auto; 
   border: 1px solid black;
+  scrollbar-width: none; /* Ẩn thanh cuộn trên Firefox */
+  -ms-overflow-style: none; /* Ẩn thanh cuộn trên IE/Edge */
+}
+
+.infocontent::-webkit-scrollbar {
+  width: 0px; /* Ẩn thanh cuộn nhưng vẫn cuộn được */
+  height: 0px;
 }
 
 .infocontainer {
@@ -20,6 +28,10 @@
   justify-content: center;
   margin-top: 100px;
   
+}
+
+.infobox{
+  width: 400px;
 }
 
 .map {
@@ -34,9 +46,10 @@
 
 .searchContainer input{
   padding: 5px;
+  width: 400px;
 }
 
 .FindOrderInput select{
   padding: 5px;
-  width: 263px;
+  width: 400px;
 }
