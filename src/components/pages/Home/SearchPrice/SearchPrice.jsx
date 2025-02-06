@@ -6,6 +6,7 @@ import { getLocationAPI } from "../../../../utils/locationAPI/locationAPI";
 import { SearchPriceApi } from "../../../../utils/orderAPI/orderAPI";
 import LoadingSpinner from "../../../../containers/LoadingSpinner/LoadingSpinner";
 import stmImage from "../../../../../public/7.jpg";
+import { FaArrowRight } from "react-icons/fa";
 
 const SearchPrice = () => {
   const [orderInfo, setOrderInfo] = useState(null); // Store order information
@@ -159,8 +160,8 @@ const SearchPrice = () => {
   return (
     <div className={styles.container}>
       <div className={styles.img}>
-              <img src={stmImage} alt="STM intro" className={styles.image} />
-            </div>
+        <img src={stmImage} alt="STM intro" className={styles.image} />
+      </div>
       <div className={styles.formContent}>
         <form onSubmit={handleSubmit}>
           <div className={styles.Content}>
@@ -168,6 +169,15 @@ const SearchPrice = () => {
               {/* From City */}
               <div className={styles.TopLeftContainer}>
                 <label className={styles.Label}>Sent from:</label>
+                <div className={styles.SearchPriceInput}>
+                  <input
+                    placeholder="From Address"
+                    type="text"
+                    id="fromAddress"
+                    name="fromAddress"
+                    required
+                  />
+                </div>
                 <div className={styles.SearchPriceInput}>
                   <select
                     id="fromCity"
@@ -214,21 +224,20 @@ const SearchPrice = () => {
                     ))}
                   </select>
                 </div>
-
-                <div className={styles.SearchPriceInput}>
-                  <input
-                    placeholder="From Address"
-                    type="text"
-                    id="fromAddress"
-                    name="fromAddress"
-                    required
-                  />
-                </div>
               </div>
 
               {/* To City */}
               <div className={styles.TopRightContainer}>
                 <label className={styles.Label}>Get from:</label>
+                <div className={styles.SearchPriceInput}>
+                  <input
+                    placeholder="To Address"
+                    type="text"
+                    id="toAddress"
+                    name="toAddress"
+                    required
+                  />
+                </div>
                 <div className={styles.SearchPriceInput}>
                   <select
                     id="toCity"
@@ -275,16 +284,6 @@ const SearchPrice = () => {
                     ))}
                   </select>
                 </div>
-
-                <div className={styles.SearchPriceInput}>
-                  <input
-                    placeholder="To Address"
-                    type="text"
-                    id="toAddress"
-                    name="toAddress"
-                    required
-                  />
-                </div>
               </div>
             </div>
 
@@ -326,6 +325,7 @@ const SearchPrice = () => {
               <button type="submit" disabled={isLoading}>
                 Submit
               </button>
+              <FaArrowRight />
             </div>
           </div>
         </form>

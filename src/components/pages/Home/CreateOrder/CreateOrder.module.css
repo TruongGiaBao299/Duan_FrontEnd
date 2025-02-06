@@ -1,83 +1,141 @@
-.CreateOrderContainer{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
+.CreateOrderContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
 }
 
-.FormContainer{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
-    border: 1px solid black;
-    border-radius: 20px;
-    padding: 20px;
+.FormContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  border-radius: 20px;
+  padding: 20px;
 }
 
-.CreateOrderInput input{
-    padding: 10px;
-    width: 500px;
-    color: black;
-    place-content: black;
+.CreateOrderInput input {
+  padding: 10px;
+  width: 500px;
+  color: black;
+  place-content: black;
 }
 
-.CreateOrderInput textarea{
-    padding: 10px;
-    width: 1050px;
-    height: 200px;
-    color: black;
-    place-content: black;
+.CreateOrderInput textarea {
+  padding: 10px;
+  width: 1050px;
+  height: 200px;
+  color: black;
+  place-content: black;
 }
 
-.CreateOrderInputBot input{
-    padding: 10px;
-    width: 326px;
-    color: black;
+.CreateOrderInputBot input {
+  padding: 10px;
+  width: 326px;
+  color: black;
 }
 
-.CreateOrderInput input::placeholder{
-    color: black;
+.CreateOrderInput input::placeholder {
+  color: black;
 }
 
-.CreateOrderInput textarea::placeholder{
-    color: black;
+.CreateOrderInput textarea::placeholder {
+  color: black;
 }
 
-.CreateOrderInputBot input::placeholder{
-    color: black;
+.CreateOrderInputBot input::placeholder {
+  color: black;
 }
 
-.CreateOrderInput select{
-    padding: 10px;
-    width: 525px;
+.CreateOrderInput select {
+  padding: 10px;
+  width: 525px;
 }
 
-.FormTopContainer{
+.FormTopContainer {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+}
+
+.FormLeftContainer,
+.FormRightContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.FormBotContainer {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+
+.ToggleButton {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  background-color: #fcc737;
+  color: white;
+  padding: 10px ;
+  border-radius: 100%;
+  cursor: pointer;
+  border: none;
+  z-index: 1000;
+  font-size: 30px;
+}
+
+.PopupOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.PopupContent {
+  background: white;
+  padding: 20px;
+  width: 60%;
+  border-radius: 10px;
+  position: relative;
+}
+
+.CloseButton {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  color: black;
+  border: none;
+  cursor: pointer;
+  padding: 5px;
+  background-color: transparent;
+  font-size: 40px;
+}
+
+.CreateOrderSubmit{
     display: flex;
     flex-direction: row;
-    gap: 20px;
-}
-
-.FormLeftContainer, .FormRightContainer{
-    display: flex;
-    flex-direction: column;
+    align-items: center;
     gap: 10px;
-}
-
-.FormBotContainer{
-    display: flex;
-    flex-direction: row;
-    gap: 10px;
-}
-
-.CreateOrderSubmit button{
+    background-color: #fcc737;
+    width: fit-content;
     padding: 10px 20px;
-    background-color: yellow;
+    color: #ffffff;
+    border: none;
+    border-radius: 20px;
     cursor: pointer;
 }
 
-.CreateOrderSubmit button:hover{
-    background-color: lightgreen;
+.CreateOrderSubmit button{
+    outline: none;
+    border: none;
+    background-color: transparent;
+    color: #ffffff;
+    cursor: pointer;
 }

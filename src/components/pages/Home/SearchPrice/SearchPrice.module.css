@@ -6,7 +6,7 @@
   max-width: 1200px; /* Điều chỉnh theo nhu cầu */
   margin: 0 auto; /* Canh giữa trang */
   padding: 20px;
-  gap: 50px; /* Khoảng cách giữa ảnh và form */
+  gap: 200px; /* Khoảng cách giữa ảnh và form */
 }
 
 .img {
@@ -16,7 +16,7 @@
 }
 
 .image {
-  max-width: 100%;
+  max-width: 700px;
   height: 350px;
 }
 
@@ -30,7 +30,6 @@
 .Content{
     display: flex;
     flex-direction: column;
-    align-items: center;
     gap: 20px;
     padding: 20px;
 }
@@ -69,14 +68,26 @@
     color: black;
 }
 
-.SearchPriceSubmit button{
+.SearchPriceSubmit{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    background-color: #fcc737;
+    width: fit-content;
     padding: 10px 20px;
-    background-color: yellow;
+    color: #ffffff;
+    border: none;
+    border-radius: 20px;
     cursor: pointer;
 }
 
-.SearchPriceSubmit button:hover{
-    background-color: lightgreen;
+.SearchPriceSubmit button{
+    outline: none;
+    border: none;
+    background-color: transparent;
+    color: #ffffff;
+    cursor: pointer;
 }
 
 /* Overlay background khi hiển thị popup */

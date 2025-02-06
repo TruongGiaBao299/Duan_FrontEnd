@@ -2,16 +2,22 @@
   padding: 10px;
 }
 
-table {
+.content {
   width: 100%;
   border-collapse: collapse;
   color: #ffffff;
 }
 
-th,
-td {
+.content th, td {
   padding: 10px;
   text-align: left;
+  color: white;
+  white-space: nowrap; 
+  overflow: hidden;    
+  text-overflow: ellipsis; 
+}
+
+.text td {
   color: white;
   white-space: nowrap; 
   overflow: hidden;    

@@ -1,19 +1,35 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styles from "./Contact.module.css";
 import Header from "../../layout/Header/Header";
 import Footer from "../../layout/Footer/Footer";
+import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import "leaflet/dist/leaflet.css";
+import L from "leaflet";
+
+// Fix default Leaflet marker icon issue in React
+import markerIcon from "leaflet/dist/images/marker-icon.png";
+import markerShadow from "leaflet/dist/images/marker-shadow.png";
 
 const Contact = () => {
+  useEffect(() => {
+    delete L.Icon.Default.prototype._getIconUrl;
+    L.Icon.Default.mergeOptions({
+      iconUrl: markerIcon,
+      shadowUrl: markerShadow,
+    });
+  }, []);
+
+  const position = [10.732100048248101, 106.69930960985738]; // Tọa độ của BaShip
+
   return (
     <>
-      <Header></Header>
+      <Header />
       <div className={styles.contactContainer}>
         <div className={styles.formSection}>
           <h2>
             Fill in the registration form below, BaShip will contact you to
             schedule a demo session soon.
           </h2>
-
           <form className={styles.contactForm}>
             <div className={styles.inputGroup}>
               <label htmlFor="name">Full Name</label>
@@ -48,23 +64,20 @@ const Contact = () => {
             <p>Hotline: 086868686</p>
             <p>19 Nguyen Huu Tho, Tan Hung, District 7, Ho Chi Minh City</p>
             <div className={styles.mapContainer}>
-              {" "}
-              {/* New container for styling */}
-              <iframe
-                title="BaShip Map"
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1d3919.603222625119!2d106.68150291515453!3d10.76294999233155!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1d10.7629499!2d106.6815029!4m5!1s0x31752f4c9984c4c7%3A0xb9411503719c8b2b!2zQUMwMy0wNCBI4bqhbSBzbyA5LC road66LCBQaMaw4bujbmcgVGjhuqNuIETinCwgVGjDoCBxaOG7QSBESOG7QWMsIFRow6BuaCBwaOG7byBIbyBDaGkgaW1inhM!5e0!3m2!1svi!2sus4!4v1701161477271!5m2!1svi!2sus" // Use embed URL
-                width="100%"
-                height="400"
-                style={{ border: 0 }}
-                allowFullScreen=""
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-              ></iframe>
+              <MapContainer center={position} zoom={15} style={{ height: "400px", width: "100%" }}>
+                <TileLayer
+                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                  attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                />
+                <Marker position={position}>
+                  <Popup>BaShip - 19 Nguyen Huu Tho, District 7, Ho Chi Minh City</Popup>
+                </Marker>
+              </MapContainer>
             </div>
           </div>
         </div>
       </div>
-      <Footer></Footer>
+      <Footer />
     </>
   );
 };

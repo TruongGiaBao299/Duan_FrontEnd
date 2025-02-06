@@ -207,16 +207,19 @@ const DriverGetOrder = () => {
       ) : (
         <div>
           <div>
-            <div>
-              {sortedOrders.map((order) => (
-                <div className={styles.OrderInfo} key={order._id}>
+            {sortedOrders.map((order) => (
+              <div className={styles.OrderInfo} key={order._id}>
+                <div className={styles.StatusInfo}>
                   <p>
                     <strong>Order ID:</strong> {order._id}
                   </p>
+
                   <p>
-                    <strong>Distance:</strong>{" "}
-                    {distanceCache[order._id] || "Calculating..."}
+                    <strong>Status:</strong> {order.status}
                   </p>
+                </div>
+
+                <div className={styles.AddressInfo}>
                   <p>
                     <strong>Sender Address:</strong> {order.fromAddress},{" "}
                     {order.fromDistrict}, {order.fromWard}, {order.fromCity}
@@ -225,39 +228,45 @@ const DriverGetOrder = () => {
                     <strong>Recipient Address:</strong> {order.toAddress},{" "}
                     {order.toDistrict}, {order.toWard}, {order.toCity}
                   </p>
+                </div>
+
+                <div className={styles.NoteInfo}>
+                  <p>
+                    <strong>Distance:</strong>{" "}
+                    {distanceCache[order._id] || "Calculating..."} km
+                  </p>
+
                   <p>
                     <strong>Message:</strong> {order.message}
                   </p>
                   <p>
                     <strong>Price:</strong> {order.price}
                   </p>
-                  <p>
-                    <strong>Status:</strong> {order.status}
-                  </p>
-                  <p>
-                    <button
-                      className={styles.acceptButton}
-                      onClick={() =>
-                        order.status === "pending"
-                          ? AcceptOrder(order._id)
-                          : AcceptOrderIsShipping(order._id)
-                      }
-                    >
-                      Accept Request
-                    </button>
-                    <button
-                      className={styles.detailsButton}
-                      onClick={() => {
-                        setExpandedOrder(order);
-                        setShowPopup(true);
-                      }}
-                    >
-                      Show Details
-                    </button>
-                  </p>
                 </div>
-              ))}
-            </div>
+
+                <div className={styles.ButtonInfo}>
+                  <button
+                    className={styles.acceptButton}
+                    onClick={() =>
+                      order.status === "pending"
+                        ? AcceptOrder(order._id)
+                        : AcceptOrderIsShipping(order._id)
+                    }
+                  >
+                    Accept Request
+                  </button>
+                  <button
+                    className={styles.detailsButton}
+                    onClick={() => {
+                      setExpandedOrder(order);
+                      setShowPopup(true);
+                    }}
+                  >
+                    Show Details
+                  </button>
+                </div>
+              </div>
+            ))}
           </div>
 
           {showPopup && expandedOrder && (

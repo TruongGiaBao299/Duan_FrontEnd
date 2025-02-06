@@ -10,6 +10,7 @@ import {
 import { getPostOfficeApi } from "../../utils/postOfficeAPI/postOfficeAPI";
 import styles from "./DriverMangeOrder.module.css";
 import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
+import { FaLocationArrow } from "react-icons/fa";
 
 const DriverMangeOrder = () => {
   const [orders, setOrders] = useState([]);
@@ -190,62 +191,66 @@ const DriverMangeOrder = () => {
     }
   };
 
-
   return (
     <div className={styles.Container}>
       {isLoading && <LoadingSpinner isLoading={true} />}
       {/* Hiển thị số lượng đơn và thu nhập */}
-      <div className={styles.OrderInfo}>
+      <div className={styles.CalInfo}>
         <h3>Total Orders: {totalOrders}</h3>
         <h3>Shipped Orders: {totalShippedOrders}</h3>
         <h3>Is Shipping Orders: {totalIsShippingOrders}</h3>
         <h3>
           Delivery to Post Office Orders: {totalDeliveryToPostOfficeOrders}
         </h3>
-        <h3>
-          Total Income:{" "}
-          {totalIncome.toLocaleString("vi-VN", {
-            style: "currency",
-            currency: "VND",
-          })}
-        </h3>
       </div>
 
       {/* Nút bộ lọc */}
-      <div style={{ marginBottom: "20px" }}>
+      <div className={styles.ButtonInfo}>
         <button onClick={() => setFilterStatus("all")}>All</button>
         <button onClick={() => setFilterStatus("delivery to post office")}>
           Delivery to Post Office
         </button>
-        <button onClick={() => setFilterStatus("shipped")}>Shipped</button>
         <button onClick={() => setFilterStatus("is shipping")}>
           Is Shipping
         </button>
+        <button onClick={() => setFilterStatus("shipped")}>Shipped</button>
       </div>
 
       {filteredOrders.length === 0 ? (
         <p>No orders match the selected filter!</p>
       ) : (
-        <div>
+        <div className={styles.OrderInfoContainer}>
           {filteredOrders.map((order) => (
-            <div className={styles.OrderContainer} key={order._id}>
-              <p>
-                <strong>Order ID:</strong> {order._id}
-              </p>
-              <p>
-                <strong>From Address:</strong> {order.fromAddress},{" "}
-                {order.fromDistrict}, {order.fromWard}, {order.fromCity}
-              </p>
-              <p>
-                <strong>To Address:</strong> {order.toAddress},{" "}
-                {order.toDistrict}, {order.toWard}, {order.toCity}
-              </p>
-              <p>
-                <strong>Price:</strong> {order.price}
-              </p>
-              <p>
-                <strong>Status:</strong> {order.status}
-              </p>
+            <div className={styles.OrderInfo} key={order._id}>
+              <div className={styles.StatusInfo}>
+                <p>
+                  <strong>Order ID:</strong> {order._id}
+                </p>
+
+                <p>
+                  <strong>Status:</strong> {order.status}
+                </p>
+              </div>
+
+              <div className={styles.AddressInfo}>
+                <p>
+                  <strong>Sender Address:</strong> {order.fromAddress},{" "}
+                  {order.fromDistrict}, {order.fromWard}, {order.fromCity}
+                </p>
+                <p>
+                  <strong>Recipient Address:</strong> {order.toAddress},{" "}
+                  {order.toDistrict}, {order.toWard}, {order.toCity}
+                </p>
+              </div>
+
+              <div className={styles.NoteInfo}>
+                <p>
+                  <strong>Message:</strong> {order.message}
+                </p>
+                <p>
+                  <strong>Price:</strong> {order.price}
+                </p>
+              </div>
 
               <div className={styles.SentContent}>
                 <button onClick={() => handleShowDetails(order)}>
@@ -261,7 +266,10 @@ const DriverMangeOrder = () => {
                   order.status !== "shipped" &&
                   order.status !== "canceled" && (
                     <div>
-                      <form onSubmit={(e) => handleSubmit(e, order._id)}>
+                      <form
+                        className={styles.SentTo}
+                        onSubmit={(e) => handleSubmit(e, order._id)}
+                      >
                         <select
                           value={emails[order._id] || ""}
                           onChange={(e) =>
@@ -291,7 +299,9 @@ const DriverMangeOrder = () => {
                               </option>
                             ))}
                         </select>
-                        <button type="submit">Sent to</button>
+                        <button type="submit">
+                          <FaLocationArrow />
+                        </button>
                       </form>
                     </div>
                   )}

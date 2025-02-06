@@ -83,8 +83,8 @@ const Orders = () => {
       ) : filteredOrders.length === 0 ? (
         <p>You don't have any orders!</p>
       ) : (
-        <div>
-          <table className={styles.table}>
+        <div className={styles.content}>
+          <table className={styles.content}>
             <thead>
               <tr>
                 <th>Order ID</th>
@@ -106,7 +106,7 @@ const Orders = () => {
             </thead>
             <tbody>
               {filteredOrders.map((order) => (
-                <tr key={order._id}>
+                <tr className={styles.text} key={order._id}>
                   <td>{order._id}</td>
                   <td>{order.senderName}</td>
                   <td>{order.senderNumber}</td>

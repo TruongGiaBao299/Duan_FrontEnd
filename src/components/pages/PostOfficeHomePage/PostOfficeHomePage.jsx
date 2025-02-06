@@ -7,6 +7,8 @@ import PostOfficeManageOrder from "../../../containers/PostOfficeManageOrder/Pos
 import PostOfficeSentOrder from "../../../containers/PostOfficeSentOrder/PostOfficeSentOrder";
 import PostOfficeManageDriver from "../../../containers/PostOfficeManageDriver/PostOfficeManageDriver";
 import PostOfficeHistory from "../../../containers/PostOfficeHistory/PostOfficeHistory";
+import HeaderPostOffice from "../../layout/HeaderPostOffice/HeaderPostOffice";
+import styles from "./PostOfficeHomePage.module.css"
 
 const PostOfficeHomePage = () => {
   const [currentPage, setCurrentPage] = useState("drivergetorder"); // State to track current page
@@ -25,22 +27,53 @@ const PostOfficeHomePage = () => {
 
   return (
     <>
-      <HeaderDriver></HeaderDriver>
-      <div>
-        {/* Page navigation buttons */}
-        <button onClick={() => setCurrentPage("postofficesentorder")}>Sent Order</button>
-        <button onClick={() => setCurrentPage("postofficegetorder")}>Get Order</button>
-        <button onClick={() => setCurrentPage("postofficemanagedriver")}>Manage Driver</button>
-        <button onClick={() => setCurrentPage("postofficehistory")}>History</button>
-        {/* <button onClick={() => setCurrentPage("postofficemanageorder")}>Manage Order</button> */}
-      </div>
+      <HeaderPostOffice></HeaderPostOffice>
+      <div className={styles.mainContent}>
+        <div className={styles.container}>
+          <div className={styles.listbutton}>
+            <button
+              className={
+                currentPage === "postofficesentorder" ? styles.active : ""
+              }
+              onClick={() => setCurrentPage("postofficesentorder")}
+            >
+              Sent Order
+            </button>
+            <button
+              className={
+                currentPage === "postofficegetorder" ? styles.active : ""
+              }
+              onClick={() => setCurrentPage("postofficegetorder")}
+            >
+              Get Order
+            </button>
+            <button
+              className={
+                currentPage === "postofficemanagedriver" ? styles.active : ""
+              }
+              onClick={() => setCurrentPage("postofficemanagedriver")}
+            >
+              Manage Driver
+            </button>
+            <button
+              className={
+                currentPage === "postofficehistory" ? styles.active : ""
+              }
+              onClick={() => setCurrentPage("postofficehistory")}
+            >
+              History
+            </button>
+          </div>
 
-      {/* Display components based on the current page */}
-      {currentPage === "postofficesentorder" && <PostOfficeSentOrder />}
-      {currentPage === "postofficegetorder" && <PostOfficeGetOrder />} 
-      {currentPage === "postofficemanagedriver" && <PostOfficeManageDriver />} 
-      {currentPage === "postofficehistory" && <PostOfficeHistory />} 
-      {/* {currentPage === "postofficemanageorder" && <PostOfficeManageOrder />} */}
+          {/* Display components based on the current page */}
+          {currentPage === "postofficesentorder" && <PostOfficeSentOrder />}
+          {currentPage === "postofficegetorder" && <PostOfficeGetOrder />}
+          {currentPage === "postofficemanagedriver" && (
+            <PostOfficeManageDriver />
+          )}
+          {currentPage === "postofficehistory" && <PostOfficeHistory />}
+        </div>
+      </div>
     </>
   );
 };

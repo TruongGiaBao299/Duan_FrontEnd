@@ -13,7 +13,7 @@ import {
   makeDriverApi,
   makeGuestApi,
 } from "../../utils/userAPI/userAPI";
-import "./PostOfficeManageDriver.css";
+import styles from "./PostOfficeManageDriver.module.css";
 import { getPostOfficeByEmailApi } from "../../utils/postOfficeAPI/postOfficeAPI";
 import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 
@@ -155,66 +155,67 @@ const PostOfficeManageDriver = () => {
       ) : filteredDriverData.length === 0 ? (
         <p>No driver requests found for this post office.</p>
       ) : (
-        <table className="driver-table">
-          <thead>
-            <tr>
-              <th>Id</th>
-              <th>DriverName</th>
-              <th>DriverNumber</th>
-              <th>DriverEmail</th>
-              <th>DriverBirth</th>
-              <th>DriverId</th>
-              <th>DriverAddress</th>
-              <th>DriverCity</th>
-              <th>PostOffice</th>
-              <th>Status</th>
-              <th>Role</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredDriverData.map((user) => (
-              <tr key={user._id}>
-                <td>{user._id}</td>
-                <td>{user.DriverName}</td>
-                <td>{user.DriverNumber}</td>
-                <td>{user.email}</td>
-                <td>{user.DriverBirth}</td>
-                <td>{user.DriverId}</td>
-                <td>{user.DriverAddress}</td>
-                <td>{user.DriverCity}</td>
-                <td>{user.postOffice}</td>
-                <td>{user.status}</td>
-                <td>{user.role}</td>
-                <td>
-                  {user.role !== "driver" ? (
-                    <>
-                      <button
-                        className="driver-button accept"
-                        onClick={() => handleBecomeDriver(user.email)}
-                      >
-                        Accept Request
-                      </button>
-                      <button
-                        className="driver-button cancel"
-                        onClick={() => handleDeleteDriverRequest(user.email)}
-                      >
-                        Cancel Request
-                      </button>
-                    </>
-                  ) : (
-                    <button
-                      className="driver-button guest"
-                      onClick={() => handleBecomeGuest(user.email)}
-                    >
-                      Become Guest
-                    </button>
-                  )}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <>
+          <div className={styles.container}>
+            <table className="driver-table">
+              <thead>
+                <tr>
+                  <th>DriverName</th>
+                  <th>DriverNumber</th>
+                  <th>DriverEmail</th>
+                  <th>DriverBirth</th>
+                  <th>DriverId</th>
+                  <th>DriverAddress</th>
+                  <th>DriverCity</th>
+                  <th>PostOffice</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredDriverData.map((user) => (
+                  <tr key={user._id}>
+                    <td>{user.DriverName}</td>
+                    <td>{user.DriverNumber}</td>
+                    <td>{user.email}</td>
+                    <td>{user.DriverBirth}</td>
+                    <td>{user.DriverId}</td>
+                    <td>{user.DriverAddress}</td>
+                    <td>{user.DriverCity}</td>
+                    <td>{user.postOffice}</td>
+                    <td>{user.status}</td>
+                    <td>
+                      {user.role !== "driver" ? (
+                        <>
+                          <button
+                            className={styles.acceptbutton}
+                            onClick={() => handleBecomeDriver(user.email)}
+                          >
+                            Accept Request
+                          </button>
+                          <button
+                            className={styles.acceptbutton}
+                            onClick={() =>
+                              handleDeleteDriverRequest(user.email)
+                            }
+                          >
+                            Cancel Request
+                          </button>
+                        </>
+                      ) : (
+                        <button
+                          className={styles.acceptbutton}
+                          onClick={() => handleBecomeGuest(user.email)}
+                        >
+                          Become Guest
+                        </button>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </>
       )}
     </div>
   );

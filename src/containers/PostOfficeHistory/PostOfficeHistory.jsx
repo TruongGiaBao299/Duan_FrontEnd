@@ -6,6 +6,7 @@ import {
   getPostOfficeOrderByEmailApi,
 } from "../../utils/postOfficeAPI/postOfficeAPI";
 import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
+import { MdOutlineDoubleArrow } from "react-icons/md";
 
 const PostOfficeHistory = () => {
   const [orders, setOrders] = useState([]);
@@ -14,7 +15,7 @@ const PostOfficeHistory = () => {
   const [showPopup, setShowPopup] = useState(false);
   const [expandedOrder, setExpandedOrder] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-  
+
   useEffect(() => {
     const fetchOrders = async () => {
       setIsLoading(true);
@@ -65,20 +66,13 @@ const PostOfficeHistory = () => {
 
   if (isLoading) {
     // Hiển thị trạng thái Loading
-    return <LoadingSpinner isLoading={isLoading}></LoadingSpinner>
+    return <LoadingSpinner isLoading={isLoading}></LoadingSpinner>;
   }
 
   return (
     <div className={styles.driverordercontainer}>
       <div className={styles.stats}>
         <h3>Total Orders: {totalShippedOrders}</h3>
-        {/* <h3>
-          Total Commission:{" "}
-          {totalCommission.toLocaleString("vi-VN", {
-            style: "currency",
-            currency: "VND",
-          })}
-        </h3> */}
       </div>
 
       {totalShippedOrders === 0 ? (
@@ -92,26 +86,42 @@ const PostOfficeHistory = () => {
             )
             .map((order) => (
               <div className={styles.OrderContent} key={order._id}>
-                <p>
-                  <strong>Order ID:</strong> {order._id}
-                </p>
-                <p>
-                  <strong>From Address:</strong> {order.fromAddress},{" "}
-                  {order.fromDistrict}, {order.fromCity}
-                </p>
-                <p>
-                  <strong>To Address:</strong> {order.toAddress},{" "}
-                  {order.toDistrict}, {order.toCity}
-                </p>
-                <p>
-                  <strong>Price:</strong> {order.price}
-                </p>
-                <p>
-                  <strong>Status:</strong> {order.status}
-                </p>
-                <button onClick={() => handleShowDetails(order)}>
-                  Show Details
-                </button>
+                <div className={styles.addressInfo}>
+                  <p>
+                    <strong>Order ID:</strong> {order._id}
+                  </p>
+                  <div className={styles.addressGroup}>
+                    <p>
+                      <strong>From Address: </strong>
+                      {`${order.fromAddress}, ${order.fromDistrict},  ${order.fromWard}, ${order.fromCity}`}
+                    </p>
+
+                    <MdOutlineDoubleArrow />
+
+                    <p>
+                      <strong>To Address:</strong>{" "}
+                      {`${order.toAddress}, ${order.toDistrict},  ${order.toWard}, ${order.toCity}`}
+                    </p>
+                  </div>
+                </div>
+
+                <div className={styles.noteInfo}>
+                  <p>
+                    <strong>Order Weight:</strong> {order.orderWeight}
+                  </p>
+                  <p>
+                    <strong>Order Size:</strong> {order.orderSize}
+                  </p>
+                  <p>
+                    <strong>Type:</strong> {order.type}
+                  </p>
+                </div>
+                <div className={styles.SentContent}>
+                  {/* Show Details Button */}
+                  <button onClick={() => handleShowDetails(order)}>
+                    Show Details
+                  </button>
+                </div>
               </div>
             ))}
         </div>

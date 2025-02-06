@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import styles from "./HeaderDriver.module.css";
+import styles from "./HeaderPostOffice.module.css";
 import { toast } from "react-toastify";
 import { AuthContext } from "../../../context/auth.context";
 import { MdOutlineLocalShipping } from "react-icons/md";
@@ -8,7 +8,7 @@ import { getOrderByEmailApi } from "../../../utils/orderAPI/orderAPI"; // Import
 import { FaUserCircle, FaHistory } from "react-icons/fa";
 import UpdatePassword from "../../../containers/UpdatePassword/UpdatePassword";
 
-const HeaderDriver = () => {
+const HeaderPostOffice = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [username, setUsername] = useState("");
   const [orderCount, setOrderCount] = useState(0); // State for storing order count
@@ -112,7 +112,7 @@ const HeaderDriver = () => {
             <>
               <img className={styles.img} src="logo.png"></img>
               <span className={styles.greeting}>Hello, {username}!</span>
-              <button onClick={() => navigate("/driverhome")}>Home</button>
+              <button onClick={() => navigate("/postofficehome")}>Home</button>
               <button onClick={() => navigate("/service")}>Service</button>
               <button onClick={() => navigate("/contact")}>Contact</button>
 
@@ -181,4 +181,4 @@ const HeaderDriver = () => {
   );
 };
 
-export default HeaderDriver;
+export default HeaderPostOffice;

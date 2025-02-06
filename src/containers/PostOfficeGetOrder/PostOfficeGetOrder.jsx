@@ -13,6 +13,7 @@ import {
 } from "../../utils/postOfficeAPI/postOfficeAPI";
 import { getPostOfficeApi } from "../../utils/postOfficeAPI/postOfficeAPI";
 import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
+import { MdOutlineDoubleArrow } from "react-icons/md";
 
 const PostOfficeGetOrder = () => {
   const [orders, setOrders] = useState([]);
@@ -140,7 +141,7 @@ const PostOfficeGetOrder = () => {
 
   if (isLoading) {
     // Hiển thị trạng thái Loading
-    return <LoadingSpinner isLoading={isLoading}></LoadingSpinner>
+    return <LoadingSpinner isLoading={isLoading}></LoadingSpinner>;
   }
 
   return (
@@ -162,24 +163,38 @@ const PostOfficeGetOrder = () => {
                     order.toCity === postCity
                 )
                 .map((order) => (
-                  <div key={order._id}>
-                    <p>
-                      <strong>Order ID:</strong> {order._id}
-                    </p>
-                    <p>
-                      <strong>From Address:</strong>
-                      {`${order.fromAddress}, ${order.fromDistrict},  ${order.fromWard}, ${order.fromCity}`}
-                    </p>
-                    <p>
-                      <strong>To Address:</strong>{" "}
-                      {`${order.toAddress}, ${order.toDistrict},  ${order.toWard}, ${order.toCity}`}
-                    </p>
-                    <p>
-                      <strong>Price:</strong> {order.price}
-                    </p>
-                    <p>
-                      <strong>Status:</strong> {order.status}
-                    </p>
+                  <div className={styles.OrderInfo} key={order._id}>
+                    <div className={styles.addressInfo}>
+                      <p>
+                        <strong>Order ID:</strong> {order._id}
+                      </p>
+                      <div className={styles.addressGroup}>
+                        <p>
+                          <strong>From Address: </strong>
+                          {`${order.fromAddress}, ${order.fromDistrict},  ${order.fromWard}, ${order.fromCity}`}
+                        </p>
+
+                        <MdOutlineDoubleArrow />
+
+                        <p>
+                          <strong>To Address:</strong>{" "}
+                          {`${order.toAddress}, ${order.toDistrict},  ${order.toWard}, ${order.toCity}`}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className={styles.noteInfo}>
+                      <p>
+                        <strong>Order Weight:</strong> {order.orderWeight}
+                      </p>
+                      <p>
+                        <strong>Order Size:</strong> {order.orderSize}
+                      </p>
+                      <p>
+                        <strong>Type:</strong> {order.type}
+                      </p>
+                    </div>
+
                     <div className={styles.SentContent}>
                       <button
                         className=""

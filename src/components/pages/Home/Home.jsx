@@ -25,6 +25,7 @@ const Home = () => {
       <Header />
       <HeroSection></HeroSection>
       <FindOrder></FindOrder>
+      <CreateOrder></CreateOrder>
       <SearchPrice></SearchPrice>
       <PostOffice></PostOffice>
       <About></About>

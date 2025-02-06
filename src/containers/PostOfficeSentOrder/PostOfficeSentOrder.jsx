@@ -13,6 +13,8 @@ import {
 } from "../../utils/postOfficeAPI/postOfficeAPI";
 import { getPostOfficeApi } from "../../utils/postOfficeAPI/postOfficeAPI";
 import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
+import { MdOutlineDoubleArrow } from "react-icons/md";
+import { FaLocationArrow } from "react-icons/fa";
 
 const PostOfficeSentOrder = () => {
   const [orders, setOrders] = useState([]);
@@ -141,7 +143,7 @@ const PostOfficeSentOrder = () => {
 
   if (isLoading) {
     // Hiển thị trạng thái Loading
-    return <LoadingSpinner isLoading={isLoading}></LoadingSpinner>
+    return <LoadingSpinner isLoading={isLoading}></LoadingSpinner>;
   }
 
   return (
@@ -163,33 +165,40 @@ const PostOfficeSentOrder = () => {
                     order.fromCity === postCity
                 )
                 .map((order) => (
-                  <div key={order._id}>
-                    <p>
-                      <strong>Order ID:</strong> {order._id}
-                    </p>
-                    <p>
-                      <strong>Sender Name:</strong> {order.senderName}
-                    </p>
-                    <p>
-                      <strong>Sender Number:</strong> {order.senderNumber}
-                    </p>
-                    <p>
-                      <strong>From Address:</strong>
-                      {`${order.fromAddress}, ${order.fromDistrict},  ${order.fromWard}, ${order.fromCity}`}
-                    </p>
-                    <p>
-                      <strong>Recipient Name:</strong> {order.recipientName}
-                    </p>
-                    <p>
-                      <strong>Recipient Number:</strong> {order.recipientNumber}
-                    </p>
-                    <p>
-                      <strong>To Address:</strong>{" "}
-                      {`${order.toAddress}, ${order.toDistrict},  ${order.toWard}, ${order.toCity}`}
-                    </p>
+                  <div className={styles.OrderInfo} key={order._id}>
+                    <div className={styles.addressInfo}>
+                      <p>
+                        <strong>Order ID:</strong> {order._id}
+                      </p>
+                      <div className={styles.addressGroup}>
+                        <p>
+                          <strong>From Address: </strong>
+                          {`${order.fromAddress}, ${order.fromDistrict},  ${order.fromWard}, ${order.fromCity}`}
+                        </p>
+
+                        <MdOutlineDoubleArrow />
+
+                        <p>
+                          <strong>To Address:</strong>{" "}
+                          {`${order.toAddress}, ${order.toDistrict},  ${order.toWard}, ${order.toCity}`}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className={styles.noteInfo}>
+                      <p>
+                        <strong>Order Weight:</strong> {order.orderWeight}
+                      </p>
+                      <p>
+                        <strong>Order Size:</strong> {order.orderSize}
+                      </p>
+                      <p>
+                        <strong>Type:</strong> {order.type}
+                      </p>
+                    </div>
                     <div>
                       <div className={styles.SentContent}>
-                        <form onSubmit={(e) => handleSubmit(e, order._id)}>
+                        <form className={styles.SentForm} onSubmit={(e) => handleSubmit(e, order._id)}>
                           <select
                             value={emails[order._id] || ""}
                             onChange={(e) =>
@@ -220,11 +229,11 @@ const PostOfficeSentOrder = () => {
                                 </option>
                               ))}
                           </select>
-                          <button type="submit">Submit</button>
+                          <button type="submit"><FaLocationArrow /></button>
                         </form>
 
                         {/* Show Details Button */}
-                        <button onClick={() => handleShowDetails(order)}>
+                        <button className={styles.ShowDetails} onClick={() => handleShowDetails(order)}>
                           Show Details
                         </button>
                       </div>

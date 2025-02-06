@@ -112,32 +112,32 @@ const DriverSentOrder = () => {
 
   // Calculate distance between driver's location and order's toAddress
   useEffect(() => {
-      const calculateDistances = async () => {
-        if (!driverLocation || orders.length === 0) return;
-  
-        setIsCalculatingDistance(true); // Bắt đầu tính khoảng cách
-  
-        const updatedCache = { ...distanceCache };
-        for (const order of orders) {
-          if (!updatedCache[order._id]) {
-            try {
-              const distance = await calculateDistance(order.fromAddress);
-              updatedCache[order._id] = distance;
-  
-              // Thêm delay để tránh bị rate limit API
-              await new Promise((resolve) => setTimeout(resolve, 1000));
-            } catch (error) {
-              console.error("Error calculating distance:", error);
-            }
+    const calculateDistances = async () => {
+      if (!driverLocation || orders.length === 0) return;
+
+      setIsCalculatingDistance(true); // Bắt đầu tính khoảng cách
+
+      const updatedCache = { ...distanceCache };
+      for (const order of orders) {
+        if (!updatedCache[order._id]) {
+          try {
+            const distance = await calculateDistance(order.fromAddress);
+            updatedCache[order._id] = distance;
+
+            // Thêm delay để tránh bị rate limit API
+            await new Promise((resolve) => setTimeout(resolve, 1000));
+          } catch (error) {
+            console.error("Error calculating distance:", error);
           }
         }
-  
-        setDistanceCache(updatedCache);
-        setIsCalculatingDistance(false); // Hoàn tất tính toán
-      };
-  
-      calculateDistances();
-    }, [driverLocation, orders]);
+      }
+
+      setDistanceCache(updatedCache);
+      setIsCalculatingDistance(false); // Hoàn tất tính toán
+    };
+
+    calculateDistances();
+  }, [driverLocation, orders]);
 
   // Function to calculate distance using HERE API
   const calculateDistance = async (toAddress) => {
@@ -205,31 +205,44 @@ const DriverSentOrder = () => {
                     order.toCity === driverCity
                 )
                 .map((order) => (
-                  <div key={order._id}>
-                    <p>
-                      <strong>Order ID:</strong> {order._id}
-                    </p>
-                    <p>
-                      <strong>Distance (km):</strong>{" "}
-                      {distanceCache[order._id] || "Calculating..."}
-                    </p>
-                    <p>
-                      <strong>From Address:</strong>{" "}
-                      {`${order.fromAddress}, ${order.fromDistrict}, ${order.fromCity}`}
-                    </p>
-                    <p>
-                      <strong>To Address:</strong>{" "}
-                      {`${order.toAddress}, ${order.toDistrict}, ${order.toCity}`}
-                    </p>
-                    <p>
-                      <strong>Price:</strong> {order.price}
-                    </p>
-                    <p>
-                      <strong>Status:</strong> {order.status}
-                    </p>
-                    <div>
+                  <div className={styles.OrderInfo} key={order._id}>
+                    <div className={styles.StatusInfo}>
+                      <p>
+                        <strong>Order ID:</strong> {order._id}
+                      </p>
+
+                      <p>
+                        <strong>Status:</strong> {order.status}
+                      </p>
+                    </div>
+                    <div className={styles.AddressInfo}>
+                      <p>
+                        <strong>Sender Address:</strong> {order.fromAddress},{" "}
+                        {order.fromDistrict}, {order.fromWard}, {order.fromCity}
+                      </p>
+                      <p>
+                        <strong>Recipient Address:</strong> {order.toAddress},{" "}
+                        {order.toDistrict}, {order.toWard}, {order.toCity}
+                      </p>
+                    </div>
+
+                    <div className={styles.NoteInfo}>
+                      <p>
+                        <strong>Distance:</strong>{" "}
+                        {distanceCache[order._id] || "Calculating..."} km
+                      </p>
+
+                      <p>
+                        <strong>Message:</strong> {order.message}
+                      </p>
+                      <p>
+                        <strong>Price:</strong> {order.price}
+                      </p>
+                    </div>
+
+                    <div className={styles.ButtonInfo}>
                       <button
-                        className={styles.becomeDriverButton}
+                        className={styles.acceptButton}
                         onClick={() =>
                           order.status === "pending"
                             ? AcceptOrder(order._id)
