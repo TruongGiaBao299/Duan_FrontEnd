@@ -203,32 +203,30 @@
   max-height: 500px;
 }
 
-.contentpopup {
-  display: flex;
-  flex-direction: column;
-}
-
 .ordertitle {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
 }
 
-.ordergroup {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-  gap: 10px;
-}
-
 .orderaddress {
   display: flex;
   flex-direction: row;
-  gap: 10px;
   justify-content: center;
   align-items: center;
+  gap: 20px;
 }
 
 .orderaddress .addressicon {
-  font-size: 80px;
+  font-size: 50px;
+}
+
+.ordergroup {
+  display: flex;
+  flex-direction: row;
+  gap: 130px;
+}
+
+.ordercontent{
+  width: 550px;
 }

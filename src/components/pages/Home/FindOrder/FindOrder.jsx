@@ -151,8 +151,7 @@ const FindOrder = () => {
                     <strong>Recipient Name:</strong> {orderInfo.recipientName}
                   </p>
                   <p>
-                    <strong>Recipient Number:</strong>{" "}
-                    {orderInfo.recipientNumber}
+                    <strong>Recipient Number:</strong> {orderInfo.recipientNumber}
                   </p>
                   <p>
                     <strong>Order Weight:</strong> {orderInfo.orderWeight} kg, <strong>Order Size:</strong> {orderInfo.orderSize} m³, <strong>Type:</strong> {orderInfo.type}
@@ -164,7 +163,6 @@ const FindOrder = () => {
                     <strong>Price:</strong> {orderInfo.price}
                   </p>
                 </div>
-                <br />
                 <div className={styles.timelinecontent}>
                   {orderInfo.timeline && orderInfo.timeline.length > 0 && (
                     <div className={styles.timeline}>
