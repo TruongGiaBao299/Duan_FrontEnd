@@ -198,7 +198,7 @@ const BecomePostOffice = () => {
     <div className={styles.container}>
       <div className={styles.content}>
         {loading ? (
-          <p>Loading...</p>
+          <LoadingSpinner />
         ) : isAlreadySubmitted ? ( // Kiểm tra nếu đã nộp
           <p className={styles.alert}>
             Your request has been sent, please wait for us to review.
