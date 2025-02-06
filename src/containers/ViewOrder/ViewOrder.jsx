@@ -76,7 +76,7 @@ const ViewOrder = () => {
 
   if (isLoading) {
     // Hiển thị trạng thái Loading
-    return <LoadingSpinner isLoading={isLoading}></LoadingSpinner>
+    return <LoadingSpinner isLoading={isLoading}></LoadingSpinner>;
   }
 
   return (
@@ -92,8 +92,8 @@ const ViewOrder = () => {
                 <strong>Order ID:</strong> {order._id}
               </p>
               <p>
-                <strong>From:</strong> {order.fromAddress}, {order.fromDistrict},{" "}
-                {order.fromWard}, {order.fromCity}
+                <strong>From:</strong> {order.fromAddress}, {order.fromDistrict}
+                , {order.fromWard}, {order.fromCity}
               </p>
               <p>
                 <strong>To:</strong> {order.toAddress}, {order.toDistrict},{" "}
@@ -102,6 +102,21 @@ const ViewOrder = () => {
               <p>
                 <strong>Status:</strong> {order.status}
               </p>
+              {/* Timeline Display */}
+              {order.timeline && order.timeline.length > 0 && (
+                <div className={styles.timeline}>
+                  <ul>
+                    {order.timeline.map((entry, index) => (
+                      <li key={entry._id}>
+                        {new Date(
+                          new Date(entry.timestamp).getTime() +
+                            17 * 60 * 60 * 1000
+                        ).toLocaleString()}: <strong>{entry.status}</strong>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
               <button
                 onClick={() => {
                   setExpandedOrder(order);
@@ -124,7 +139,10 @@ const ViewOrder = () => {
       )}
 
       {showPopup && expandedOrder && (
-        <div className={styles.popupOverlay} onClick={() => setShowPopup(false)}>
+        <div
+          className={styles.popupOverlay}
+          onClick={() => setShowPopup(false)}
+        >
           <div
             className={styles.popupContent}
             onClick={(e) => e.stopPropagation()}
@@ -146,7 +164,8 @@ const ViewOrder = () => {
                 <strong>Recipient Name:</strong> {expandedOrder.recipientName}
               </p>
               <p>
-                <strong>Recipient Number:</strong> {expandedOrder.recipientNumber}
+                <strong>Recipient Number:</strong>{" "}
+                {expandedOrder.recipientNumber}
               </p>
               <p>
                 <strong>Order Weight:</strong> {expandedOrder.orderWeight}
