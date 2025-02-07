@@ -6,7 +6,7 @@
   max-width: 1200px; /* Điều chỉnh theo nhu cầu */
   margin: 0 auto; /* Canh giữa trang */
   padding: 20px;
-  gap: 100px; /* Khoảng cách giữa ảnh và form */
+  gap: 40px; /* Khoảng cách giữa ảnh và form */
 }
 
 .img {
