@@ -88,19 +88,19 @@ const Orders = () => {
             <thead>
               <tr>
                 <th>Order ID</th>
-                <th>Sender Name</th>
-                <th>Sender Number</th>
+                {/* <th>Sender Name</th>
+                <th>Sender Number</th> */}
                 <th>From Address</th>
-                <th>Recipient Name</th>
-                <th>Recipient Number</th>
+                {/* <th>Recipient Name</th>
+                <th>Recipient Number</th> */}
                 <th>To Address</th>
-                <th>Order Weight</th>
+                {/* <th>Order Weight</th>
                 <th>Order Size</th>
                 <th>Type</th>
                 <th>Message</th>
-                <th>Price</th>
+                <th>Price</th> */}
                 <th>Status</th>
-                <th>Created By</th>
+                {/* <th>Created By</th> */}
                 <th>Driver</th>
               </tr>
             </thead>
@@ -108,23 +108,23 @@ const Orders = () => {
               {filteredOrders.map((order) => (
                 <tr className={styles.text} key={order._id}>
                   <td>{order._id}</td>
-                  <td>{order.senderName}</td>
-                  <td>{order.senderNumber}</td>
+                  {/* <td>{order.senderName}</td>
+                  <td>{order.senderNumber}</td> */}
                   <td>
-                    {`${order.fromAddress}, District: ${order.fromDistrict}, City: ${order.fromCity}`}
+                    {`${order.fromAddress}, ${order.fromDistrict}, ${order.fromCity}`}
                   </td>
-                  <td>{order.recipientName}</td>
-                  <td>{order.recipientNumber}</td>
+                  {/* <td>{order.recipientName}</td>
+                  <td>{order.recipientNumber}</td> */}
                   <td>
-                    {`${order.toAddress}, District: ${order.toDistrict}, City: ${order.toCity}`}
+                    {`${order.toAddress}, ${order.toDistrict}, ${order.toCity}`}
                   </td>
-                  <td>{order.orderWeight}</td>
+                  {/* <td>{order.orderWeight}</td>
                   <td>{order.orderSize}</td>
                   <td>{order.type}</td>
                   <td>{order.message}</td>
-                  <td>{order.price}</td>
+                  <td>{order.price}</td> */}
                   <td>{order.status}</td>
-                  <td>{order.createdBy}</td>
+                  {/* <td>{order.createdBy}</td> */}
                   <td>{order.driver}</td>
                 </tr>
               ))}

@@ -3,7 +3,7 @@
   justify-content: center; /* Căn giữa nội dung */
   align-items: center;
   width: 100%;
-  height: 100vh; /* Chiều cao toàn màn hình */
+  height: 90vh; /* Chiều cao toàn màn hình */
 }
 
 .findOrderInputContainer {

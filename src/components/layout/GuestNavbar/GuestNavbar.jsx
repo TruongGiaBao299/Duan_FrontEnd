@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import styles from "./Navbar.module.css";
+import styles from "./GuestNavbar.module.css";
 import { toast } from "react-toastify";
 import { AuthContext } from "../../../context/auth.context";
 import { IoIosNotificationsOutline } from "react-icons/io";
 import { BsChatLeftText } from "react-icons/bs";
 import { FaUser } from "react-icons/fa";
 
-const Navbar = () => {
+const GuestNavbar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [username, setUsername] = useState("");
   const navigate = useNavigate();
@@ -48,10 +48,23 @@ const Navbar = () => {
   return (
     <div className={styles.navbar}>
       <div className={styles.hello}>
-        <span className={styles.welcome}>Welcome back, <span className={styles.name}>{username}</span></span>
+        <span className={styles.welcome}>Welcome back, {username}</span>
       </div>
+
+      {/* <div className={styles.right}>
+        <input type="text" className={styles.searchbar} placeholder="Search" />
+
+        <div className={styles.groupicon}>
+          <div className={styles.icon}>
+            <IoIosNotificationsOutline />
+          </div>
+          <div className={styles.icon}>
+            <BsChatLeftText />
+          </div>
+        </div>
+      </div> */}
     </div>
   );
 };
 
-export default Navbar;
+export default GuestNavbar;

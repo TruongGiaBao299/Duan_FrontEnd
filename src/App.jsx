@@ -23,6 +23,7 @@ import UpdatePassword from "./containers/UpdatePassword/UpdatePassword";
 import ServicePage from "./components/pages/ServicePage/ServicePage";
 import BecomeDriverPage from "./components/pages/BecomeDriverPage/BecomeDriverPage";
 import BecomePostOfficePage from "./components/pages/BecomePostOfficePage/BecomePostOfficePage";
+import GuestDashboardPage from "./components/pages/GuestDashboardPage/GuestDashboardPage";
 
 function App() {
   const { setAuth, appLoading, setAppLoading } = useContext(AuthContext);
@@ -71,6 +72,7 @@ function App() {
             <Route path="/service" element={<ServicePage></ServicePage>}></Route>
             <Route path="/becomedriver" element={<BecomeDriverPage></BecomeDriverPage>}></Route>
             <Route path="/becomepostoffice" element={<BecomePostOfficePage></BecomePostOfficePage>}></Route>
+            <Route path="/guesthome" element={<GuestDashboardPage></GuestDashboardPage>}></Route>
           </Routes>
         </BrowserRouter>
     </>

@@ -158,10 +158,6 @@ const SearchPrice = () => {
   }
 
   return (
-    <div className={styles.container}>
-      <div className={styles.img}>
-        <img src={stmImage} alt="STM intro" className={styles.image} />
-      </div>
       <div className={styles.formContent}>
         <form onSubmit={handleSubmit}>
           <div className={styles.Content}>
@@ -363,7 +359,6 @@ const SearchPrice = () => {
           <p></p>
         )}
       </div>
-    </div>
   );
 };
 

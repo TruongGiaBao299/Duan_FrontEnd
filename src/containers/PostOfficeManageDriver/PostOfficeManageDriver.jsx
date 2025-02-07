@@ -164,10 +164,10 @@ const PostOfficeManageDriver = () => {
                   <th>DriverNumber</th>
                   <th>DriverEmail</th>
                   <th>DriverBirth</th>
-                  <th>DriverId</th>
+                  {/* <th>DriverId</th> */}
                   <th>DriverAddress</th>
                   <th>DriverCity</th>
-                  <th>PostOffice</th>
+                  {/* <th>PostOffice</th> */}
                   <th>Status</th>
                 </tr>
               </thead>
@@ -178,10 +178,10 @@ const PostOfficeManageDriver = () => {
                     <td>{user.DriverNumber}</td>
                     <td>{user.email}</td>
                     <td>{user.DriverBirth}</td>
-                    <td>{user.DriverId}</td>
+                    {/* <td>{user.DriverId}</td> */}
                     <td>{user.DriverAddress}</td>
                     <td>{user.DriverCity}</td>
-                    <td>{user.postOffice}</td>
+                    {/* <td>{user.postOffice}</td> */}
                     <td>{user.status}</td>
                     <td>
                       {user.role !== "driver" ? (

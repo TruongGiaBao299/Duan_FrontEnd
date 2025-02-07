@@ -208,6 +208,9 @@ const BecomePostOffice = () => {
             <div className={styles.formContainer}>
               <div className={styles.postInfo}>
                 <div className={styles.postInput}>
+                  <h1 className={styles.title}>
+                    Register to become a BaShip Post Office
+                  </h1>
                   <p>1. Post Office User Name:</p>
                   <input
                     placeholder="OfficeUserName"
@@ -342,10 +345,6 @@ const BecomePostOffice = () => {
             </div>
           </form>
         )}
-      </div>
-
-      <div className={styles.img}>
-        <img src={stmImage} alt="STM intro" className={styles.image} />
       </div>
     </div>
   );

@@ -1,6 +1,6 @@
 .container {
   display: flex;
-  justify-content: row;
+  flex-direction: column;
   align-items: center;
   width: 100%;
   max-width: 1200px;
@@ -54,17 +54,26 @@
 }
 
 .postSubmit button {
+  background-color: #fcc737;
+  color: #fff;
   padding: 10px 20px;
-  background-color: yellow;
+  border: none;
+  border-radius: 5px;
   cursor: pointer;
-}
-
-.postSubmit button:hover {
-  background-color: lightgreen;
+  font-size: 15px;
+  transition: background-color 0.3s;
+  margin-top: 10px;
 }
 
 .alert {
   color: red;
   background-color: lightgray;
   padding: 20px 200px;
+}
+
+.title {
+  font-size: 24px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 20px;
 }

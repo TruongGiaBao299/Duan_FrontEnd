@@ -174,44 +174,46 @@ const PostOffice = () => {
           type="text"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          placeholder="Tìm kiếm bưu cục..."
+          placeholder="Find PostOffice..."
           className={styles.searchInput}
         />
 
-        {/* From City */}
-        <div className={styles.FindOrderInput}>
-          <select
-            id="fromCity"
-            name="fromCity"
-            required
-            value={selectedFromCity}
-            onChange={(e) => setSelectedFromCity(e.target.value)}
-          >
-            <option value="">Select City</option>
-            {locationCity.map((city, index) => (
-              <option key={index} value={city}>
-                {city}
-              </option>
-            ))}
-          </select>
-        </div>
+        <div className={styles.filtergroup}>
+          {/* From City */}
+          <div className={styles.FindOrderInput}>
+            <select
+              id="fromCity"
+              name="fromCity"
+              required
+              value={selectedFromCity}
+              onChange={(e) => setSelectedFromCity(e.target.value)}
+            >
+              <option value="">Select City</option>
+              {locationCity.map((city, index) => (
+                <option key={index} value={city}>
+                  {city}
+                </option>
+              ))}
+            </select>
+          </div>
 
-        {/* From District */}
-        <div className={styles.FindOrderInput}>
-          <select
-            id="fromDistrict"
-            name="fromDistrict"
-            required
-            value={selectedFromDistrict}
-            onChange={(e) => setSelectedFromDistrict(e.target.value)}
-          >
-            <option value="">Select District</option>
-            {locationDistrictFrom.map((district, index) => (
-              <option key={index} value={district.name}>
-                {district.name}
-              </option>
-            ))}
-          </select>
+          {/* From District */}
+          <div className={styles.FindOrderInput}>
+            <select
+              id="fromDistrict"
+              name="fromDistrict"
+              required
+              value={selectedFromDistrict}
+              onChange={(e) => setSelectedFromDistrict(e.target.value)}
+            >
+              <option value="">Select District</option>
+              {locationDistrictFrom.map((district, index) => (
+                <option key={index} value={district.name}>
+                  {district.name}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
       </div>
       <div className={styles.mapContainer}>

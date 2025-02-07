@@ -96,7 +96,7 @@ const PostOfficeHistory = () => {
                       {`${order.fromAddress}, ${order.fromDistrict},  ${order.fromWard}, ${order.fromCity}`}
                     </p>
 
-                    <MdOutlineDoubleArrow />
+                    <MdOutlineDoubleArrow className={styles.addressGroupicon}/>
 
                     <p>
                       <strong>To Address:</strong>{" "}

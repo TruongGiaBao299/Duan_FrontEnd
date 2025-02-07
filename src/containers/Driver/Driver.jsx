@@ -170,15 +170,15 @@ const Driver = () => {
             <tr>
               <th className={styles.tableuserHeader}>Id</th>
               <th className={styles.tableuserHeader}>DriverName</th>
-              <th className={styles.tableuserHeader}>DriverNumber</th>
+              {/* <th className={styles.tableuserHeader}>DriverNumber</th> */}
               <th className={styles.tableuserHeader}>DriverEmail</th>
-              <th className={styles.tableuserHeader}>DriverBirth</th>
-              <th className={styles.tableuserHeader}>DriverId</th>
-              <th className={styles.tableuserHeader}>DriverAddress</th>
-              <th className={styles.tableuserHeader}>DriverCity</th>
+              {/* <th className={styles.tableuserHeader}>DriverBirth</th>
+              <th className={styles.tableuserHeader}>DriverId</th> */}
+              {/* <th className={styles.tableuserHeader}>DriverAddress</th>
+              <th className={styles.tableuserHeader}>DriverCity</th> */}
               <th className={styles.tableuserHeader}>PostOffice</th>
               <th className={styles.tableuserHeader}>status</th>
-              <th className={styles.tableuserHeader}>role</th>
+              {/* <th className={styles.tableuserHeader}>role</th> */}
             </tr>
           </thead>
           <tbody>
@@ -186,15 +186,15 @@ const Driver = () => {
               <tr key={user._id} className={styles.tableRow}>
                 <td className={styles.tableCell}>{user._id}</td>
                 <td className={styles.tableCell}>{user.DriverName}</td>
-                <td className={styles.tableCell}>{user.DriverNumber}</td>
+                {/* <td className={styles.tableCell}>{user.DriverNumber}</td> */}
                 <td className={styles.tableCell}>{user.email}</td>
-                <td className={styles.tableCell}>{user.DriverBirth}</td>
+                {/* <td className={styles.tableCell}>{user.DriverBirth}</td>
                 <td className={styles.tableCell}>{user.DriverId}</td>
                 <td className={styles.tableCell}>{user.DriverAddress}</td>
-                <td className={styles.tableCell}>{user.DriverCity}</td>
+                <td className={styles.tableCell}>{user.DriverCity}</td> */}
                 <td className={styles.tableCell}>{user.postOffice}</td>
                 <td className={styles.tableCell}>{user.status}</td>
-                <td className={styles.tableCell}>{user.role}</td>
+                {/* <td className={styles.tableCell}>{user.role}</td> */}
                 <td className={styles.tableCell}>
                   {user.role !== "driver" ? (
                     <>

@@ -9,6 +9,7 @@ import BecomePostOffice from "./BecomePostOffice/BecomePostOffice";
 import Footer from "../../layout/Footer/Footer";
 import HeroSection from "../../../containers/HeroSection/HeroSection";
 import About from "../../../containers/About";
+import styles from "./Home.module.css";
 
 const Home = () => {
   const [currentPage, setCurrentPage] = useState("create"); // State to track current page
@@ -26,8 +27,10 @@ const Home = () => {
       <HeroSection></HeroSection>
       <FindOrder></FindOrder>
       <CreateOrder></CreateOrder>
-      <SearchPrice></SearchPrice>
-      <PostOffice></PostOffice>
+      <div className={styles.group}>
+        <PostOffice></PostOffice>
+        <SearchPrice></SearchPrice>
+      </div>
       <About></About>
       <Footer></Footer>
     </>
@@ -36,32 +39,34 @@ const Home = () => {
 
 export default Home;
 
-{/* <div>
-        {/* Page navigation buttons */}
-        // <button onClick={() => setCurrentPage("create")}>Create Order</button>
-        // <button onClick={() => setCurrentPage("find")}>Find Order</button>
-        // <button onClick={() => setCurrentPage("postoffice")}>PostOffice</button>
-        // <button onClick={() => setCurrentPage("searchprice")}>
-        //   SearchPrice
-        // </button>
+{
+  /* <div>
+        {/* Page navigation buttons */
+}
+// <button onClick={() => setCurrentPage("create")}>Create Order</button>
+// <button onClick={() => setCurrentPage("find")}>Find Order</button>
+// <button onClick={() => setCurrentPage("postoffice")}>PostOffice</button>
+// <button onClick={() => setCurrentPage("searchprice")}>
+//   SearchPrice
+// </button>
 
-      //   {/* Only show BecomeDriver button if the user is logged in */}
-      //   {isLoggedIn && (
-      //     <>
-      //       <button onClick={() => setCurrentPage("becomedriver")}>
-      //         Become Driver
-      //       </button>
-      //       <button onClick={() => setCurrentPage("becomepostoffice")}>
-      //         Become PostOffice
-      //       </button>
-      //     </>
-      //   )}
-      // </div>
+//   {/* Only show BecomeDriver button if the user is logged in */}
+//   {isLoggedIn && (
+//     <>
+//       <button onClick={() => setCurrentPage("becomedriver")}>
+//         Become Driver
+//       </button>
+//       <button onClick={() => setCurrentPage("becomepostoffice")}>
+//         Become PostOffice
+//       </button>
+//     </>
+//   )}
+// </div>
 
-      // {/* Display components based on the current page */}
-      // {currentPage === "create" && <CreateOrder />}
-      // {currentPage === "find" && <FindOrder />}
-      // {currentPage === "postoffice" && <PostOffice />}
-      // {currentPage === "searchprice" && <SearchPrice />}
-      // {currentPage === "becomedriver" && isLoggedIn && <BecomeDriver />}
-      // {currentPage === "becomepostoffice" && isLoggedIn && <BecomePostOffice />} */}
+// {/* Display components based on the current page */}
+// {currentPage === "create" && <CreateOrder />}
+// {currentPage === "find" && <FindOrder />}
+// {currentPage === "postoffice" && <PostOffice />}
+// {currentPage === "searchprice" && <SearchPrice />}
+// {currentPage === "becomedriver" && isLoggedIn && <BecomeDriver />}
+// {currentPage === "becomepostoffice" && isLoggedIn && <BecomePostOffice />} */}

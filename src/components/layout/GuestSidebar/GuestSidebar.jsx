@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import styles from "./Sidebar.module.css";
+import styles from "./GuestSidebar.module.css";
 import { toast } from "react-toastify";
 import { AuthContext } from "../../../context/auth.context";
 import { MdDashboard } from "react-icons/md";
@@ -17,7 +17,7 @@ import { FaUser } from "react-icons/fa";
 import { FaUserNinja } from "react-icons/fa";
 import { HiBuildingOffice2 } from "react-icons/hi2";
 
-const Sidebar = () => {
+const GuestSidebar = () => {
   const [activeItem, setActiveItem] = useState(null);
   const navigate = useNavigate();
   const location = useLocation();
@@ -56,7 +56,7 @@ const Sidebar = () => {
             className={`${styles.menuItem} ${
               activeItem === "dashboard" ? styles.active : ""
             }`}
-            onClick={() => handleItemClick("dashboard", "/dashboard")}
+            onClick={() => handleItemClick("dashboard", "/guesthome")}
           >
             <MdDashboard /> Dashboard
           </li>
@@ -64,23 +64,15 @@ const Sidebar = () => {
             className={`${styles.menuItem} ${
               activeItem === "orders" ? styles.active : ""
             }`}
-            onClick={() => handleItemClick("orders", "/orders")}
+            onClick={() => handleItemClick("orders", "/guesthome")}
           >
             <BsBoxSeam /> Orders
           </li>
           <li
             className={`${styles.menuItem} ${
-              activeItem === "user" ? styles.active : ""
-            }`}
-            onClick={() => handleItemClick("user", "/user")}
-          >
-            <FaUser /> User
-          </li>
-          <li
-            className={`${styles.menuItem} ${
               activeItem === "driver" ? styles.active : ""
             }`}
-            onClick={() => handleItemClick("driver", "/driver")}
+            onClick={() => handleItemClick("driver", "/guesthome")}
           >
             <FaUserNinja /> Driver
           </li>
@@ -88,7 +80,7 @@ const Sidebar = () => {
             className={`${styles.menuItem} ${
               activeItem === "postoffice" ? styles.active : ""
             }`}
-            onClick={() => handleItemClick("postoffice", "/postoffice")}
+            onClick={() => handleItemClick("postoffice", "/guesthome")}
           >
             <HiBuildingOffice2 /> PostOffice
           </li>
@@ -101,4 +93,4 @@ const Sidebar = () => {
   );
 };
 
-export default Sidebar;
+export default GuestSidebar;

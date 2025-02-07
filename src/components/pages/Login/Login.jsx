@@ -106,9 +106,9 @@ const Login = () => {
                   onClick={() => setShowPassword(!showPassword)}
                 >
                   {showPassword ? (
-                    <IoEyeOff className={styles.togglePassword} />
+                    <IoEyeOff />
                   ) : (
-                    <IoEye className={styles.togglePassword} />
+                    <IoEye />
                   )}
                 </span>
               </div>

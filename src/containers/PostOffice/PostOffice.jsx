@@ -139,36 +139,36 @@ const PostOffice = () => {
           <thead>
             <tr>
               <th className={styles.tableuserHeader}>Id</th>
-              <th className={styles.tableuserHeader}>OfficeUserName</th>
+              {/* <th className={styles.tableuserHeader}>OfficeUserName</th>
               <th className={styles.tableuserHeader}>OfficeUserNumber</th>
               <th className={styles.tableuserHeader}>OfficeUserId</th>
               <th className={styles.tableuserHeader}>OfficeUserAddress</th>
-              <th className={styles.tableuserHeader}>OfficeUserEmail</th>
+              <th className={styles.tableuserHeader}>OfficeUserEmail</th> */}
               <th className={styles.tableuserHeader}>OfficeName</th>
               <th className={styles.tableuserHeader}>OfficeHotline</th>
               <th className={styles.tableuserHeader}>OfficeAddress</th>
-              <th className={styles.tableuserHeader}>OfficeLocation</th>
+              {/* <th className={styles.tableuserHeader}>OfficeLocation</th> */}
               <th className={styles.tableuserHeader}>Status</th>
-              <th className={styles.tableuserHeader}>Action</th>
+              {/* <th className={styles.tableuserHeader}>Action</th> */}
             </tr>
           </thead>
           <tbody>
             {data.map((Office) => (
               <tr key={Office._id} className={styles.tableRow}>
                 <td className={styles.tableCell}>{Office._id}</td>
-                <td className={styles.tableCell}>{Office.OfficeUserName}</td>
+                {/* <td className={styles.tableCell}>{Office.OfficeUserName}</td>
                 <td className={styles.tableCell}>{Office.OfficeUserNumber}</td>
                 <td className={styles.tableCell}>{Office.OfficeUserId}</td>
                 <td className={styles.tableCell}>{Office.OfficeUserAddress}</td>
-                <td className={styles.tableCell}>{Office.email}</td>
+                <td className={styles.tableCell}>{Office.email}</td> */}
                 <td className={styles.tableCell}>{Office.OfficeName}</td>
                 <td className={styles.tableCell}>{Office.OfficeHotline}</td>
                 <td className={styles.tableCell}>
                   {Office.OfficeAddress}, {Office.OfficeDistrict}, {Office.OfficeWard}, {Office.OfficeCity}
                 </td>
-                <td className={styles.tableCell}>
+                {/* <td className={styles.tableCell}>
                   {Office.OfficeLatitude}, {Office.OfficeLongitude}
-                </td>
+                </td> */}
                 <td className={styles.tableCell}>{Office.status}</td>
                 <td className={styles.tableCell}>
                   {Office.status !== "active" ? (

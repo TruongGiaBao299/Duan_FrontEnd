@@ -28,19 +28,19 @@
 .item {
   display: flex;
   gap: 30px;
-  border: solid 2px #475365;
-  padding: 30px 60px;
+  border: solid 2px #002E50;
+  padding: 30px;
   border-radius: 20px;
-  width: 200px;
+  width: 220px;
 }
 
 .itemname {
-  color: white;
+  color: 002E50;
   font-size: 16px;
 }
 
 .itemvalue {
-  color: #94da22;
+  color: #002E50;
   font-size: 20px;
 }
 
@@ -48,29 +48,21 @@
   display: flex;
   color: #94da22;
   font-size: 30px;
-  background-color: #475365;
+  background-color: #002E50;
   border-radius: 14px;
   align-items: center;
   text-align: center;
-  padding: 20px;
+  padding: 10px 30px;
 }
 
 .box {
   background-color: #d9d9d9;
-  padding: 100px 100px 200px 100px;
+  padding: 100px ;
   border-radius: 20px;
 }
 
 .itemtotal {
   gap: 10px;
-  display: flex;
-  flex-direction: column;
-}
-
-.boxtracking {
-  background-color: #242731;
-  padding: 10px;
-  border-radius: 20px;
   display: flex;
   flex-direction: column;
 }
