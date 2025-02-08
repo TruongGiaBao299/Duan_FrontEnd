@@ -52,14 +52,40 @@
   padding: 20px;
 }
 
-.orderContainer{
-    padding: 20px 30px;
-    border: 1px solid black;
-    width: 500px;
-    border-radius: 20px;
-    margin-bottom: 10px;
+.orderContainer {
+  padding: 20px 30px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  width: 700px;
+  border-radius: 20px;
+  margin-bottom: 10px;
+}
+
+.orderstatus {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.orderContainer button {
+  outline: none;
+  border: none;
+  background-color: #002E50;
+  color: #fcc737;
+  cursor: pointer;
+  padding: 10px 20px;
+  border-radius: 20px;
 }
 
 .FilterButton{
-    margin-bottom: 10px;
+  margin-bottom: 20px;
+}
+
+.FilterButton button {
+  outline: none;
+  border: none;
+  background-color: #002E50;
+  color: #fcc737;
+  cursor: pointer;
+  padding: 10px 20px;
+  border-radius: 20px;
 }

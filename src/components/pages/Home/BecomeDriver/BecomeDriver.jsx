@@ -362,9 +362,12 @@ const BecomeDriver = () => {
           </form>
         )}
       </div>
-      <div className={styles.img}>
-        <img src={stmImage} alt="STM intro" className={styles.image} />
-      </div>
+      {/* Hiển thị hình ảnh chỉ khi loading là false */}
+      {!loading && (
+        <div className={styles.img}>
+          <img src={stmImage} alt="STM intro" className={styles.image} />
+        </div>
+      )}
     </div>
   );
 };

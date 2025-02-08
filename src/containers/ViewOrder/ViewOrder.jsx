@@ -7,27 +7,29 @@ import {
 } from "../../utils/driverAPI/driverAPI";
 import styles from "./ViewOrder.module.css";
 import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
+import { MapContainer, TileLayer } from "react-leaflet";
+import "leaflet/dist/leaflet.css";
+import { useNavigate } from "react-router-dom";
 
 const ViewOrder = () => {
   const [orders, setOrders] = useState([]);
-  const [expandedOrder, setExpandedOrder] = useState(null);
-  const [showPopup, setShowPopup] = useState(false);
+  const [selectedOrder, setSelectedOrder] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchUser = async () => {
+    const fetchOrders = async () => {
       setIsLoading(true);
       try {
         const res = await getOrderByEmailApi();
-        console.log("Order by email:", res);
-
         if (res && res.length > 0) {
           const filteredOrders = res.filter(
             (order) =>
               order.status === "pending" ||
               order.status === "is shipping" ||
               order.status === "delivery to post office" ||
-              order.status === "prepare to delivery"
+              order.status === "prepare to delivery" ||
+              order.status === "canceled"
           );
           setOrders(filteredOrders);
         } else {
@@ -37,164 +39,153 @@ const ViewOrder = () => {
         console.error("Error:", error);
         toast.error("Error fetching orders");
       } finally {
-        setIsLoading(false); // Mark loading as complete
+        setIsLoading(false);
       }
     };
 
-    fetchUser();
+    fetchOrders();
   }, []);
 
-  const ShippedOrder = async (userId) => {
+  const updateOrderStatus = async (orderId, status) => {
     try {
-      await ShippedOrderApi(userId);
-      toast.success("Order status updated to shipped successfully!");
+      if (status === "shipped") {
+        await ShippedOrderApi(orderId);
+        toast.success("Order marked as shipped!");
+      } else if (status === "canceled") {
+        await CancelledOrderApi(orderId);
+        toast.success("Order canceled successfully!");
+      }
       setOrders((prevOrders) =>
         prevOrders.map((order) =>
-          order._id === userId ? { ...order, status: "shipped" } : order
+          order._id === orderId ? { ...order, status } : order
         )
       );
     } catch (error) {
-      console.error("Error update:", error);
-      toast.error("Failed to update. Please try again.");
-    }
-  };
-
-  const CancelledOrder = async (userId) => {
-    try {
-      await CancelledOrderApi(userId);
-      toast.success("Order status updated to canceled successfully!");
-      setOrders((prevOrders) =>
-        prevOrders.map((order) =>
-          order._id === userId ? { ...order, status: "canceled" } : order
-        )
-      );
-    } catch (error) {
-      console.error("Error update:", error);
-      toast.error("Failed to update. Please try again.");
+      console.error("Error updating order:", error);
+      toast.error("Failed to update order status. Please try again.");
     }
   };
 
   if (isLoading) {
-    // Hiển thị trạng thái Loading
-    return <LoadingSpinner isLoading={isLoading}></LoadingSpinner>;
+    return <LoadingSpinner isLoading={isLoading} />;
   }
 
   return (
     <div className={styles.Container}>
       {orders.length === 0 ? (
-        <p>You don't have any order!</p>
+        <p>You don't have any orders!</p>
       ) : (
-        <div>
-          <h2>Order Information</h2>
-          {orders.map((order) => (
-            <div key={order._id} className={styles.orderContainer}>
-              <p>
-                <strong>Order ID:</strong> {order._id}
-              </p>
-              <p>
-                <strong>From:</strong> {order.fromAddress}, {order.fromDistrict}
-                , {order.fromWard}, {order.fromCity}
-              </p>
-              <p>
-                <strong>To:</strong> {order.toAddress}, {order.toDistrict},{" "}
-                {order.toWard}, {order.toCity}
-              </p>
-              <p>
-                <strong>Status:</strong> {order.status}
-              </p>
-              {/* Timeline Display */}
-              {order.timeline && order.timeline.length > 0 && (
-                <div className={styles.timeline}>
-                  <ul>
-                    {order.timeline.map((entry, index) => (
-                      <li key={entry._id}>
-                        {new Date(
-                          new Date(entry.timestamp).getTime() +
-                            17 * 60 * 60 * 1000
-                        ).toLocaleString()}: <strong>{entry.status}</strong>
-                      </li>
-                    ))}
-                  </ul>
+        <div className={styles.containeroverview}>
+          <div>
+            <button className={styles.addnew} onClick={() => navigate("/guestcreateorder")}>Add New +</button>
+            {orders.map((order) => (
+              <div key={order._id} className={styles.orderContainer}>
+                <div className={styles.orderstatus}>
+                  <p>
+                    <strong>Order ID:</strong> {order._id}
+                  </p>
+                  <p>
+                    <strong>Status:</strong> {order.status}
+                  </p>
                 </div>
-              )}
-              <button
-                onClick={() => {
-                  setExpandedOrder(order);
-                  setShowPopup(true);
-                }}
-              >
-                Show Details
-              </button>
-              {order.status === "is shipping" && (
-                <button onClick={() => ShippedOrder(order._id)}>Shipped</button>
-              )}
-              {order.status === "pending" && (
-                <button onClick={() => CancelledOrder(order._id)}>
-                  Cancelled
-                </button>
-              )}
-            </div>
-          ))}
-        </div>
-      )}
 
-      {showPopup && expandedOrder && (
-        <div
-          className={styles.popupOverlay}
-          onClick={() => setShowPopup(false)}
-        >
-          <div
-            className={styles.popupContent}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <button
-              className={styles.closeButton}
-              onClick={() => setShowPopup(false)}
-            >
-              x
-            </button>
-            <div className={styles.orderDetails}>
-              <p>
-                <strong>Sender Name:</strong> {expandedOrder.senderName}
-              </p>
-              <p>
-                <strong>Sender Number:</strong> {expandedOrder.senderNumber}
-              </p>
-              <p>
-                <strong>Recipient Name:</strong> {expandedOrder.recipientName}
-              </p>
-              <p>
-                <strong>Recipient Number:</strong>{" "}
-                {expandedOrder.recipientNumber}
-              </p>
-              <p>
-                <strong>Order Weight:</strong> {expandedOrder.orderWeight}
-              </p>
-              <p>
-                <strong>Order Size:</strong> {expandedOrder.orderSize}
-              </p>
-              <p>
-                <strong>Type:</strong> {expandedOrder.type}
-              </p>
-              <p>
-                <strong>Message:</strong> {expandedOrder.message}
-              </p>
-              <p>
-                <strong>Price:</strong> {expandedOrder.price}
-              </p>
-              <p>
-                <strong>Created At:</strong> {expandedOrder.createdAt}
-              </p>
-              <p>
-                <strong>Driver:</strong> {expandedOrder.driver}
-              </p>
-              <p>
-                <strong>Estimated Delivery Time:</strong>{" "}
-                {expandedOrder.estimatedDeliveryTime}
-              </p>
-              <p>
-                <strong>Distance:</strong> {expandedOrder.distance} km
-              </p>
+                {/* Đổi màu khi đơn hàng được chọn */}
+                <div
+                  className={`${styles.orderaddress} ${
+                    selectedOrder?._id === order._id ? styles.selectedOrder : ""
+                  }`}
+                >
+                  <div className={styles.fromstatus}>
+                    <p>
+                      <strong>From:</strong> {order.fromAddress},{" "}
+                      {order.fromDistrict}, {order.fromCity}
+                    </p>
+                    <p>
+                      {new Date(order.createdAt).toLocaleDateString("en-GB")}
+                    </p>
+                  </div>
+
+                  {order.senderNumber}
+
+                  <div className={styles.tostatus}>
+                    <p>
+                      <strong>To:</strong> {order.toAddress}, {order.toDistrict}
+                      , {order.toCity}
+                    </p>
+                    <p>{order.estimatedDeliveryTime}</p>
+                  </div>
+
+                  {order.recipientNumber}
+
+                  <button onClick={() => setSelectedOrder(order)}>
+                    Show Details
+                  </button>
+
+                  {order.status === "is shipping" && (
+                    <button
+                      onClick={() => updateOrderStatus(order._id, "shipped")}
+                    >
+                      Shipped
+                    </button>
+                  )}
+                  {order.status === "pending" && (
+                    <button
+                      onClick={() => updateOrderStatus(order._id, "canceled")}
+                    >
+                      Cancelled
+                    </button>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Overview Section */}
+          <div className={styles.overview}>
+            <h3>Overview</h3>
+            <div className={styles.map}>
+              <MapContainer
+                center={[10.7336, 106.6989]}
+                zoom={13}
+                style={{ height: "300px", width: "600px" }}
+                zoomControl={false}
+              >
+                <TileLayer
+                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                  attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                />
+              </MapContainer>
+            </div>
+
+            <div className={styles.orderoverview}>
+              {selectedOrder ? (
+                <div className={styles.overviewgroup}>
+                  <div>
+                    <p>
+                      <strong>Recipient Name:</strong>{" "}
+                      {selectedOrder.recipientName}
+                    </p>
+                    <p>
+                      <strong>Recipient Number:</strong>{" "}
+                      {selectedOrder.recipientNumber}
+                    </p>
+                    <p>
+                      <strong>Price:</strong> {selectedOrder.price}
+                    </p>
+                    <p>
+                      <strong>Driver:</strong> {selectedOrder.driver}
+                    </p>
+                  </div>
+                  <div>
+                    <p>
+                      <strong>Estimated Delivery Time:</strong>{" "}
+                      {selectedOrder.estimatedDeliveryTime}
+                    </p>
+                  </div>
+                </div>
+              ) : (
+                <p>Chưa chọn đơn hàng</p>
+              )}
             </div>
           </div>
         </div>

@@ -147,7 +147,7 @@ const PostOfficeManageDriver = () => {
   );
 
   return (
-    <div>
+    <div className={styles.maincontainer}>
       {isLoading ? (
         <LoadingSpinner isLoading={isLoading}></LoadingSpinner>
       ) : error ? (
@@ -157,31 +157,20 @@ const PostOfficeManageDriver = () => {
       ) : (
         <>
           <div className={styles.container}>
-            <table className="driver-table">
+            <table className={styles.tablecontainer}>
               <thead>
                 <tr>
-                  <th>DriverName</th>
-                  <th>DriverNumber</th>
                   <th>DriverEmail</th>
-                  <th>DriverBirth</th>
-                  {/* <th>DriverId</th> */}
-                  <th>DriverAddress</th>
-                  <th>DriverCity</th>
-                  {/* <th>PostOffice</th> */}
+                  <th>DriverNumber</th>
                   <th>Status</th>
+                  <th></th>
                 </tr>
               </thead>
               <tbody>
                 {filteredDriverData.map((user) => (
                   <tr key={user._id}>
-                    <td>{user.DriverName}</td>
-                    <td>{user.DriverNumber}</td>
                     <td>{user.email}</td>
-                    <td>{user.DriverBirth}</td>
-                    {/* <td>{user.DriverId}</td> */}
-                    <td>{user.DriverAddress}</td>
-                    <td>{user.DriverCity}</td>
-                    {/* <td>{user.postOffice}</td> */}
+                    <td>{user.DriverNumber}</td>
                     <td>{user.status}</td>
                     <td>
                       {user.role !== "driver" ? (

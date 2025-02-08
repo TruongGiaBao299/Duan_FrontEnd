@@ -151,7 +151,6 @@ const CreateOrder = () => {
       } else {
         toast.success("Order created successfully!");
         form.reset(); // Reset form input
-        navigate("/");
       }
     } catch (error) {
       console.error("Error:", error);
@@ -160,13 +159,13 @@ const CreateOrder = () => {
     }
   };
 
-  useEffect(() => {
-    if (isPopupOpen) {
-      document.body.style.overflow = "hidden"; // Disable scrolling
-    } else {
-      document.body.style.overflow = "auto"; // Enable scrolling
-    }
-  }, [isPopupOpen]);
+  // useEffect(() => {
+  //   if (isPopupOpen) {
+  //     document.body.style.overflow = "hidden"; // Disable scrolling
+  //   } else {
+  //     document.body.style.overflow = "auto"; // Enable scrolling
+  //   }
+  // }, [isPopupOpen]);
 
   if (isLoading) {
     // Hiển thị trạng thái Loading
@@ -175,245 +174,237 @@ const CreateOrder = () => {
 
   return (
     <>
-      <button
+      {/* <button
         className={styles.ToggleButton}
         onClick={() => setIsPopupOpen(!isPopupOpen)}
       >
         📦
-      </button>
+      </button> */}
 
-      {isPopupOpen && (
-        <div className={styles.CreateOrderContainer}>
-          <div className={styles.PopupOverlay}>
-            <div className={styles.PopupContent}>
-              <button
-                className={styles.CloseButton}
-                onClick={() => setIsPopupOpen(false)}
-              >
-                <IoIosClose />
-              </button>
-              <form onSubmit={handleSubmit}>
-                <div className={styles.FormContainer}>
-                  <div className={styles.FormTopContainer}>
-                    <div className={styles.FormLeftContainer}>
-                      <p>1. Sender Infomation</p>
-                      <div className={styles.CreateOrderInput}>
-                        <input
-                          placeholder="Sender Name"
-                          type="text"
-                          id="senderName"
-                          name="senderName"
-                          required
-                        />
-                      </div>
+      {/* {isPopupOpen && (
+        
+      )} */}
 
-                      <div className={styles.CreateOrderInput}>
-                        <input
-                          placeholder="Sender Number"
-                          type="text"
-                          id="senderNumber"
-                          name="senderNumber"
-                          required
-                        />
-                      </div>
-
-                      {/* From City */}
-                      <div className={styles.CreateOrderInput}>
-                        <select
-                          id="fromCity"
-                          name="fromCity"
-                          required
-                          value={selectedFromCity}
-                          onChange={(e) => setSelectedFromCity(e.target.value)}
-                        >
-                          <option value="">Select From City</option>
-                          {locationCity.map((city, index) => (
-                            <option key={index} value={city}>
-                              {city}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-
-                      {/* From District */}
-                      <div className={styles.CreateOrderInput}>
-                        <select
-                          id="fromDistrict"
-                          name="fromDistrict"
-                          required
-                          value={selectedFromDistrict}
-                          onChange={(e) =>
-                            setSelectedFromDistrict(e.target.value)
-                          }
-                        >
-                          <option value="">Select From District</option>
-                          {locationDistrictFrom.map((district, index) => (
-                            <option key={index} value={district.name}>
-                              {district.name}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-
-                      {/* From Ward */}
-                      <div className={styles.CreateOrderInput}>
-                        <select id="fromWard" name="fromWard" required>
-                          <option value="">Select From Ward</option>
-                          {locationWardFrom.map((ward, index) => (
-                            <option key={index} value={ward.name}>
-                              {ward.name}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-
-                      <div className={styles.CreateOrderInput}>
-                        <input
-                          placeholder="From Address"
-                          type="text"
-                          id="fromAddress"
-                          name="fromAddress"
-                          required
-                        />
-                      </div>
-                    </div>
-
-                    <div className={styles.FormRightContainer}>
-                      <p>2. Recipient Infomation</p>
-                      <div className={styles.CreateOrderInput}>
-                        <input
-                          placeholder="Recipient Name"
-                          type="text"
-                          id="recipientName"
-                          name="recipientName"
-                          required
-                        />
-                      </div>
-
-                      <div className={styles.CreateOrderInput}>
-                        <input
-                          placeholder="Recipient Number"
-                          type="text"
-                          id="recipientNumber"
-                          name="recipientNumber"
-                          required
-                        />
-                      </div>
-
-                      {/* To City */}
-                      <div className={styles.CreateOrderInput}>
-                        <select
-                          id="toCity"
-                          name="toCity"
-                          required
-                          value={selectedToCity}
-                          onChange={(e) => setSelectedToCity(e.target.value)}
-                        >
-                          <option value="">Select To City</option>
-                          {locationCity.map((city, index) => (
-                            <option key={index} value={city}>
-                              {city}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-
-                      {/* To District */}
-                      <div className={styles.CreateOrderInput}>
-                        <select
-                          id="toDistrict"
-                          name="toDistrict"
-                          required
-                          value={selectedToDistrict}
-                          onChange={(e) =>
-                            setSelectedToDistrict(e.target.value)
-                          }
-                        >
-                          <option value="">Select To District</option>
-                          {locationDistrictTo.map((district, index) => (
-                            <option key={index} value={district.name}>
-                              {district.name}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-
-                      {/* To Ward */}
-                      <div className={styles.CreateOrderInput}>
-                        <select id="toWard" name="toWard" required>
-                          <option value="">Select To Ward</option>
-                          {locationWardTo.map((ward, index) => (
-                            <option key={index} value={ward.name}>
-                              {ward.name}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-
-                      <div className={styles.CreateOrderInput}>
-                        <input
-                          placeholder="To Address"
-                          type="text"
-                          id="toAddress"
-                          name="toAddress"
-                          required
-                        />
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className={styles.FormBotContainer}>
-                    <div className={styles.CreateOrderInputBot}>
-                      <input
-                        placeholder="Order Weight"
-                        type="number"
-                        id="orderWeight"
-                        name="orderWeight"
-                        required
-                      />
-                    </div>
-
-                    <div className={styles.CreateOrderInputBot}>
-                      <input
-                        placeholder="Order Size"
-                        type="number"
-                        id="orderSize"
-                        name="orderSize"
-                        required
-                      />
-                    </div>
-
-                    <div className={styles.CreateOrderInputBot}>
-                      <input
-                        placeholder="Type"
-                        type="text"
-                        id="type"
-                        name="type"
-                        required
-                      />
-                    </div>
-                  </div>
-
-                  <div className={styles.CreateOrderInput}>
-                    <textarea
-                      placeholder="Message"
-                      type="text"
-                      id="message"
-                      name="message"
-                      required
-                    />
-                  </div>
-
-                  <div className={styles.CreateOrderSubmit}>
-                    <button type="submit">Submit</button>
-                    <FaArrowRight />
-                  </div>
+      <div className={styles.CreateOrderContainer}>
+        <form onSubmit={handleSubmit}>
+          <div className={styles.FormContainer}>
+            <div className={styles.FormTopContainer}>
+              <div className={styles.FormLeftContainer}>
+                <p>1. Sender Infomation</p>
+                <div className={styles.CreateOrderInput}>
+                  <input
+                    placeholder="Sender Name"
+                    type="text"
+                    id="senderName"
+                    name="senderName"
+                    required
+                  />
                 </div>
-              </form>
+
+                <div className={styles.CreateOrderInput}>
+                  <input
+                    placeholder="Sender Number"
+                    type="text"
+                    id="senderNumber"
+                    name="senderNumber"
+                    required
+                  />
+                </div>
+
+                {/* From City */}
+                <div className={styles.CreateOrderInput}>
+                  <select
+                    id="fromCity"
+                    name="fromCity"
+                    required
+                    value={selectedFromCity}
+                    onChange={(e) => setSelectedFromCity(e.target.value)}
+                  >
+                    <option value="">Select From City</option>
+                    {locationCity.map((city, index) => (
+                      <option key={index} value={city}>
+                        {city}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* From District */}
+                <div className={styles.CreateOrderInput}>
+                  <select
+                    id="fromDistrict"
+                    name="fromDistrict"
+                    required
+                    value={selectedFromDistrict}
+                    onChange={(e) => setSelectedFromDistrict(e.target.value)}
+                  >
+                    <option value="">Select From District</option>
+                    {locationDistrictFrom.map((district, index) => (
+                      <option key={index} value={district.name}>
+                        {district.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* From Ward */}
+                <div className={styles.CreateOrderInput}>
+                  <select id="fromWard" name="fromWard" required>
+                    <option value="">Select From Ward</option>
+                    {locationWardFrom.map((ward, index) => (
+                      <option key={index} value={ward.name}>
+                        {ward.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className={styles.CreateOrderInput}>
+                  <input
+                    placeholder="From Address"
+                    type="text"
+                    id="fromAddress"
+                    name="fromAddress"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div className={styles.FormRightContainer}>
+                <p>2. Recipient Infomation</p>
+                <div className={styles.CreateOrderInput}>
+                  <input
+                    placeholder="Recipient Name"
+                    type="text"
+                    id="recipientName"
+                    name="recipientName"
+                    required
+                  />
+                </div>
+
+                <div className={styles.CreateOrderInput}>
+                  <input
+                    placeholder="Recipient Number"
+                    type="text"
+                    id="recipientNumber"
+                    name="recipientNumber"
+                    required
+                  />
+                </div>
+
+                {/* To City */}
+                <div className={styles.CreateOrderInput}>
+                  <select
+                    id="toCity"
+                    name="toCity"
+                    required
+                    value={selectedToCity}
+                    onChange={(e) => setSelectedToCity(e.target.value)}
+                  >
+                    <option value="">Select To City</option>
+                    {locationCity.map((city, index) => (
+                      <option key={index} value={city}>
+                        {city}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* To District */}
+                <div className={styles.CreateOrderInput}>
+                  <select
+                    id="toDistrict"
+                    name="toDistrict"
+                    required
+                    value={selectedToDistrict}
+                    onChange={(e) => setSelectedToDistrict(e.target.value)}
+                  >
+                    <option value="">Select To District</option>
+                    {locationDistrictTo.map((district, index) => (
+                      <option key={index} value={district.name}>
+                        {district.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* To Ward */}
+                <div className={styles.CreateOrderInput}>
+                  <select id="toWard" name="toWard" required>
+                    <option value="">Select To Ward</option>
+                    {locationWardTo.map((ward, index) => (
+                      <option key={index} value={ward.name}>
+                        {ward.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className={styles.CreateOrderInput}>
+                  <input
+                    placeholder="To Address"
+                    type="text"
+                    id="toAddress"
+                    name="toAddress"
+                    required
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className={styles.FormBotContainer}>
+              <div className={styles.CreateOrderInputBot}>
+                <input
+                  placeholder="Order Weight"
+                  type="number"
+                  id="orderWeight"
+                  name="orderWeight"
+                  required
+                />
+              </div>
+
+              <div className={styles.CreateOrderInputBot}>
+                <input
+                  placeholder="Order Size"
+                  type="number"
+                  id="orderSize"
+                  name="orderSize"
+                  required
+                />
+              </div>
+
+              <div className={styles.CreateOrderInputBot}>
+                <input
+                  placeholder="Type"
+                  type="text"
+                  id="type"
+                  name="type"
+                  required
+                />
+              </div>
+            </div>
+
+            <div className={styles.CreateOrderInput}>
+              <textarea
+                placeholder="Message"
+                type="text"
+                id="message"
+                name="message"
+                required
+              />
             </div>
           </div>
-        </div>
-      )}
+
+          <div className={styles.CreateOrderGroup}>
+            <div className={styles.CreateOrderCancel}>
+              <button>Cancel</button>
+            </div>
+            <div className={styles.CreateOrderSubmit}>
+              <button type="submit">Add</button>
+            </div>
+          </div>
+        </form>
+      </div>
     </>
   );
 };

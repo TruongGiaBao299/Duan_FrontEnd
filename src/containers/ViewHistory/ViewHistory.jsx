@@ -89,20 +89,25 @@ const ViewHistory = () => {
         <div>
           {filteredOrders.map((order) => (
             <div key={order._id} className={styles.orderContainer}>
-              <p>
-                <strong>Order ID:</strong> {order._id}
-              </p>
-              <p>
-                <strong>From:</strong> {order.fromAddress}, {order.fromDistrict}
-                , {order.fromCity}
-              </p>
-              <p>
-                <strong>To:</strong> {order.toAddress}, {order.toDistrict},{" "}
-                {order.toCity}
-              </p>
-              <p>
-                <strong>Status:</strong> {order.status}
-              </p>
+              <div className={styles.orderstatus}>
+                <p>
+                  <strong>Order ID:</strong> {order._id}
+                </p>
+                <p>
+                  <strong>Status:</strong> {order.status}
+                </p>
+              </div>
+
+              <div className={styles.orderaddress}>
+                <p>
+                  <strong>From:</strong> {order.fromAddress},{" "}
+                  {order.fromDistrict}, {order.fromWard}, {order.fromCity}
+                </p>
+                <p>
+                  <strong>To:</strong> {order.toAddress}, {order.toDistrict},{" "}
+                  {order.toWard}, {order.toCity}
+                </p>
+              </div>
               {/* Timeline Display */}
               {order.timeline && order.timeline.length > 0 && (
                 <div className={styles.timeline}>
@@ -112,8 +117,8 @@ const ViewHistory = () => {
                         {new Date(
                           new Date(entry.timestamp).getTime() +
                             17 * 60 * 60 * 1000
-                        ).toLocaleString()}: <strong>{entry.status}</strong>
-                        
+                        ).toLocaleString()}
+                        : <strong>{entry.status}</strong>
                       </li>
                     ))}
                   </ul>

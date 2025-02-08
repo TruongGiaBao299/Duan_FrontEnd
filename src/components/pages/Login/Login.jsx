@@ -38,6 +38,7 @@ const Login = () => {
         if (res.user.role === "admin") navigate("/dashboard");
         else if (res.user.role === "driver") navigate("/driverhome");
         else if (res.user.role === "postoffice") navigate("/postofficehome");
+        else if (res.user.role === "guest") navigate("/guesthome");
         else navigate("/");
 
         toast.success("Login successfully!");

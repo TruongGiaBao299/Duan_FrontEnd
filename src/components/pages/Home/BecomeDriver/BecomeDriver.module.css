@@ -1,28 +1,22 @@
 .container {
   display: flex;
-  justify-content: row;
+  flex-direction: row;
+  justify-content: center;
+  gap: 30px;
   align-items: center;
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px;
-  gap: 50px;
-}
-
-.content {
-  flex: 1;
-  padding-right: 20px;
+  width: 90vw;
+  height: 90vh;
+  padding-top: 90px;
 }
 
 .img {
-  flex: 1;
   display: flex;
   justify-content: center;
 }
 
 .image {
-  max-width: 100%;
-  height: 100%;
+  max-width: 700px;
+  height: 88vh;
 }
 
 .formContainer {
@@ -46,17 +40,23 @@
 
 .personalInfoInput select {
   padding: 10px;
-  width: 185px;
+  width: 184px;
+  border: 1px solid #002E50;
+  border-radius: 10px;
 }
 
 .personalInfoSelect select {
   padding: 10px;
   width: 565px;
+  border: 1px solid #002E50;
+  border-radius: 10px;
 }
 
 .personalInfoInput input {
   padding: 10px;
   width: 540px;
+  border: 1px solid #002E50;
+  border-radius: 10px;
 }
 
 .personalInfoSubmit button {

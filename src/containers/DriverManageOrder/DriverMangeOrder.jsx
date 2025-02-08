@@ -11,6 +11,14 @@ import { getPostOfficeApi } from "../../utils/postOfficeAPI/postOfficeAPI";
 import styles from "./DriverMangeOrder.module.css";
 import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 import { FaLocationArrow } from "react-icons/fa";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  Tooltip,
+  ResponsiveContainer,
+} from "recharts";
 
 const DriverMangeOrder = () => {
   const [orders, setOrders] = useState([]);
@@ -30,6 +38,7 @@ const DriverMangeOrder = () => {
         const res = await getDriverOrderByEmailApi();
         if (res && res.length > 0) {
           setOrders(res);
+          console.log("orders: ", res);
         } else {
           setOrders([]);
         }
@@ -99,10 +108,11 @@ const DriverMangeOrder = () => {
     (order) => order.status === "shipped"
   ).length;
   const totalIsShippingOrders = orders.filter(
-    (order) => order.status === "is shipping"
-  ).length;
-  const totalDeliveryToPostOfficeOrders = orders.filter(
-    (order) => order.status === "delivery to post office"
+    (order) =>
+      order.status === "is shipping" ||
+      order.status === "delivery to post office" ||
+      order.status === "prepare to delivery" ||
+      order.status === "canceled"
   ).length;
 
   const totalIncome = orders
@@ -191,123 +201,138 @@ const DriverMangeOrder = () => {
     }
   };
 
+  const datachart = [
+    { name: "Total", count: totalOrders },
+    { name: "Successful", count: totalShippedOrders },
+    { name: "OnGoing", count: totalIsShippingOrders },
+  ];
+
   return (
     <div className={styles.Container}>
       {isLoading && <LoadingSpinner isLoading={true} />}
       {/* Hiển thị số lượng đơn và thu nhập */}
-      <div className={styles.CalInfo}>
-        <h3>Total Orders: {totalOrders}</h3>
-        <h3>Shipped Orders: {totalShippedOrders}</h3>
-        <h3>Is Shipping Orders: {totalIsShippingOrders}</h3>
-        <h3>
-          Delivery to Post Office Orders: {totalDeliveryToPostOfficeOrders}
-        </h3>
-      </div>
+      <div className={styles.BoxCalInfo}>
+        <div className={styles.CalInfo}>
+          <div className={styles.CalBox}>
+            <h3>Total Orders: {totalOrders}</h3>
+          </div>
+          <div className={styles.CalBox}>
+            <h3>Successful Orders: {totalShippedOrders}</h3>
+          </div>
+          <div className={styles.CalBox}>
+            <h3>OnGoing Orders: {totalIsShippingOrders}</h3>
+          </div>
+        </div>
 
-      {/* Nút bộ lọc */}
-      <div className={styles.ButtonInfo}>
-        <button onClick={() => setFilterStatus("all")}>All</button>
-        <button onClick={() => setFilterStatus("delivery to post office")}>
-          Delivery to Post Office
-        </button>
-        <button onClick={() => setFilterStatus("is shipping")}>
-          Is Shipping
-        </button>
-        <button onClick={() => setFilterStatus("shipped")}>Shipped</button>
+        <div className={styles.chart}>
+          <ResponsiveContainer width="100%" height={300}>
+            <BarChart data={datachart}>
+              <XAxis dataKey="name" />
+              <YAxis />
+              <Tooltip />
+              <Bar dataKey="count" fill="#fcc737" />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
       </div>
 
       {filteredOrders.length === 0 ? (
         <p>No orders match the selected filter!</p>
       ) : (
         <div className={styles.OrderInfoContainer}>
-          {filteredOrders.map((order) => (
-            <div className={styles.OrderInfo} key={order._id}>
-              <div className={styles.StatusInfo}>
-                <p>
-                  <strong>Order ID:</strong> {order._id}
-                </p>
+          {filteredOrders
+            .filter((order) => order.status === "shipped")
+            .map((order) => (
+              <div className={styles.OrderInfo} key={order._id}>
+                <div className={styles.StatusInfo}>
+                  <p>
+                    <strong>Order ID:</strong> {order._id}
+                  </p>
 
-                <p>
-                  <strong>Status:</strong> {order.status}
-                </p>
-              </div>
+                  <p>
+                    <strong>Status:</strong> {order.status}
+                  </p>
+                </div>
 
-              <div className={styles.AddressInfo}>
-                <p>
-                  <strong>Sender Address:</strong> {order.fromAddress},{" "}
-                  {order.fromDistrict}, {order.fromWard}, {order.fromCity}
-                </p>
-                <p>
-                  <strong>Recipient Address:</strong> {order.toAddress},{" "}
-                  {order.toDistrict}, {order.toWard}, {order.toCity}
-                </p>
-              </div>
+                <div className={styles.AddressInfo}>
+                  <p>
+                    <strong>Sender Address:</strong> {order.fromAddress},{" "}
+                    {order.fromDistrict}, {order.fromWard}, {order.fromCity}
+                  </p>
+                  <p>
+                    <strong>Recipient Address:</strong> {order.toAddress},{" "}
+                    {order.toDistrict}, {order.toWard}, {order.toCity}
+                  </p>
+                </div>
 
-              <div className={styles.NoteInfo}>
-                <p>
-                  <strong>Message:</strong> {order.message}
-                </p>
-                <p>
-                  <strong>Price:</strong> {order.price}
-                </p>
-              </div>
+                <div className={styles.NoteInfo}>
+                  <p>
+                    <strong>Message:</strong> {order.message}
+                  </p>
+                  <p>
+                    <strong>Price:</strong> {order.price}
+                  </p>
+                </div>
 
-              <div className={styles.SentContent}>
-                <button onClick={() => handleShowDetails(order)}>
-                  Show Details
-                </button>
+                <div className={styles.SentContent}>
+                  <button onClick={() => handleShowDetails(order)}>
+                    Show Details
+                  </button>
 
-                {/* Nút mở bản đồ HERE */}
-                {order.status !== "shipped" && order.status !== "canceled" && (
-                  <button onClick={() => handleOpenMap(order)}>Open Map</button>
-                )}
+                  {/* Nút mở bản đồ HERE */}
+                  {order.status !== "shipped" &&
+                    order.status !== "canceled" && (
+                      <button onClick={() => handleOpenMap(order)}>
+                        Open Map
+                      </button>
+                    )}
 
-                {!order.postOffice &&
-                  order.status !== "shipped" &&
-                  order.status !== "canceled" && (
-                    <div>
-                      <form
-                        className={styles.SentTo}
-                        onSubmit={(e) => handleSubmit(e, order._id)}
-                      >
-                        <select
-                          value={emails[order._id] || ""}
-                          onChange={(e) =>
-                            setEmails((prev) => ({
-                              ...prev,
-                              [order._id]: e.target.value,
-                            }))
-                          }
-                          required
+                  {!order.postOffice &&
+                    order.status !== "shipped" &&
+                    order.status !== "canceled" && (
+                      <div>
+                        <form
+                          className={styles.SentTo}
+                          onSubmit={(e) => handleSubmit(e, order._id)}
                         >
-                          <option value="">Select a Post Office</option>
-                          {data
-                            .filter(
-                              (postOffice) =>
-                                postOffice.OfficeDistrict ===
-                                  order.fromDistrict ||
-                                (postOffice.OfficeDistrict !==
-                                  order.fromDistrict &&
-                                  postOffice.OfficeCity === order.fromCity)
-                            )
-                            .map((postOffice) => (
-                              <option
-                                key={postOffice.email}
-                                value={postOffice.email}
-                              >
-                                {postOffice.OfficeName}
-                              </option>
-                            ))}
-                        </select>
-                        <button type="submit">
-                          <FaLocationArrow />
-                        </button>
-                      </form>
-                    </div>
-                  )}
+                          <select
+                            value={emails[order._id] || ""}
+                            onChange={(e) =>
+                              setEmails((prev) => ({
+                                ...prev,
+                                [order._id]: e.target.value,
+                              }))
+                            }
+                            required
+                          >
+                            <option value="">Select a Post Office</option>
+                            {data
+                              .filter(
+                                (postOffice) =>
+                                  postOffice.OfficeDistrict ===
+                                    order.fromDistrict ||
+                                  (postOffice.OfficeDistrict !==
+                                    order.fromDistrict &&
+                                    postOffice.OfficeCity === order.fromCity)
+                              )
+                              .map((postOffice) => (
+                                <option
+                                  key={postOffice.email}
+                                  value={postOffice.email}
+                                >
+                                  {postOffice.OfficeName}
+                                </option>
+                              ))}
+                          </select>
+                          <button type="submit">
+                            <FaLocationArrow />
+                          </button>
+                        </form>
+                      </div>
+                    )}
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
         </div>
       )}
 

@@ -7,6 +7,8 @@ import {
 } from "../../utils/postOfficeAPI/postOfficeAPI";
 import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 import { MdOutlineDoubleArrow } from "react-icons/md";
+import { MapContainer, TileLayer } from "react-leaflet";
+import "leaflet/dist/leaflet.css";
 
 const PostOfficeHistory = () => {
   const [orders, setOrders] = useState([]);
@@ -15,6 +17,7 @@ const PostOfficeHistory = () => {
   const [showPopup, setShowPopup] = useState(false);
   const [expandedOrder, setExpandedOrder] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [selectedOrder, setSelectedOrder] = useState(null);
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -60,8 +63,7 @@ const PostOfficeHistory = () => {
     .reduce((sum, order) => sum + order.price * 0.2, 0);
 
   const handleShowDetails = (order) => {
-    setExpandedOrder(order);
-    setShowPopup(true);
+    setSelectedOrder(order);
   };
 
   if (isLoading) {
@@ -71,9 +73,9 @@ const PostOfficeHistory = () => {
 
   return (
     <div className={styles.driverordercontainer}>
-      <div className={styles.stats}>
+      {/* <div className={styles.stats}>
         <h3>Total Orders: {totalShippedOrders}</h3>
-      </div>
+      </div> */}
 
       {totalShippedOrders === 0 ? (
         <p>You don't have any shipped orders!</p>
@@ -85,115 +87,98 @@ const PostOfficeHistory = () => {
                 order.status === "shipped" && order.postOffice === postEmail
             )
             .map((order) => (
-              <div className={styles.OrderContent} key={order._id}>
-                <div className={styles.addressInfo}>
-                  <p>
-                    <strong>Order ID:</strong> {order._id}
-                  </p>
-                  <div className={styles.addressGroup}>
-                    <p>
-                      <strong>From Address: </strong>
-                      {`${order.fromAddress}, ${order.fromDistrict},  ${order.fromWard}, ${order.fromCity}`}
-                    </p>
+              <>
+                <div className={styles.overcontent}>
+                  <div className={styles.topContent} key={order._id}>
+                    <div className={styles.OrderContent}>
+                      <div className={styles.addressInfo}>
+                        <div className={styles.statusGroup}>
+                          <p>
+                            <strong>Order ID:</strong> {order._id}
+                          </p>
+                          <p>
+                            <strong>Status:</strong> {order.status}
+                          </p>
+                        </div>
+                      </div>
 
-                    <MdOutlineDoubleArrow className={styles.addressGroupicon}/>
+                      <div
+                        className={`${styles.contentgroup} ${
+                          selectedOrder?._id === order._id
+                            ? styles.selected
+                            : ""
+                        }`}
+                      >
+                        <div className={styles.addressGroup}>
+                          <p>
+                            <strong>From Address: </strong>
+                            {`${order.fromAddress}, ${order.fromDistrict},  ${order.fromWard}, ${order.fromCity}`}
+                          </p>
 
-                    <p>
-                      <strong>To Address:</strong>{" "}
-                      {`${order.toAddress}, ${order.toDistrict},  ${order.toWard}, ${order.toCity}`}
-                    </p>
+                          {order.senderNumber}
+
+                          <p>
+                            <strong>To Address:</strong>{" "}
+                            {`${order.toAddress}, ${order.toDistrict},  ${order.toWard}, ${order.toCity}`}
+                          </p>
+
+                          {order.recipientNumber}
+                        </div>
+
+                        <div className={styles.SentContent}>
+                          {/* Show Details Button */}
+                          <button onClick={() => handleShowDetails(order)}>
+                            Show Details
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className={styles.mapcontent}>
+                    <h3>Overview</h3>
+                    <div className={styles.map}>
+                      <MapContainer
+                        center={[10.7336, 106.6989]}
+                        zoom={13}
+                        style={{ height: "300px", width: "600px" }}
+                        zoomControl={false}
+                      >
+                        <TileLayer
+                          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                        />
+                      </MapContainer>
+                    </div>
+
+                    {selectedOrder && (
+                      <div className={styles.orderDetails}>
+                        <p>
+                          <strong>Recipient Name:</strong>{" "}
+                          {selectedOrder.recipientName}
+                        </p>
+                        <p>
+                          <strong>Recipient Number:</strong>{" "}
+                          {selectedOrder.recipientNumber}
+                        </p>
+                        <p>
+                          <strong>To Address:</strong> {selectedOrder.toAddress}
+                          , {selectedOrder.toDistrict}, {selectedOrder.toCity}
+                        </p>
+                        <p>
+                          <strong>Price:</strong> {selectedOrder.price}
+                        </p>
+
+                        <p>
+                          <strong>Delivery Time:</strong>{" "}
+                          {selectedOrder.estimatedDeliveryTime}
+                        </p>
+                      </div>
+                    )}
                   </div>
                 </div>
-
-                <div className={styles.noteInfo}>
-                  <p>
-                    <strong>Order Weight:</strong> {order.orderWeight}
-                  </p>
-                  <p>
-                    <strong>Order Size:</strong> {order.orderSize}
-                  </p>
-                  <p>
-                    <strong>Type:</strong> {order.type}
-                  </p>
-                </div>
-                <div className={styles.SentContent}>
-                  {/* Show Details Button */}
-                  <button onClick={() => handleShowDetails(order)}>
-                    Show Details
-                  </button>
-                </div>
-              </div>
+              </>
             ))}
-        </div>
-      )}
-
-      {showPopup && expandedOrder && (
-        <div
-          className={styles.popupOverlay}
-          onClick={() => setShowPopup(false)}
-        >
-          <div
-            className={styles.popupContent}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <button
-              className={styles.closeButton}
-              onClick={() => setShowPopup(false)}
-            >
-              x
-            </button>
-            <h3>Order Details</h3>
-            <p>
-              <strong>Order ID:</strong> {expandedOrder._id}
-            </p>
-            <p>
-              <strong>Sender Name:</strong> {expandedOrder.senderName}
-            </p>
-            <p>
-              <strong>Sender Number:</strong> {expandedOrder.senderNumber}
-            </p>
-            <p>
-              <strong>From Address:</strong> {expandedOrder.fromAddress},{" "}
-              {expandedOrder.fromDistrict}, {expandedOrder.fromCity}
-            </p>
-            <p>
-              <strong>Recipient Name:</strong> {expandedOrder.recipientName}
-            </p>
-            <p>
-              <strong>Recipient Number:</strong> {expandedOrder.recipientNumber}
-            </p>
-            <p>
-              <strong>To Address:</strong> {expandedOrder.toAddress},{" "}
-              {expandedOrder.toDistrict}, {expandedOrder.toCity}
-            </p>
-            <p>
-              <strong>Order Weight:</strong> {expandedOrder.orderWeight}
-            </p>
-            <p>
-              <strong>Order Size:</strong> {expandedOrder.orderSize}
-            </p>
-            <p>
-              <strong>Type:</strong> {expandedOrder.type}
-            </p>
-            <p>
-              <strong>Message:</strong> {expandedOrder.message}
-            </p>
-            <p>
-              <strong>Price:</strong> {expandedOrder.price}
-            </p>
-            <p>
-              <strong>Status:</strong> {expandedOrder.status}
-            </p>
-            <p>
-              <strong>Created By:</strong> {expandedOrder.createdBy}
-            </p>
-            <p>
-              <strong>Driver:</strong> {expandedOrder.driver}
-            </p>
-            <p>
-              <strong>Post Office:</strong> {expandedOrder.postOffice}
-            </p>
-          </div>
         </div>
       )}
     </div>

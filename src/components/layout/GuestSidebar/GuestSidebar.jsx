@@ -16,6 +16,12 @@ import { IoLogOutOutline } from "react-icons/io5";
 import { FaUser } from "react-icons/fa";
 import { FaUserNinja } from "react-icons/fa";
 import { HiBuildingOffice2 } from "react-icons/hi2";
+import { RiDashboardHorizontalFill } from "react-icons/ri";
+import { MdOutlineLocalShipping } from "react-icons/md";
+import { MdOutlineShoppingCart } from "react-icons/md";
+import { MdOutlineSupervisorAccount } from "react-icons/md";
+import { MdOutlineBusinessCenter } from "react-icons/md";
+import { MdLogout } from "react-icons/md";
 
 const GuestSidebar = () => {
   const [activeItem, setActiveItem] = useState(null);
@@ -58,31 +64,39 @@ const GuestSidebar = () => {
             }`}
             onClick={() => handleItemClick("dashboard", "/guesthome")}
           >
-            <MdDashboard /> Dashboard
+            <RiDashboardHorizontalFill /> Dashboard
+          </li>
+          <li
+            className={`${styles.menuItem} ${
+              activeItem === "Shipment" ? styles.active : ""
+            }`}
+            onClick={() => handleItemClick("Shipment", "/guestshipment")}
+          >
+            <MdOutlineLocalShipping /> Shipment
           </li>
           <li
             className={`${styles.menuItem} ${
               activeItem === "orders" ? styles.active : ""
             }`}
-            onClick={() => handleItemClick("orders", "/guesthome")}
+            onClick={() => handleItemClick("orders", "/guestorder")}
           >
-            <BsBoxSeam /> Orders
+            <MdOutlineShoppingCart /> Orders
           </li>
           <li
             className={`${styles.menuItem} ${
               activeItem === "driver" ? styles.active : ""
             }`}
-            onClick={() => handleItemClick("driver", "/guesthome")}
+            onClick={() => handleItemClick("driver", "/guestdriver")}
           >
-            <FaUserNinja /> Driver
+            <MdOutlineSupervisorAccount /> Driver
           </li>
           <li
             className={`${styles.menuItem} ${
               activeItem === "postoffice" ? styles.active : ""
             }`}
-            onClick={() => handleItemClick("postoffice", "/guesthome")}
+            onClick={() => handleItemClick("postoffice", "/guestpostoffice")}
           >
-            <HiBuildingOffice2 /> PostOffice
+            <MdOutlineBusinessCenter /> Post Office
           </li>
           <li onClick={handleLogout} className={styles.menuItem}>
             <IoLogOutOutline /> Logout

@@ -66,7 +66,6 @@ const Header = () => {
               <span className={styles.greeting}>Hello, {username}!</span>
               <button onClick={() => navigate("/")}>Home</button>
               <button onClick={() => navigate("/becomedriver")}>Driver</button>
-              <button onClick={() => navigate("/becomepostoffice")}>PostOffice</button>
               <button onClick={() => navigate("/service")}>Service</button>
               <button onClick={() => navigate("/contact")}>Contact</button>
               <button onClick={() => navigate("/vieworder")}>
@@ -113,8 +112,7 @@ const Header = () => {
             <>
               <img className={styles.img} src="logo.png"></img>
               <button onClick={() => navigate("/")}>Home</button>
-              <button onClick={() => navigate("/becomedriver")}>Driver</button>
-              <button onClick={() => navigate("/becomepostoffice")}>PostOffice</button>
+              {/* <button onClick={() => navigate("/becomedriver")}>Driver</button> */}
               <button onClick={() => navigate("/service")}>Service</button>
               <button onClick={() => navigate("/contact")}>Contact</button>
               <div className={styles.signup}>

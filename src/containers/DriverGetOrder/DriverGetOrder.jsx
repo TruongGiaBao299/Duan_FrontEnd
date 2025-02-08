@@ -206,7 +206,7 @@ const DriverGetOrder = () => {
         <p>You don't have any pending orders!</p>
       ) : (
         <div>
-          <div>
+          <div className={styles.OrderInfocontainer}>
             {sortedOrders.map((order) => (
               <div className={styles.OrderInfo} key={order._id}>
                 <div className={styles.StatusInfo}>

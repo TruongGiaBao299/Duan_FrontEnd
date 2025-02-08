@@ -7,6 +7,9 @@ import { MdOutlineLocalShipping } from "react-icons/md";
 import { getOrderByEmailApi } from "../../../utils/orderAPI/orderAPI"; // Import your API call
 import { FaUserCircle, FaHistory } from "react-icons/fa";
 import UpdatePassword from "../../../containers/UpdatePassword/UpdatePassword";
+import { MdOutlineManageHistory } from "react-icons/md";
+import { MdDeliveryDining } from "react-icons/md";
+import { TbCubeSend } from "react-icons/tb";
 
 const HeaderDriver = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -113,13 +116,16 @@ const HeaderDriver = () => {
               <img className={styles.img} src="logo.png"></img>
               <span className={styles.greeting}>Hello, {username}!</span>
               <button onClick={() => navigate("/driverhome")}>Home</button>
-              <button onClick={() => navigate("/service")}>Service</button>
-              <button onClick={() => navigate("/contact")}>Contact</button>
+              <button onClick={() => navigate("/servicedriver")}>Service</button>
+              <button onClick={() => navigate("/contactdriver")}>Contact</button>
+              <button className={styles.icons} onClick={() => navigate("/managedriver")}><MdDeliveryDining className={styles.icons}/></button>
+              <button className={styles.icons} onClick={() => navigate("/managesentdriver")}><TbCubeSend className={styles.icons}/></button>
+              <button className={styles.icons} onClick={() => navigate("/managehistorydriver")}><MdOutlineManageHistory className={styles.icons}/></button>
 
               {/* Nút User Icon để mở dropdown */}
               <div className={styles.userMenu}>
-                <button onClick={() => setShowDropdown(!showDropdown)}>
-                  <FaUserCircle />
+                <button className={styles.icons} onClick={() => setShowDropdown(!showDropdown)}>
+                  <FaUserCircle className={styles.icons}/>
                 </button>
 
                 {/* Dropdown box */}
@@ -152,8 +158,8 @@ const HeaderDriver = () => {
             <>
               <img className={styles.img} src="logo.png"></img>
               <button onClick={() => navigate("/driverhome")}>Home</button>
-              <button onClick={() => navigate("/service")}>Service</button>
-              <button onClick={() => navigate("/contact")}>Contact</button>
+              <button onClick={() => navigate("/servicedriver")}>Service</button>
+              <button onClick={() => navigate("/contactdriver")}>Contact</button>
               <div className={styles.signup}>
                 <button
                   className={styles.login}

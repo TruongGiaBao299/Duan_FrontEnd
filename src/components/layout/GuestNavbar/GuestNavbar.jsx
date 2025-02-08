@@ -6,6 +6,8 @@ import { AuthContext } from "../../../context/auth.context";
 import { IoIosNotificationsOutline } from "react-icons/io";
 import { BsChatLeftText } from "react-icons/bs";
 import { FaUser } from "react-icons/fa";
+import { IoSettingsOutline } from "react-icons/io5";
+import { IoChatbox } from "react-icons/io5";
 
 const GuestNavbar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
