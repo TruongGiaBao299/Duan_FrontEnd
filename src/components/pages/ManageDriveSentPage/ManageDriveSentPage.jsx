@@ -56,7 +56,7 @@ const ManageDriveSentPage = () => {
           <MapContainer
             center={[10.7336, 106.6989]}
             zoom={13}
-            style={{ height: "700px", width: "600px" }}
+            style={{ height: "650px", width: "500px" }}
             zoomControl={false}
           >
             <TileLayer

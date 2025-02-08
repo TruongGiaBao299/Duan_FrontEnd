@@ -197,7 +197,7 @@ const DriverSentOrder = () => {
       ) : (
         <div>
           <div className={styles.driverordertable}>
-            <div>
+            <div className={styles.OrderInfocontainer}>
               {orders
                 .filter(
                   (order) =>

@@ -158,7 +158,7 @@ const TrackingFindPostOffice = () => {
           <MapContainer
             center={[10.7336, 106.6989]}
             zoom={13}
-            style={{ height: "500px", width: "700px" }}
+            style={{ height: "450px", width: "600px" }}
             zoomControl={false}
           >
             <TileLayer

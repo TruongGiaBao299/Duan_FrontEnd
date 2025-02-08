@@ -55,12 +55,21 @@
 .orderContainer {
   padding: 14px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-  width: 600px;
+  width: 500px;
   border-radius: 20px;
   margin-bottom: 10px;
   font-size: 12px;
-  height: fit-content;
   background-color: #ffffff;
+  max-width: 450px;
+}
+
+.newcontaineroverview{
+  height: 500px;
+}
+
+.heightcontainer{
+  height: 640px;
+  overflow-y: auto;
 }
 
 .orderstatus {
@@ -111,6 +120,7 @@
   padding-top: 90px;
   overflow: auto;
   scrollbar-width: none; /* Ẩn scrollbar trên Firefox */
+  padding-left: 180px;
 }
 
 .containeroverview::-webkit-scrollbar {
@@ -152,4 +162,5 @@
   padding: 0px 20px;
   height: fit-content;
   background-color: #ffffff;
+  margin-top: 10px;
 }

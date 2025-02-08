@@ -5,11 +5,7 @@
   width: 90vw;
   height: 90vh;
   padding-top: 95px;
-}
-
-.content {
-  flex: 1;
-  padding-right: 20px;
+  padding-left: 180px;
 }
 
 .img {
@@ -40,12 +36,14 @@
 .postInfo {
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
   gap: 5px;
 }
 
 .postInput select {
   padding: 15px;
-  width: 188px;
+  width: 155px;
   background-color: transparent;
   border: 1px solid #002E50;
   border-radius: 10px;
@@ -53,7 +51,7 @@
 
 .postInput input {
   padding: 15px;
-  width: 550px;
+  width: 450px;
   background-color: transparent;
   border: 1px solid #002E50;
   border-radius: 10px;
@@ -75,11 +73,12 @@
 .alert {
   color: red;
   background-color: lightgray;
-  padding: 20px 200px;
+  padding: 20px 120px;
+  text-align: center;
 }
 
 .title {
-  font-size: 25px;
+  font-size: 22px;
   font-weight: bold;
   text-align: center;
   margin-bottom: 20px;
@@ -87,7 +86,7 @@
 }
 
 .subtitle {
-  font-size: 15px;
+  font-size: 13px;
   font-weight: bold;
   text-align: center;
   margin-bottom: 20px;
@@ -100,9 +99,22 @@
   gap: 10px;
 }
 
+.PhoneId p{
+  font-size: 14px;
+}
+
+.postInput p{
+  font-size: 14px;
+}
+
+.NameHotline p{
+  font-size: 14px;
+}
+
+
 .PhoneIdInput input{
   padding: 15px;
-  width: 255px;
+  width: 205px;
   background-color: transparent;
   border: 1px solid #002E50;
   border-radius: 10px;
@@ -110,7 +122,7 @@
 
 .NameHotline input{
   padding: 15px;
-  width: 255px;
+  width: 205px;
   background-color: transparent;
   border: 1px solid #002E50;
   border-radius: 10px;

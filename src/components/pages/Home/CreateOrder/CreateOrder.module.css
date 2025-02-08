@@ -19,7 +19,7 @@
 }
 
 .CreateOrderInput input {
-  padding: 15px;
+  padding: 10px;
   width: 300px;
   color: #002E50;
   place-content: #002E50;
@@ -28,9 +28,9 @@
 }
 
 .CreateOrderInput textarea {
-  padding: 15px;
-  width: 750px;
-  height: 200px;
+  padding: 10px;
+  width: 670px;
+  height: 120px;
   color: #002E50;
   place-content: #002E50;
   border: 1px solid #002E50;
@@ -38,8 +38,8 @@
 }
 
 .CreateOrderInputBot input {
-  padding: 15px;
-  width: 222px;
+  padding: 10px;
+  width: 204px;
   color: #002E50;
   border: 1px solid #002E50;
   border-radius: 10px;
@@ -58,8 +58,8 @@
 }
 
 .CreateOrderInput select {
-  padding: 15px;
-  width: 330px;
+  padding: 10px;
+  width: 322px;
   border: 1px solid #002E50;
   border-radius: 10px;
 }

@@ -362,7 +362,7 @@ const BecomePostOffice = () => {
                 <MapContainer
                   center={[10.733605966511371, 106.69892820061779]}
                   zoom={13}
-                  style={{ height: "760px", width: "600px" }}
+                  style={{ height: "700px", width: "600px" }}
                 >
                   <TileLayer
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

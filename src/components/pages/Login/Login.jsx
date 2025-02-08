@@ -102,16 +102,6 @@ const Login = () => {
                   required
                 />
                 {/* Nút show/hide password */}
-                <span
-                  className={styles.togglePassword}
-                  onClick={() => setShowPassword(!showPassword)}
-                >
-                  {showPassword ? (
-                    <IoEyeOff />
-                  ) : (
-                    <IoEye />
-                  )}
-                </span>
               </div>
 
               {/* Submit Button */}

@@ -94,7 +94,7 @@ const Register = () => {
                   required
                 />
                 {/* Nút show/hide password */}
-                <span
+                {/* <span
                   className={styles.togglePassword}
                   onClick={() => setShowPassword(!showPassword)}
                 >
@@ -103,7 +103,7 @@ const Register = () => {
                   ) : (
                     <IoEye className={styles.togglePassword} />
                   )}
-                </span>
+                </span> */}
               </div>
 
               {/* Submit Button */}

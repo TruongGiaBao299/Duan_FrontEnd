@@ -2,11 +2,10 @@
   display: flex;
   flex-direction: row;
   justify-content: center;
-  gap: 30px;
-  align-items: center;
   width: 90vw;
   height: 90vh;
   padding-top: 90px;
+  padding-left: 150px;
 }
 
 .img {
@@ -16,14 +15,15 @@
 
 .image {
   max-width: 700px;
-  height: 88vh;
+  height: 85vh;
 }
 
 .formContainer {
   display: flex;
   flex-direction: column;
-  gap: 10px;
   padding: 20px;
+  gap: 20px;
+  font-size: 14px;
 }
 
 .personalInfoAddress {
@@ -35,7 +35,12 @@
 .personalInfo {
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 30px;
+  font-size: 14px;
+}
+
+.personalInfo p {
+  font-size: 14px;
 }
 
 .personalInfoInput select {
@@ -73,7 +78,7 @@
 .alert {
   color: red;
   background-color: lightgray;
-  padding: 20px 200px;
+  padding: 20px 120px;
 }
 
 .title {
@@ -84,8 +89,13 @@
 }
 
 .label label {
-  font-size: 20px;
+  font-size: 14px;
   font-weight: bold;
   text-align: center;
-  margin-bottom: 20px;
+}
+
+.containerform{
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
 }

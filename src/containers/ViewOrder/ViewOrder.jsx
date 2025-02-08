@@ -76,68 +76,77 @@ const ViewOrder = () => {
         <p>You don't have any orders!</p>
       ) : (
         <div className={styles.containeroverview}>
-          <div>
-            <button className={styles.addnew} onClick={() => navigate("/guestcreateorder")}>Add New +</button>
-            {orders.map((order) => (
-              <div key={order._id} className={styles.orderContainer}>
-                <div className={styles.orderstatus}>
-                  <p>
-                    <strong>Order ID:</strong> {order._id}
-                  </p>
-                  <p>
-                    <strong>Status:</strong> {order.status}
-                  </p>
-                </div>
-
-                {/* Đổi màu khi đơn hàng được chọn */}
-                <div
-                  className={`${styles.orderaddress} ${
-                    selectedOrder?._id === order._id ? styles.selectedOrder : ""
-                  }`}
-                >
-                  <div className={styles.fromstatus}>
+          <div className={styles.newcontaineroverview}>
+            <button
+              className={styles.addnew}
+              onClick={() => navigate("/guestcreateorder")}
+            >
+              Add New +
+            </button>
+            <div className={styles.heightcontainer}>
+              {orders.map((order) => (
+                <div key={order._id} className={styles.orderContainer}>
+                  <div className={styles.orderstatus}>
                     <p>
-                      <strong>From:</strong> {order.fromAddress},{" "}
-                      {order.fromDistrict}, {order.fromCity}
+                      <strong>Order ID:</strong> {order._id}
                     </p>
                     <p>
-                      {new Date(order.createdAt).toLocaleDateString("en-GB")}
+                      <strong>Status:</strong> {order.status}
                     </p>
                   </div>
 
-                  {order.senderNumber}
+                  {/* Đổi màu khi đơn hàng được chọn */}
+                  <div
+                    className={`${styles.orderaddress} ${
+                      selectedOrder?._id === order._id
+                        ? styles.selectedOrder
+                        : ""
+                    }`}
+                  >
+                    <div className={styles.fromstatus}>
+                      <p>
+                        <strong>From:</strong> {order.fromAddress},{" "}
+                        {order.fromDistrict}, {order.fromCity}
+                      </p>
+                      <p>
+                        {new Date(order.createdAt).toLocaleDateString("en-GB")}
+                      </p>
+                    </div>
 
-                  <div className={styles.tostatus}>
-                    <p>
-                      <strong>To:</strong> {order.toAddress}, {order.toDistrict}
-                      , {order.toCity}
-                    </p>
-                    <p>{order.estimatedDeliveryTime}</p>
+                    {order.senderNumber}
+
+                    <div className={styles.tostatus}>
+                      <p>
+                        <strong>To:</strong> {order.toAddress},{" "}
+                        {order.toDistrict}, {order.toCity}
+                      </p>
+                      <p>{order.estimatedDeliveryTime}</p>
+                    </div>
+
+                    {order.recipientNumber}
+
+                    <button onClick={() => setSelectedOrder(order)}>
+                      Show Details
+                    </button>
+
+                    {order.status === "is shipping" && (
+                      <button
+                        onClick={() => updateOrderStatus(order._id, "shipped")}
+                      >
+                        Shipped
+                      </button>
+                    )}
+                    {order.status === "pending" && (
+                      <button
+                        onClick={() => updateOrderStatus(order._id, "canceled")}
+                      >
+                        Cancelled
+                      </button>
+                    )}
                   </div>
-
-                  {order.recipientNumber}
-
-                  <button onClick={() => setSelectedOrder(order)}>
-                    Show Details
-                  </button>
-
-                  {order.status === "is shipping" && (
-                    <button
-                      onClick={() => updateOrderStatus(order._id, "shipped")}
-                    >
-                      Shipped
-                    </button>
-                  )}
-                  {order.status === "pending" && (
-                    <button
-                      onClick={() => updateOrderStatus(order._id, "canceled")}
-                    >
-                      Cancelled
-                    </button>
-                  )}
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
 
           {/* Overview Section */}
@@ -147,7 +156,7 @@ const ViewOrder = () => {
               <MapContainer
                 center={[10.7336, 106.6989]}
                 zoom={13}
-                style={{ height: "300px", width: "600px" }}
+                style={{ height: "300px", width: "500px" }}
                 zoomControl={false}
               >
                 <TileLayer

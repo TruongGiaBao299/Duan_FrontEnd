@@ -174,7 +174,7 @@ const Dashboard = () => {
               <MapContainer
                 center={mapCenter}
                 zoom={12}
-                style={{ height: "470px", width: "120%" }}
+                style={{ height: "470px", width: "450px" }}
               >
                 <TileLayer
                   url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

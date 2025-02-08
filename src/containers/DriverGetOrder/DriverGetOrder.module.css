@@ -93,6 +93,10 @@
 .OrderInfocontainer{
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  height: 580px;
+  overflow-y: auto;
+}
+
+.OrderInfocontainer::-webkit-scrollbar {
+  display: none;
 }

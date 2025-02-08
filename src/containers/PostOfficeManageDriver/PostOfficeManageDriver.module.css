@@ -35,7 +35,7 @@
 
 .tablecontainer th,
 .tablecontainer td {
-  padding: 12px 100px;
+  padding: 12px 60px;
   text-align: left;
   border-bottom: 1px solid #ddd;
   vertical-align: top; /* Căn nội dung lên trên */

@@ -2,13 +2,14 @@
   background-color: #ffffff;
   color: #002E50;
   height: 50px;
-  width: fit-content;
+  width: 100%;
   position: fixed;
-  margin-left: 220px;
+  margin-left: 190px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 10px 30px 10px 30px;
+  border-bottom: 1px solid #002E50;
 }
 
 .hello{

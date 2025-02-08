@@ -35,11 +35,12 @@
   padding: 20px;
   border-radius: 10px;
   width: 400px;
-  max-width: 90%;
+  max-width: 80%;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
   text-align: left;
   position: relative;
   animation: fadeIn 0.3s ease-in-out;
+  font-size: 12px;
 }
 
 /* Nút đóng popup */

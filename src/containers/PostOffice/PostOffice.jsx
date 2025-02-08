@@ -138,7 +138,7 @@ const PostOffice = () => {
         <table className={styles.tableuser}>
           <thead>
             <tr>
-              <th className={styles.tableuserHeader}>Id</th>
+              {/* <th className={styles.tableuserHeader}>Id</th> */}
               {/* <th className={styles.tableuserHeader}>OfficeUserName</th>
               <th className={styles.tableuserHeader}>OfficeUserNumber</th>
               <th className={styles.tableuserHeader}>OfficeUserId</th>
@@ -155,7 +155,7 @@ const PostOffice = () => {
           <tbody>
             {data.map((Office) => (
               <tr key={Office._id} className={styles.tableRow}>
-                <td className={styles.tableCell}>{Office._id}</td>
+                {/* <td className={styles.tableCell}>{Office._id}</td> */}
                 {/* <td className={styles.tableCell}>{Office.OfficeUserName}</td>
                 <td className={styles.tableCell}>{Office.OfficeUserNumber}</td>
                 <td className={styles.tableCell}>{Office.OfficeUserId}</td>

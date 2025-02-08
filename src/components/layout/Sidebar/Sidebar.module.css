@@ -1,6 +1,6 @@
 .sidebar {
   height: 100%;
-  width: 180px;
+  width: 150px;
   background-color: #ffffff;
   color: #002E50;
   display: flex;
@@ -8,6 +8,9 @@
   justify-content: space-between;
   padding: 10px 20px;
   position: fixed;
+  border-right: 1px solid #002E50;
+  transition: width 0.3s ease; /* Smooth transition for width change */
+  z-index: 1000;
 }
 
 .header{

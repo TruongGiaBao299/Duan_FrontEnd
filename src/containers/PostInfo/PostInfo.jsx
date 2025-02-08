@@ -90,7 +90,6 @@ const PostInfo = () => {
 
         {/* Biểu đồ đơn hàng trong tháng */}
         <div className={styles.chart}>
-          <h1>Orders This Month</h1>
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={chartData}>
               <CartesianGrid strokeDasharray="3 3" />
