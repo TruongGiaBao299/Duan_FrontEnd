@@ -156,7 +156,7 @@ const ViewOrder = () => {
               <MapContainer
                 center={[10.7336, 106.6989]}
                 zoom={13}
-                style={{ height: "300px", width: "500px" }}
+                style={{ height: "300px", width: "600px" }}
                 zoomControl={false}
               >
                 <TileLayer
@@ -184,12 +184,30 @@ const ViewOrder = () => {
                     <p>
                       <strong>Driver:</strong> {selectedOrder.driver}
                     </p>
-                  </div>
-                  <div>
                     <p>
-                      <strong>Estimated Delivery Time:</strong>{" "}
+                      <strong>Delivery Time:</strong>{" "}
                       {selectedOrder.estimatedDeliveryTime}
                     </p>
+                  </div>
+                  <div>
+                    <div className={styles.timelinecontent}>
+                      {selectedOrder.timeline &&
+                        selectedOrder.timeline.length > 0 && (
+                          <div className={styles.timeline}>
+                            <ul>
+                              {selectedOrder.timeline.map((entry, index) => (
+                                <li key={entry._id}>
+                                  {new Date(
+                                    new Date(entry.timestamp).getTime() +
+                                      17 * 60 * 60 * 1000
+                                  ).toLocaleString()}
+                                  : <strong>{entry.status}</strong>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
+                    </div>
                   </div>
                 </div>
               ) : (
