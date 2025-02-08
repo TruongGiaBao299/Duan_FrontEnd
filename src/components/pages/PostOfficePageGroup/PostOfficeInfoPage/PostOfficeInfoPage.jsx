@@ -3,6 +3,7 @@ import PostOfficeNavbar from "../../../layout/PostOfficeNavbar/PostOfficeNavbar"
 import PostOfficeSidebar from "../../../layout/PostOfficeSidebar/PostOfficeSidebar";
 import styles from "./PostOfficeInfoPage.module.css";
 import PostOfficeInfo from "../../../../containers/PostOfficeInfo/PostofficeInfo";
+import PostInfo from "../../../../containers/PostInfo/PostInfo";
 
 const PostOfficeInfoPage = () => {
   return (
@@ -11,7 +12,7 @@ const PostOfficeInfoPage = () => {
       <PostOfficeSidebar></PostOfficeSidebar>
       <div className={styles.main}>
         {/* <ViewOrder></ViewOrder> */}
-        <PostOfficeInfo></PostOfficeInfo>
+        <PostInfo></PostInfo>
       </div>
     </>
   );
