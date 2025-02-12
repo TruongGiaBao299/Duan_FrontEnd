@@ -23,6 +23,8 @@
     "haversine": "^1.1.1",
     "jwt-decode": "^4.0.0",
     "leaflet": "^1.9.4",
+    "qrcode": "^1.5.4",
+    "qrcode.react": "^4.2.0",
     "react": "^18.3.1",
     "react-chartjs-2": "^5.2.0",
     "react-dom": "^18.3.1",

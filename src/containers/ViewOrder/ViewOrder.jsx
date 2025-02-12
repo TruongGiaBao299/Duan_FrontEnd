@@ -3,6 +3,7 @@ import { getOrderByEmailApi } from "../../utils/orderAPI/orderAPI";
 import { toast } from "react-toastify";
 import {
   CancelledOrderApi,
+  paidAPI,
   ShippedOrderApi,
 } from "../../utils/driverAPI/driverAPI";
 import styles from "./ViewOrder.module.css";
@@ -10,11 +11,20 @@ import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 import { MapContainer, TileLayer } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import { useNavigate } from "react-router-dom";
+import QRCode from "qrcode";
 
 const ViewOrder = () => {
   const [orders, setOrders] = useState([]);
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isPaymentPopupOpen, setIsPaymentPopupOpen] = useState(false);
+  const [paymentDetails, setPaymentDetails] = useState({
+    bankName: "",
+    cardNumber: "",
+  });
+  const [selectedOrderForPayment, setSelectedOrderForPayment] = useState(null);
+  const [qrCodeImage, setQrCodeImage] = useState("");
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -65,6 +75,53 @@ const ViewOrder = () => {
       toast.error("Failed to update order status. Please try again.");
     }
   };
+
+  const handleOpenPaymentPopup = (order) => {
+    setSelectedOrderForPayment(order);
+    setIsPaymentPopupOpen(true);
+  };
+
+  const handleSubmitPayment = async (orderId) => {
+    if (!orderId) {
+      toast.error("Không tìm thấy đơn hàng để thanh toán.");
+      return;
+    }
+
+    if (!paymentDetails.bankName || !paymentDetails.cardNumber) {
+      toast.error("Vui lòng nhập đầy đủ thông tin thanh toán.");
+      return;
+    }
+
+    try {
+      await paidAPI(orderId);
+      toast.success("Payment successful!");
+
+      // Cập nhật trạng thái đơn hàng trong danh sách
+      setOrders((prevOrders) =>
+        prevOrders.map((order) =>
+          order._id === orderId ? { ...order, payment: "paid" } : order
+        )
+      );
+
+      setIsPaymentPopupOpen(false);
+    } catch (error) {
+      console.error("Lỗi thanh toán:", error);
+      toast.error("Fail to pay, please try again");
+    }
+  };
+
+  useEffect(() => {
+    const generateQR = async () => {
+      try {
+        const url = await QRCode.toDataURL("Thông tin thanh toán của bạn");
+        setQrCodeImage(url);
+      } catch (error) {
+        console.error("Lỗi tạo QR Code:", error);
+      }
+    };
+
+    generateQR();
+  }, []);
 
   if (isLoading) {
     return <LoadingSpinner isLoading={isLoading} />;
@@ -123,7 +180,12 @@ const ViewOrder = () => {
                       <p>{order.estimatedDeliveryTime}</p>
                     </div>
 
-                    {order.recipientNumber}
+                    <div>
+                      <p>
+                        {" "}
+                        <strong>Payment:</strong> {order.payment}
+                      </p>
+                    </div>
 
                     <button onClick={() => setSelectedOrder(order)}>
                       Show Details
@@ -142,6 +204,73 @@ const ViewOrder = () => {
                       >
                         Cancelled
                       </button>
+                    )}
+                    {order.payment === "none" && (
+                      <button onClick={() => handleOpenPaymentPopup(order)}>
+                        Pay Now
+                      </button>
+                    )}
+
+                    {isPaymentPopupOpen && (
+                      <div className={styles.paymentPopup}>
+                        <div className={styles.popupContent}>
+                          <div className={styles.popupform}>
+                            <h3>Thanh toán đơn hàng</h3>
+                            <p>
+                              <strong>Giá tiền:</strong>{" "}
+                              {selectedOrderForPayment?.price} VND
+                            </p>{" "}
+                            {/* Hiển thị giá tiền */}
+                            <label>Bank Name:</label>
+                            <select
+                              value={paymentDetails.bankName}
+                              onChange={(e) =>
+                                setPaymentDetails({
+                                  ...paymentDetails,
+                                  bankName: e.target.value,
+                                })
+                              }
+                            >
+                              <option value="">Chọn ngân hàng</option>
+                              <option value="MB">MB Bank</option>
+                              <option value="BIDV">BIDV</option>
+                              <option value="VCB">Vietcombank</option>
+                              <option value="ACB">ACB</option>
+                              <option value="TPBank">TPBank</option>
+                            </select>
+                            <label>Card Number:</label>
+                            <input
+                              type="text"
+                              value={paymentDetails.cardNumber}
+                              onChange={(e) =>
+                                setPaymentDetails({
+                                  ...paymentDetails,
+                                  cardNumber: e.target.value,
+                                })
+                              }
+                            />
+                            <button
+                              onClick={() =>
+                                handleSubmitPayment(
+                                  selectedOrderForPayment?._id
+                                )
+                              }
+                            >
+                              Submit Payment
+                            </button>
+                            <button
+                              onClick={() => setIsPaymentPopupOpen(false)}
+                            >
+                              Cancel
+                            </button>
+                          </div>
+                          <div className={styles.popupQR}>
+                            {qrCodeImage && (
+                              <img src={qrCodeImage} alt="QR Code" />
+                            )}
+                          </div>
+                        </div>
+                      </div>
                     )}
                   </div>
                 </div>
@@ -211,7 +340,7 @@ const ViewOrder = () => {
                   </div>
                 </div>
               ) : (
-                <p>Chưa chọn đơn hàng</p>
+                <p>...</p>
               )}
             </div>
           </div>

@@ -110,3 +110,9 @@ export const getDriverByEmailApi = () => {
 
   return axios.get(URL_API);
 };
+
+// update trạng thái trả tiền
+export const paidAPI = (id) => {
+  const URL_API = `/order/payment/${id}`; // URL API với id đơn hàng
+  return axiosorder.post(URL_API); // Gửi email trong body request
+};

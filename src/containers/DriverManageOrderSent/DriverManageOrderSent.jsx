@@ -6,6 +6,7 @@ import {
   ShippedOrderApi,
   SentPostOfficeApi,
   getDriverByEmailApi,
+  paidAPI,
 } from "../../utils/driverAPI/driverAPI";
 import { getPostOfficeApi } from "../../utils/postOfficeAPI/postOfficeAPI";
 import styles from "./DriverManageOrderSent.module.css";
@@ -171,6 +172,21 @@ const DriverManageOrderSent = () => {
     }
   };
 
+  const handleUpdatePayment = async (orderId) => {
+    try {
+      await paidAPI(orderId);
+      toast.success("Paid!");
+
+      const updatedOrders = orders.map((order) =>
+        order._id === orderId ? { ...order, payment: "paid", price: 0 } : order
+      );
+      setOrders(updatedOrders);
+    } catch (error) {
+      console.error("Error updating payment status:", error);
+      toast.error("Failed to update payment status.");
+    }
+  };
+
   return (
     <div className={styles.Container}>
       {isLoading && <LoadingSpinner isLoading={true} />}
@@ -179,94 +195,108 @@ const DriverManageOrderSent = () => {
         <p>No orders match the selected filter!</p>
       ) : (
         <div className={styles.OrderInfoContainer}>
-          {orders.filter(order => order.status === "is shipping").map((order) => (
-            <div className={styles.OrderInfo} key={order._id}>
-              <div className={styles.StatusInfo}>
-                <p>
-                  <strong>Order ID:</strong> {order._id}
-                </p>
+          {orders
+            .filter((order) => order.status === "is shipping")
+            .map((order) => (
+              <div className={styles.OrderInfo} key={order._id}>
+                <div className={styles.StatusInfo}>
+                  <p>
+                    <strong>Order ID:</strong> {order._id}
+                  </p>
 
-                <p>
-                  <strong>Status:</strong> {order.status}
-                </p>
-              </div>
+                  <p>
+                    <strong>Status:</strong> {order.status}
+                  </p>
+                </div>
 
-              <div className={styles.AddressInfo}>
-                <p>
-                  <strong>Sender Address:</strong> {order.fromAddress},{" "}
-                  {order.fromDistrict}, {order.fromCity}
-                </p>
-                <p>
-                  <strong>Recipient Address:</strong> {order.toAddress},{" "}
-                  {order.toDistrict}, {order.toCity}
-                </p>
-              </div>
+                <div className={styles.AddressInfo}>
+                  <p>
+                    <strong>Sender Address:</strong> {order.fromAddress},{" "}
+                    {order.fromDistrict}, {order.fromCity}
+                  </p>
+                  <p>
+                    <strong>Recipient Address:</strong> {order.toAddress},{" "}
+                    {order.toDistrict}, {order.toCity}
+                  </p>
+                </div>
 
-              <div className={styles.NoteInfo}>
-                <p>
-                  <strong>Message:</strong> {order.message}
-                </p>
-                <p>
-                  <strong>Price:</strong> {order.price}
-                </p>
-              </div>
+                <div className={styles.NoteInfo}>
+                  <p>
+                    <strong>Message:</strong> {order.message}
+                  </p>
+                  <p>
+                    <strong>Price:</strong> {order.price}
+                  </p>
+                  <p>
+                    <strong>Payment:</strong> {order.payment}
+                  </p>
+                </div>
 
-              <div className={styles.SentContent}>
-                <button onClick={() => handleShowDetails(order)}>
-                  Show Details
-                </button>
+                <div className={styles.SentContent}>
+                  <button onClick={() => handleShowDetails(order)}>
+                    Show Details
+                  </button>
 
-                {/* Nút mở bản đồ HERE */}
-                {order.status !== "shipped" && order.status !== "canceled" && (
-                  <button onClick={() => handleOpenMap(order)}>Open Map</button>
-                )}
+                  {/* Nút mở bản đồ HERE */}
+                  {order.status !== "shipped" &&
+                    order.status !== "canceled" && (
+                      <button onClick={() => handleOpenMap(order)}>
+                        Open Map
+                      </button>
+                    )}
 
-                {!order.postOffice &&
-                  order.status !== "shipped" &&
-                  order.status !== "canceled" && (
-                    <div>
-                      <form
-                        className={styles.SentTo}
-                        onSubmit={(e) => handleSubmit(e, order._id)}
-                      >
-                        <select
-                          value={emails[order._id] || ""}
-                          onChange={(e) =>
-                            setEmails((prev) => ({
-                              ...prev,
-                              [order._id]: e.target.value,
-                            }))
-                          }
-                          required
-                        >
-                          <option value="">Select a Post Office</option>
-                          {data
-                            .filter(
-                              (postOffice) =>
-                                postOffice.OfficeDistrict ===
-                                  order.fromDistrict ||
-                                (postOffice.OfficeDistrict !==
-                                  order.fromDistrict &&
-                                  postOffice.OfficeCity === order.fromCity)
-                            )
-                            .map((postOffice) => (
-                              <option
-                                key={postOffice.email}
-                                value={postOffice.email}
-                              >
-                                {postOffice.OfficeName}
-                              </option>
-                            ))}
-                        </select>
-                        <button type="submit">
-                          <FaLocationArrow />
-                        </button>
-                      </form>
-                    </div>
+                  {order.payment === "none" && (
+                    <button onClick={() => handleUpdatePayment(order._id)}>
+                      Paid
+                    </button>
                   )}
+
+                  {!order.postOffice &&
+                    order.status !== "shipped" &&
+                    order.status !== "canceled" && (
+                      <div>
+                        <form
+                          className={styles.SentTo}
+                          onSubmit={(e) => handleSubmit(e, order._id)}
+                        >
+                          <select
+                            value={emails[order._id] || ""}
+                            onChange={(e) =>
+                              setEmails((prev) => ({
+                                ...prev,
+                                [order._id]: e.target.value,
+                              }))
+                            }
+                            required
+                          >
+                            <option value="">Select a Post Office</option>
+                            {data
+                              .filter(
+                                (postOffice) =>
+                                  postOffice.OfficeDistrict ===
+                                    order.fromDistrict ||
+                                  (postOffice.OfficeDistrict !==
+                                    order.fromDistrict &&
+                                    postOffice.OfficeCity === order.fromCity)
+                              )
+                              .map((postOffice) => (
+                                <option
+                                  key={postOffice.email}
+                                  value={postOffice.email}
+                                >
+                                  {postOffice.OfficeName}
+                                </option>
+                              ))}
+                          </select>
+                          <button type="submit">
+                            <FaLocationArrow />
+                          </button>
+                        </form>
+                      </div>
+                    )}
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
         </div>
       )}
 
