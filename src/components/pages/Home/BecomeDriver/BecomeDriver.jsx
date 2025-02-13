@@ -237,7 +237,7 @@ const BecomeDriver = () => {
                   <div className={styles.personalInfo}>
                     <div className={styles.personalInfoInput}>
                       <input
-                        placeholder="Enter your fullnam"
+                        placeholder="Enter your fullname"
                         type="text"
                         id="driverName"
                         name="driverName"
@@ -267,7 +267,7 @@ const BecomeDriver = () => {
 
                     <div className={styles.personalInfoInput}>
                       <input
-                        placeholder="Enter your id or passboard code"
+                        placeholder="Enter your id"
                         type="text"
                         id="driverId"
                         name="driverId"
