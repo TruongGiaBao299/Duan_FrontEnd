@@ -105,7 +105,7 @@ const ViewOrder = () => {
 
       setIsPaymentPopupOpen(false);
     } catch (error) {
-      console.error("Lỗi thanh toán:", error);
+      console.error("Fail to pay:", error);
       toast.error("Fail to pay, please try again");
     }
   };
@@ -116,7 +116,7 @@ const ViewOrder = () => {
         const url = await QRCode.toDataURL("Thông tin thanh toán của bạn");
         setQrCodeImage(url);
       } catch (error) {
-        console.error("Lỗi tạo QR Code:", error);
+        console.error("Fail to generate QR Code:", error);
       }
     };
 
@@ -215,7 +215,7 @@ const ViewOrder = () => {
                       <div className={styles.paymentPopup}>
                         <div className={styles.popupContent}>
                           <div className={styles.popupform}>
-                            <h3>Thanh toán đơn hàng</h3>
+                            <h3>Order Payment</h3>
                             <p>
                               <strong>Giá tiền:</strong>{" "}
                               {selectedOrderForPayment?.price} VND
