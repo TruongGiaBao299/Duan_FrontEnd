@@ -231,7 +231,7 @@ const ViewOrder = () => {
                                 })
                               }
                             >
-                              <option value="">Chọn ngân hàng</option>
+                              <option value="">Select Bank</option>
                               <option value="MB">MB Bank</option>
                               <option value="BIDV">BIDV</option>
                               <option value="VCB">Vietcombank</option>

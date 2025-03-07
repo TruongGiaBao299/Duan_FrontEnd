@@ -169,7 +169,7 @@
   max-height: 580px;
   overflow-y: auto;  
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
 }
 
 .OrderInfoContainer::-webkit-scrollbar {
